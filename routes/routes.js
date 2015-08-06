@@ -22,17 +22,17 @@ module.exports = function(app, express) {
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
     });
 
-    router.get('/retard',isLoggedIn, function (req, res){
+    router.get('/retard', isLoggedIn, function (req, res){
 
         res.sendFile(path.resolve(__dirname + '/../views/retard.html'));
     });
 
-    router.get('/ace/historique',isLoggedIn, function (req, res){
+    router.get('/ace/historique', isLoggedIn, function (req, res){
 
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
 
-    router.get('/infos_retard', function (req, res){
+    router.get('/infos_retard', isLoggedIn, function (req, res){
         res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'))
     });
 
