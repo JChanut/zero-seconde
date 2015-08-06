@@ -43,31 +43,6 @@ app.use(morgan('dev'));
 
 app.use(express.static(__dirname + "/public"));
 
-passport.use('local-login', new LocalStrategy({
-        username : 'username',
-        password : 'password',
-        passwordReqToCallback : true
-    },
-    function(req, username, password, done){
-        var getQuery = 'SELECT id, fonction FROM zs_utilisateur WHERE identifiant = "' + username + '" AND mot_de_passe ="' + password + '"';
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                return done(err);
-            }
-            var data = (rows.length > 0);
-            var result = {};
-            result.connexion = data;
-            if (!data) {
-                return done(null, false, req.flash('loginMessage', 'Identifiants incorrects.'));
-            } else {
-                result.id = rows[0].id;
-                result.fonction = rows[0].fonction;
-            }
-            return done(null, result);
-        });
-    }
-));
-
 
 require('./routes/routes.js')(app,router, jsonParser, passport);
 
