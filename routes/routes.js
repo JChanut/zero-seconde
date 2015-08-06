@@ -75,7 +75,7 @@ module.exports = function(app, express) {
 
             //construction de la query
 
-            var getQuery = 'SELECT id, fonction FROM zs_utilisateur WHERE identifiant = "' + req.body.username + '" AND mot_de_passe ="' + req.body.password+ '"';
+            var getQuery = 'SELECT id_utilisateur , fonction FROM zs_utilisateur WHERE identifiant = "' + req.body.username + '" AND mot_de_passe ="' + req.body.password+ '"';
             var query = conn.query(getQuery, function (err, rows) {
 
                 if (err) {
