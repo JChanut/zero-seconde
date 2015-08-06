@@ -56,7 +56,7 @@
 
 
             <div class="input-field col s12">
-                <select ng-repeat="unite in unites">
+                <select ng-init="init()" ng-repeat="unite in unites">
                     <option ng-value="unite.id">{{unite.libelle}}</option>
                 </select>
                 <label>Sélectionez l'unité :</label>
