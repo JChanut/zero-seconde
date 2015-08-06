@@ -10,9 +10,6 @@ var express = require('express'),
     mysql = require('mysql'),
     favicon = require('serve-favicon'),
     morgan = require('morgan'),
-    passport = require('passport'),
-    LocalStrategy = require('passport-local').Strategy,
-    flash = require('connect-flash'),//use to see requests
     app = express();
 
 //==============================================================================
@@ -21,12 +18,11 @@ var express = require('express'),
 // use body-parser pour les POST requests
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(passport.initialize());
-app.use(passport.session());
+
 // create application/json parser
 var jsonParser = bodyParser.json();
-// MySQL connection
 
+// MySQL connection
 app.use(
     connection(mysql, {
         host     : 'localhost',
@@ -40,11 +36,11 @@ app.use(
 
 ////Permet l'affichage d'info dans la console lors des requetes
 app.use(morgan('dev'));
-
 app.use(express.static(__dirname + "/public"));
 
 
-require('./routes/routes.js')(app,router, jsonParser, passport);
+//Lien vers le fichier routes.js afin d'assurer les redirections d'url
+require('./routes/routes.js')(app,router, jsonParser);
 
 //==============================================================================
 //START THE SERVER

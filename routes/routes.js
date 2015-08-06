@@ -1,7 +1,7 @@
 /**
  * Created by Thomas on 05/08/2015.
  */
-module.exports = function(app, router, jsonParser, passport) {
+module.exports = function(app, router, jsonParser) {
 
     var path = require('path');
 
@@ -13,6 +13,11 @@ module.exports = function(app, router, jsonParser, passport) {
     router.get('/retard', function (req, res){
 
         res.sendFile(path.resolve(__dirname + '/../views/retard.html'));
+    });
+
+    router.get('/ace/historique', function (req, res){
+
+        res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
 
 
