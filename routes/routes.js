@@ -20,8 +20,9 @@ module.exports = function(app, router, jsonParser) {
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
 
-
-
+    router.get('/infos_retard', function (req, res){
+        res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'))
+    });
 
 
 // | POST | post data to DB |
