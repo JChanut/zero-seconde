@@ -4,6 +4,7 @@
 module.exports = function(app, router) {
 
     var bodyParser = require('body-parser'),
+        session = require('express-session'),
         path = require('path');
 
     app.use(bodyParser.urlencoded({ extended: true }));
