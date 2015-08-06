@@ -4,11 +4,12 @@
 
 var express = require('express'),
     path = require('path'),
+    cookieSession = require('cookie-session'),
     connection = require('express-myconnection'),
     mysql = require('mysql'),
     favicon = require('serve-favicon'),
     morgan = require('morgan'),
-    cookieParser = require('cookie-parser'),
+   // cookieParser = require('cookie-parser'),
     app = express();
 
 //==============================================================================
@@ -16,7 +17,11 @@ var express = require('express'),
 //==============================================================================
 // use body-parser pour les POST requests
 
-app.use(cookieParser());
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2']
+}));
+
 
 // MySQL connection
 app.use(

@@ -4,24 +4,21 @@
 module.exports = function(app, express) {
 
     var bodyParser = require('body-parser'),
-        session = require('express-session'),
         router = express.Router(),
         path = require('path');
 
-    app.use(session({
-        secret: 'TUS415P45',
-        name: 'connexion_zs',
-        id: null,
-        resave: true,
-        saveUninitialized: true
-    }));
+   // app.use(express.cookieParser());
+
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
 // create application/json parser
     var jsonParser = bodyParser.json();
+
     app.use('/',router);
+
     router.get('/', function (req, res) {
+        req.session.user = "guest";
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
     });
 
@@ -44,6 +41,7 @@ module.exports = function(app, express) {
 //------------------------------------------------------------------------------
   router.route('/authentification').post(jsonParser, function (req, res) {
         req.getConnection(function (err, conn) {
+            console.log(req.session);
 
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);      // JSON req
@@ -63,10 +61,8 @@ module.exports = function(app, express) {
                 result.connexion = data;
                 if(data){
                     result.id = rows[0].id;
-                    req.session.id = rows[0].id;
-                    req.session.reload( function (err) {
-                        res.render('index', { title: req.session.id });
-                    });
+                    req.session.user = "user";
+                    req.session.id_user = result.id;
                     result.fonction = rows[0].fonction;
                 }
                 console.log(result);
@@ -82,7 +78,9 @@ module.exports = function(app, express) {
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on
-        if (req.session.id && req.session.id > 0)
+        console.log("$$$$$$$$$$$$$$$$ SESSIONS$$$$$$$$$$$$$$");
+        console.log(req.session);
+        if (req.session.user == "user")
             return next();
 
         // if they aren't redirect them to the home page
