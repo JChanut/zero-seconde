@@ -1,10 +1,16 @@
 /**
  * Created by Thomas on 05/08/2015.
  */
-module.exports = function(app, router, jsonParser) {
+module.exports = function(app, router) {
 
-    var path = require('path');
+    var bodyParser = require('body-parser'),
+        path = require('path');
 
+    app.use(bodyParser.urlencoded({ extended: true }));
+    app.use(bodyParser.json());
+
+// create application/json parser
+    var jsonParser = bodyParser.json();
     app.use('/',router);
     router.get('/', function (req, res) {
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
