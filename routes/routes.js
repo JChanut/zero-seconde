@@ -34,6 +34,33 @@ module.exports = function(app, express) {
 
     router.get('/infos_retard', function (req, res){
         res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'))
+
+        req.getConnection(function (err, conn) {
+            if (err) return console.log('Connection fail: ' + err);
+            console.log(req.body);
+
+            var getQuery = 'SELECT id_unite, libelle FROM zs_unite';
+            var query = conn.query(getQuery, function(err, rows){
+                if (err) {
+
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+                var result = [];
+
+                for(var i=0;i<rows.length;i++){
+                    var row = rows[i];
+                    result.push({
+                        id_unite : row.id_unite,
+                        libelle : row.libelle
+                    });
+                };
+
+                console.log(result);
+                res.json(result);
+            });
+        });
+
     });
 
 
