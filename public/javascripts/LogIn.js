@@ -89,4 +89,5 @@ var ZSauthApp = angular.module('authApp', []);
             }
         }
     }]);
+
     })();

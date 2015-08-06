@@ -34,7 +34,7 @@
 
 </head>
 
-<body class="cyan loaded">
+<body class="cyan loaded" ng-app="retardDataApp" ng-controller="retardDataCtrl">
 <!-- Start Page Loading -->
 <div id="loader-wrapper">
     <div id="loader"></div>
@@ -56,19 +56,19 @@
 
 
             <div class="input-field col s12">
+                <select ng-repeat="unite in unites">
+                    <option ng-value="unite.id">{{unite.libelle}}</option>
+                </select>
+                <label>Sélectionez l'unité :</label>
+            </div>
+
+            <div class="input-field col s12">
                 <select>
                     <option value="0" disabled selected >-- --</option>
                     <option value="1">Escale</option>
-                    <option value="2">Embarquement</option>
-                    <option value="3">Prestations externes</option>
-                    <option value="4">ET</option>
-                    <option value="5">ECT</option>
-                    <option value="6">Matériel</option>
-                    <option value="7">COP - COS</option>
-                    <option value="8">Infra C</option>
-                    <option value="9">Infra V</option>
+
                 </select>
-                <label>Sélectionez la cause du retard</label>
+                <label>Sélectionez le motif du retard :</label>
             </div>
 
             <div class="row">
@@ -111,6 +111,7 @@
 
 <!--plugins.js - Some Specific JS codes for Plugin Settings-->
 <script type="text/javascript" src="../javascripts/plugin.js"></script>
+<script type="text/javascript" src="../javascripts/retardData.js"></script>
 
 
 
