@@ -1,12 +1,20 @@
 /**
  * Created by Thomas on 05/08/2015.
  */
-module.exports = function(app, router) {
+module.exports = function(app, express) {
 
     var bodyParser = require('body-parser'),
         session = require('express-session'),
+        router = express.Router(),
         path = require('path');
 
+    app.use(session({
+        secret: 'TUS415P45',
+        name: 'connexion_zs',
+        id: null,
+        resave: true,
+        saveUninitialized: true
+    }));
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
 
@@ -17,12 +25,12 @@ module.exports = function(app, router) {
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
     });
 
-    router.get('/retard', function (req, res){
+    router.get('/retard',isLoggedIn, function (req, res){
 
         res.sendFile(path.resolve(__dirname + '/../views/retard.html'));
     });
 
-    router.get('/ace/historique', function (req, res){
+    router.get('/ace/historique',isLoggedIn, function (req, res){
 
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
@@ -55,10 +63,15 @@ module.exports = function(app, router) {
                 result.connexion = data;
                 if(data){
                     result.id = rows[0].id;
+                    req.session.id = rows[0].id;
+                    req.session.reload( function (err) {
+                        res.render('index', { title: req.session.id });
+                    });
                     result.fonction = rows[0].fonction;
                 }
                 console.log(result);
                 res.json(result);
+
             });
 
         });
@@ -69,7 +82,7 @@ module.exports = function(app, router) {
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on
-        if (req.isAuthenticated())
+        if (req.session.id && req.session.id > 0)
             return next();
 
         // if they aren't redirect them to the home page

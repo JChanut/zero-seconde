@@ -3,12 +3,12 @@
  */
 
 var express = require('express'),
-    router = express.Router(),
     path = require('path'),
     connection = require('express-myconnection'),
     mysql = require('mysql'),
     favicon = require('serve-favicon'),
     morgan = require('morgan'),
+    cookieParser = require('cookie-parser'),
     app = express();
 
 //==============================================================================
@@ -16,6 +16,7 @@ var express = require('express'),
 //==============================================================================
 // use body-parser pour les POST requests
 
+app.use(cookieParser());
 
 // MySQL connection
 app.use(
@@ -35,7 +36,7 @@ app.use(express.static(__dirname + "/public"));
 
 
 //Lien vers le fichier routes.js afin d'assurer les redirections d'url
-require('./routes/routes.js')(app,router);
+require('./routes/routes.js')(app, express);
 
 //==============================================================================
 //START THE SERVER
