@@ -6761,7 +6761,7 @@ select:disabled {
   .file-field input.file-path {
     width: 100%; }
   .file-field .btn, .file-field .btn-large {
-    float: left;
+    /*float: left;*/
     height: 3rem;
     line-height: 3rem; }
   .file-field span {
