@@ -33,8 +33,11 @@ module.exports = function(app, express) {
     });
 
     router.get('/infos_retard', isLoggedIn, function (req, res){
-        res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'))
+        res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'));
 
+    });
+
+    router.get('/infos_retard/unites', isLoggedIn, function(req, res){
         req.getConnection(function (err, conn) {
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);
@@ -60,7 +63,6 @@ module.exports = function(app, express) {
                 res.json(result);
             });
         });
-
     });
 
 
@@ -68,7 +70,6 @@ module.exports = function(app, express) {
 //------------------------------------------------------------------------------
   router.route('/authentification').post(jsonParser, function (req, res) {
         req.getConnection(function (err, conn) {
-            console.log(req.session);
 
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);      // JSON req
@@ -79,7 +80,6 @@ module.exports = function(app, express) {
             var query = conn.query(getQuery, function (err, rows) {
 
                 if (err) {
-
                     console.log(err);
                     res.status(500).send(err);
                 }
@@ -105,8 +105,8 @@ module.exports = function(app, express) {
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on
-        console.log("$$$$$$$$$$$$$$$$ SESSIONS$$$$$$$$$$$$$$");
-        console.log(req.session);
+        console.log("////// SESSIONS ////// " + JSON.stringify(req.session));
+
         if (req.session.user == "user")
             return next();
 

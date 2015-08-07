@@ -4,6 +4,8 @@
 	Author: GeeksLabs
 	Author URL: http://www.themeforest.net/user/geekslabs
 ================================================================================ --><head>
+    <html ng-app="retardDataApp">
+    <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -34,7 +36,7 @@
 
 </head>
 
-<body class="cyan loaded" ng-app="retardDataApp" ng-controller="retardDataCtrl">
+<body class="cyan loaded" ng-controller="retardDataCtrl">
 <!-- Start Page Loading -->
 <div id="loader-wrapper">
     <div id="loader"></div>
@@ -56,8 +58,8 @@
 
 
             <div class="input-field col s12">
-                <select ng-init="init()" >
-                    <option ng-value="unite.id" ng-repeat="unite in unites">{{unite.libelle}}</option>
+                <select ng-model="unite" ng-options="unite.libelle for unite in unites">
+                    <option value="{{unite.id_unite}}">------</option>
                 </select>
                 <label>Sélectionez l'unité :</label>
             </div>
@@ -99,7 +101,8 @@
 <!-- ================================================
   Scripts
   ================================================ -->
-
+<script src="//code.angularjs.org/1.2.20/angular.js"></script>
+<script type="text/javascript" src="../javascripts/retardData.js"></script>
 <!-- jQuery Library -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <!--materialize js-->
@@ -111,8 +114,9 @@
 
 <!--plugins.js - Some Specific JS codes for Plugin Settings-->
 <script type="text/javascript" src="../javascripts/plugin.js"></script>
-<script type="text/javascript" src="../javascripts/retardData.js"></script>
+
 
 
 
 <div class="hiddendiv common"></div></body>
+    </html>
