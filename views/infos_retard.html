@@ -1,9 +1,4 @@
-<!--================================================================================
-	Item Name: Materialize - Material Design Admin Template
-	Version: 1.0
-	Author: GeeksLabs
-	Author URL: http://www.themeforest.net/user/geekslabs
-================================================================================ --><head>
+
     <html ng-app="retardDataApp">
     <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -25,7 +20,7 @@
 
 
     <!-- CORE CSS-->
-
+        <script src="//code.angularjs.org/1.2.20/angular.js"></script>
     <link href="materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection">
     <link href="stylesheets/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
@@ -36,7 +31,7 @@
 
 </head>
 
-<body class="cyan loaded" ng-controller="retardDataCtrl">
+<body class="cyan loaded" >
 <!-- Start Page Loading -->
 <div id="loader-wrapper">
     <div id="loader"></div>
@@ -57,17 +52,18 @@
             </div>
 
 
-            <div class="input-field col s12">
-                <select ng-model="unite" ng-options="unite.libelle for unite in unites">
-                    <option value="{{unite.id_unite}}">------</option>
+            <div class="input-field col s12" ng-controller="retardDataCtrl">
+                <select>
+                    <option ng-repeat="unite in unites" value="">{{unite}}</option>
                 </select>
                 <label>Sélectionez l'unité :</label>
             </div>
 
+
             <div class="input-field col s12">
                 <select>
                     <option value="0" disabled selected >-- --</option>
-                    <option value="1">Escale</option>
+                    <option value="1">XXX</option>
 
                 </select>
                 <label>Sélectionez le motif du retard :</label>
@@ -101,7 +97,7 @@
 <!-- ================================================
   Scripts
   ================================================ -->
-<script src="//code.angularjs.org/1.2.20/angular.js"></script>
+
 <script type="text/javascript" src="../javascripts/retardData.js"></script>
 <!-- jQuery Library -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
@@ -114,8 +110,6 @@
 
 <!--plugins.js - Some Specific JS codes for Plugin Settings-->
 <script type="text/javascript" src="../javascripts/plugin.js"></script>
-
-
 
 
 <div class="hiddendiv common"></div></body>

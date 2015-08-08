@@ -37,7 +37,7 @@ module.exports = function(app, express) {
 
     });
 
-    router.get('/infos_retard/unites', isLoggedIn, function(req, res){
+    router.get('/unites', isLoggedIn, function(req, res){
         req.getConnection(function (err, conn) {
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);
@@ -59,7 +59,6 @@ module.exports = function(app, express) {
                     });
                 };
 
-                console.log(result);
                 res.json(result);
             });
         });
@@ -92,7 +91,7 @@ module.exports = function(app, express) {
                     req.session.id_user = result.id;
                     result.fonction = rows[0].fonction;
                 }
-                console.log(result);
+
                 res.json(result);
 
             });
