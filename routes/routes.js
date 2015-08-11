@@ -32,7 +32,11 @@ module.exports = function(app, express) {
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
 
-    router.get('/ace/ajoutHorraires', isLoggedIn, function (req, res){
+    router.get('/ace/ajoutHoraires/send', function(req,res){
+        require('../script/excel_reader.js')(req,res,1);
+    });
+
+    router.get('/ace/ajoutHoraires', isLoggedIn, function (req, res){
 
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHoraires.html'));
     });

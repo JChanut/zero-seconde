@@ -1,7 +1,7 @@
 /**
  * Created by Thomas on 07/08/2015.
  */
-module.exports = function(req,res) {
+module.exports = function(req,res,id_gare) {
     var Excel = require('exceljs');
     var path = require('path');
 
@@ -27,10 +27,15 @@ module.exports = function(req,res) {
                     date.setHours(heure[0]);
                     date.setMinutes(heure[1]);
 
+                    var string_date = date.toISOString();
+                    string_date = string_date.split("T");
+                    string_date = string_date[0] +" "+string_date[1];
+                    string_date = string_date.split(".");
+
                     prevision.push({
                         train : num_train,
                         parite : num_parite,
-                        date: date,
+                        date: string_date[0],
                         id_train : null,
                         id_parite : null,
                         id_prevision : null
@@ -63,18 +68,18 @@ module.exports = function(req,res) {
             Data_excel.prototype.setTrain = function(){
                 var train = (this.first)? this.data[this.rang].train : this.data[this.rang].parite;
                 var getQuery = 'INSERT INTO zs_train  (num_train) VALUES ('+train+')';
-
+                var current = this;
                 req.getConnection(function (err, conn) {
 
                     if (err) return console.log('Connection fail: ' + err);
                     var query = conn.query(getQuery, function (err, rows) {
 
                         if (err) {
-                            console.log(err);
+                            console.log("setTrain"+err);
                             res.status(500).send(err);
                         }
                         else
-                            this.getTrain();
+                            current.getTrain();
                     });
                 });
             };
@@ -82,34 +87,34 @@ module.exports = function(req,res) {
             Data_excel.prototype.getTrain = function(){
                 var train = (this.first)? this.data[this.rang].train : this.data[this.rang].parite;
                 var getQuery =  'SELECT id_train FROM zs_train WHERE num_train = '+train;
-
+                var current = this;
                 req.getConnection(function (err, conn) {
 
                     if (err) return console.log('Connection fail: ' + err);
                     var query = conn.query(getQuery, function (err, rows) {
 
                         if (err) {
-                            console.log(err);
+                            console.log("getTrain"+err);
                             res.status(500).send(err);
                         }
                         else
                         {
                             if(rows.length == 0)
-                                this.setTrain();
+                                current.setTrain();
                             else {
-                                if(this.first){
-                                    this.data[this.rang].id_train = rows[0].id_train;
-                                    if(this.data[this.rang].parite == null) {
-                                        this.setPrevision();
+                                if(current.first){
+                                    current.data[current.rang].id_train = rows[0].id_train;
+                                    if(current.data[current.rang].parite == null) {
+                                        current.setPrevision();
                                     }
                                     else{
-                                        this.first = false;
-                                        this.getTrain();
+                                        current.first = false;
+                                        current.getTrain();
                                     }
                                 }
                                 else {
-                                    this.data[this.rang].id_parite = rows[0].id_train;
-                                    this.setPrevision();
+                                    current.data[current.rang].id_parite = rows[0].id_train;
+                                    current.setPrevision();
                                 }
                             }
                         }
@@ -118,18 +123,20 @@ module.exports = function(req,res) {
             };
 
             Data_excel.prototype.setPrevision = function(){
-                var getQuery = 'INSERT INTO zs_prevision (id_gare, date) VALUES ('+this.id_gare+','+this.data[this.rang].date+')';
+                var getQuery = 'INSERT INTO zs_prevision (id_gare, date) VALUES ('+this.id_gare+',TIMESTAMP("'+this.data[this.rang].date+'"))';
+                var current = this;
+                console.log(this.data[this.rang].date);//INSERT INTO `zero_sec`.`zs_prevision` (`id_prevision`, `id_gare`, `date`) VALUES (NULL, '1', TIMESTAMP('2015-08-31 00:00:00'));
                 req.getConnection(function (err, conn) {
 
                     if (err) return console.log('Connection fail: ' + err);
                     var query = conn.query(getQuery, function (err, rows) {
 
                         if (err) {
-                            console.log(err);
+                            console.log("setPrevision "+current.id_gare+" "+current.data[current.rang].date+" "+err);
                             res.status(500).send(err);
                         }
                         else {
-                            this.getPrevision();
+                            current.getPrevision();
                         }
                     });
                 });
@@ -138,18 +145,20 @@ module.exports = function(req,res) {
             Data_excel.prototype.getPrevision = function(){
                 var getQuery = 'SELECT max(id_prevision) AS id_prevision FROM zs_prevision WHERE id_gare ='+this.id_gare;
 
+                var current = this;
+
                 req.getConnection(function (err, conn) {
 
                     if (err) return console.log('Connection fail: ' + err);
                     var query = conn.query(getQuery, function (err, rows) {
 
                         if (err) {
-                            console.log(err);
+                            console.log("getPrevision "+err);
                             res.status(500).send(err);
                         }
                         else{
-                            this.data[this.rang].id_prevision = rows[0].id_prevision;
-                            this.makeLinkTrainPrevision();
+                            current.data[current.rang].id_prevision = rows[0].id_prevision;
+                            current.makeLinkTrainPrevision();
                         }
                     });
                 });
@@ -160,8 +169,9 @@ module.exports = function(req,res) {
                 var id_parite = this.data[this.rang].id_parite;
                 var id_prevision = this.data[this.rang].id_prevision;
                 var getQuery = 'INSERT INTO zs_prevision_train (id_prevision,id_train,second_train) VALUES ('+id_prevision+','+id_train+',false)';
+                var current = this;
                 if(id_parite != null)
-                    getQuery += ' ('+id_prevision+','+id_parite+',true)';
+                    getQuery += ', ('+id_prevision+','+id_parite+',true)';
 
                 req.getConnection(function (err, conn) {
 
@@ -169,19 +179,25 @@ module.exports = function(req,res) {
                     var query = conn.query(getQuery, function (err, rows) {
 
                         if (err) {
-                            console.log(err);
+                            console.log("makeLinkTrainPrevision "+id_train+" "+id_parite+" "+id_prevision+" "+err);
                             res.status(500).send(err);
                         }
                         else {
-                            this.rang++;
-                            this.first = true;
-                            if(this.rang < this.data.length) {
-                                this.getTrain();
+                            current.rang++;
+                            current.first = true;
+                            if(current.rang < current.data.length) {
+                                current.getTrain();
+                            }
+                            else {
+                                current.res.send("ok");
                             }
                         }
                     });
                 });
             };
+
+            var ajout_bd = new Data_excel(req,res,prevision,id_gare);
+            ajout_bd.getTrain();
         }
     );
 };

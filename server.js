@@ -42,7 +42,7 @@ app.use(express.static(__dirname + "/public"));
 
 //Lien vers le fichier routes.js afin d'assurer les redirections d'url
 require('./routes/routes.js')(app, express);
-//require('./script/excel_reader.js')(app);
+//
 
 //==============================================================================
 //START THE SERVER
