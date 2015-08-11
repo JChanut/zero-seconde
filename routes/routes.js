@@ -105,7 +105,7 @@ module.exports = function(app, express) {
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on
-        console.log("$$$$$$$$$$$$$$$$ SESSIONS$$$$$$$$$$$$$$");
+        console.log("$$$$$$$$$$$$$$$$ SESSIONS $$$$$$$$$$$$$$");
         console.log(req.session);
         if (req.session.user == "user")
             return next();

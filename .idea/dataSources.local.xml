@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="MySQL - zero_sec@localhost" uuid="b7384940-4ca6-4efd-8d05-dacd717509f9">
+      <secret-storage>memory</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>zero_sec.*</schema-pattern>
+      <default-schemas>zero_sec.*</default-schemas>
+    </data-source>
+  </component>
+</project>
