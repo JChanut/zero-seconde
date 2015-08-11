@@ -1481,3 +1481,8 @@ footer.page-footer {
       font-size: 0.8rem;
   }
 }
+
+.label-list {
+  position: static !important;
+
+}

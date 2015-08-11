@@ -8,17 +8,20 @@
         function($scope, $http) {
 
             var url = 'http://localhost:3000/unites';
-            $scope.unites = [];
-            console.log($scope.unites);
+
+
+            $scope.selected = {};
 
             //Méthode GET -> Récupérer et afficher les données
                 $http.get(url).
                     then(function(response) {
-                        $scope.unites = response;
+                        $scope.data = response.data;
                     }, function(response) {
                         // called asynchronously if an error occurs
                         // or server returns response with an error status.
                     });
+
+
         }]);
 
 })();

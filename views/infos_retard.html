@@ -31,7 +31,7 @@
 
 </head>
 
-<body class="cyan loaded" >
+<body class="cyan loaded" ng-controller="retardDataCtrl">
 <!-- Start Page Loading -->
 <div id="loader-wrapper">
     <div id="loader"></div>
@@ -52,38 +52,37 @@
             </div>
 
 
-            <div class="input-field col s12" ng-controller="retardDataCtrl">
-                <select>
-                    <option ng-repeat="unite in unites" value="">{{unite}}</option>
+            <div class="input-field col s12" >
+                <label class="label-list" for="list">Sélectionez l'unité :</label>
+                <select class="browser-default" id="list" ng-model="selected.unite" ng-options="u.libelle_unite for u in data">
+                    <option value="">-- UNITES --</option>
                 </select>
-                <label>Sélectionez l'unité :</label>
             </div>
 
 
             <div class="input-field col s12">
-                <select>
-                    <option value="0" disabled selected >-- --</option>
-                    <option value="1">XXX</option>
-
+                <label class="label-list" >Sélectionez le motif du retard :</label>
+                <select class="browser-default" ng-model="selected.motif" ng-options="m.libelle_motif for m in selected.unite.motif">
+                    <option value="">-- MOTIFS --</option>
                 </select>
-                <label>Sélectionez le motif du retard :</label>
+
             </div>
 
             <div class="row">
                 <div class="input-field col s12">
                     <i class="mdi-editor-mode-edit prefix"></i>
                     <textarea id="icon_prefix2" class="materialize-textarea"></textarea>
-                    <label for="icon_prefix2" class="">Indiquez la raison du retard :</label>
+                    <label for="icon_prefix2" class="">Commentaire :</label>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s12">
-                    <a href="index.html" class="btn waves-effect waves-light col s12">Envoyez les infos</a>
+                    <a href="#" class="btn waves-effect waves-light col s12">Envoyez les infos</a>
                 </div>
             </div>
             <div class="row">
                 <div class="input-field col s6 m6 16">
-                    <a href="index.html" class="waves-effect waves-light btn-large"><i class="mdi-av-skip-previous right"></i></a>
+                    <a href="/" class="waves-effect waves-light btn-large"><i class="mdi-av-skip-previous right"></i></a>
                 </div>
                 <div class="input-field col s6 m6 16">
                 </div>

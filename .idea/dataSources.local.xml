@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal">
+    <data-source name="Zero SEC" uuid="9deb1b70-ae9b-4258-83c6-c897892d91a9">
+      <secret-storage>master_key</secret-storage>
+      <user-name>root</user-name>
+      <schema-pattern>zero_sec.*</schema-pattern>
+      <default-schemas>zero_sec.*</default-schemas>
+    </data-source>
+  </component>
+</project>
