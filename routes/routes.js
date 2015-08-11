@@ -116,7 +116,7 @@ module.exports = function(app, express) {
 
 // | POST | post data to DB |
 //------------------------------------------------------------------------------
-  router.route('/authentification').post(jsonParser, function (req, res) {
+    router.route('/authentification').post(jsonParser, function (req, res) {
         req.getConnection(function (err, conn) {
 
             if (err) return console.log('Connection fail: ' + err);
