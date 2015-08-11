@@ -7,18 +7,20 @@
     ZSretardData.controller('retardDataCtrl', ['$scope', '$http',
         function($scope, $http) {
 
-            var url = 'http://localhost:3000/infos_retard';
-            $scope.unites=[];
+            var url = 'http://localhost:3000/unites';
+
+
+            $scope.selected = {};
 
             //Méthode GET -> Récupérer et afficher les données
-            $scope.init=function(){
-                $http.get(url)
-                    .success(function(resultat) {
-                        $scope.unites = resultat;
-                        setTimeout($scope.initCheck,1000);
+                $http.get(url).
+                    then(function(response) {
+                        $scope.data = response.data;
+                    }, function(response) {
+                        // called asynchronously if an error occurs
+                        // or server returns response with an error status.
                     });
-            };
-            $scope.init();
+
 
         }]);
 

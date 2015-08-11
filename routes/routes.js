@@ -33,13 +33,58 @@ module.exports = function(app, express) {
     });
 
     router.get('/infos_retard', isLoggedIn, function (req, res){
-        res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'))
+        res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'));
 
+    });
+
+    router.get('/unites', isLoggedIn, function(req, res){
         req.getConnection(function (err, conn) {
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);
 
-            var getQuery = 'SELECT id_unite, libelle FROM zs_unite';
+            var getQuery = 'SELECT DISTINCT zs_unite.libelle as libelle_unite, id_retard, zs_cause_retard.id_unite, zs_cause_retard.libelle as libelle_motif FROM zs_cause_retard LEFT JOIN zs_unite ON zs_cause_retard.id_unite = zs_unite.id_unite';
+            var query = conn.query(getQuery, function(err, rows){
+                if (err) {
+
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+                var result = [];
+
+                for(var i=0;i<rows.length;i++){
+                    var row = rows[i];
+                    var bool = false;
+                    for(var j= 0; j<result.length;j++){
+                        if(result[j].id_unite == row.id_unite){
+                            bool = true;
+                            result[j].motif.push({
+                                id_retard : row.id_retard,
+                                libelle_motif : row.libelle_motif
+                            });
+                        };
+                    };
+                    if(!bool){
+                      result.push({
+                         id_unite : row.id_unite,
+                          libelle_unite : row.libelle_unite,
+                          motif : [{
+                              id_retard : row.id_retard,
+                              libelle_motif : row.libelle_motif
+                          }]
+                      });
+                    };
+                };
+                res.json(result);
+            });
+        });
+    });
+
+    router.get('/motifs', isLoggedIn, function(req, res){
+        req.getConnection(function (err, conn) {
+            if (err) return console.log('Connection fail: ' + err);
+            console.log(req.body);
+
+            var getQuery = 'SELECT id_retard, id_unite, libelle FROM zs_cause_retard';
             var query = conn.query(getQuery, function(err, rows){
                 if (err) {
 
@@ -51,24 +96,23 @@ module.exports = function(app, express) {
                 for(var i=0;i<rows.length;i++){
                     var row = rows[i];
                     result.push({
+                        id_retard: row.id_retard,
                         id_unite : row.id_unite,
                         libelle : row.libelle
                     });
                 };
 
-                console.log(result);
                 res.json(result);
             });
         });
-
     });
+
 
 
 // | POST | post data to DB |
 //------------------------------------------------------------------------------
   router.route('/authentification').post(jsonParser, function (req, res) {
         req.getConnection(function (err, conn) {
-            console.log(req.session);
 
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);      // JSON req
@@ -79,7 +123,6 @@ module.exports = function(app, express) {
             var query = conn.query(getQuery, function (err, rows) {
 
                 if (err) {
-
                     console.log(err);
                     res.status(500).send(err);
                 }
@@ -92,7 +135,7 @@ module.exports = function(app, express) {
                     req.session.id_user = result.id;
                     result.fonction = rows[0].fonction;
                 }
-                console.log(result);
+
                 res.json(result);
 
             });
@@ -105,8 +148,13 @@ module.exports = function(app, express) {
     function isLoggedIn(req, res, next) {
 
         // if user is authenticated in the session, carry on
+<<<<<<< HEAD
         console.log("$$$$$$$$$$$$$$$$ SESSIONS $$$$$$$$$$$$$$");
         console.log(req.session);
+=======
+        console.log("////// SESSIONS ////// " + JSON.stringify(req.session));
+
+>>>>>>> origin/master
         if (req.session.user == "user")
             return next();
 
