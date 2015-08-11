@@ -34,7 +34,7 @@ module.exports = function(app, express) {
 
     router.get('/ace/ajoutHorraires', isLoggedIn, function (req, res){
 
-        res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHorraires.html'));
+        res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHoraires.html'));
     });
 
     router.get('/infos_retard', isLoggedIn, function (req, res){
