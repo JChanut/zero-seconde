@@ -32,6 +32,11 @@ module.exports = function(app, express) {
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
 
+    router.get('/ace/ajoutHorraires', isLoggedIn, function (req, res){
+
+        res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHorraires.html'));
+    });
+
     router.get('/infos_retard', isLoggedIn, function (req, res){
         res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'));
 

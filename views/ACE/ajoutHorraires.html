@@ -1,24 +1,23 @@
-<!--================================================================================
-	Item Name: Materialize - Material Design Admin Template
-	Version: 1.0
-	Author: GeeksLabs
-	Author URL: http://www.themeforest.net/user/geekslabs
-================================================================================ --><head>
+<!DOCTYPE html>
+<html lang="fr">
+
+<html>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
     <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
-    <title>Login Page | Materialize - Material Design Admin Template</title>
+    <title>Ajout des trains</title>
 
     <!-- Favicons-->
-    <link rel="icon" href="../images/favicon/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
     <!-- Favicons-->
-    <link rel="apple-touch-icon-precomposed" href="../images/favicon/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
     <!-- For iPhone -->
     <meta name="msapplication-TileColor" content="#00bcd4">
-    <meta name="msapplication-TileImage" content="../images/favicon/mstile-144x144.png">
+    <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
     <!-- For Windows Phone -->
 
 
@@ -44,39 +43,39 @@
 <!-- End Page Loading -->
 
 
-<div class="row">
-    <div class="col s12 z-depth-4 card-panel">
-        <table class="table-responsive bordered centered">
-            <thead>
-            <tr>
-                <th data-field="id">N° train</th>
-                <th data-field="retard">Retard</th>
-                <th data-field="temps">Temps de retard</th>
-                <th data-field="temps">Opérateur Départ</th>
-            </tr>
-            </thead>
 
-            <tbody>
-            <tr>
-                <td>87123</td>
-                <td>OUI</td>
-                <td>3.54</td>
-                <td>MARCHALL</td>
-            </tr>
-            <tr>
-                <td>7234</td>
-                <td>NON</td>
-                <td>---</td>
-                <td>RICO</td>
-            </tr>
-            <tr>
-                <td>7276</td>
-                <td>OUI</td>
-                <td>16.34</td>
-                <td>LESTAGE</td>
-            </tr>
-            </tbody>
-        </table>
+<div id="login-page" class="row">
+    <div class="col s12 z-depth-4 card-panel">
+        <form class="login-form">
+            <div class="row">
+                <div class="input-field col s12 center">
+                    <h4>Insertion de fichier</h4>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <form action="#">
+                        <div class="file-field input-field">
+                            <input class="file-path validate" type="text"/>
+                            <div class="btn">
+                                <span>Fichier</span>
+                                <input type="file" />
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="input-field col s6 m6 16">
+                    <a href="/" class="waves-effect waves-light btn-large"><i class="mdi-av-skip-previous right"></i></a>
+                </div>
+                <div class="input-field col s6 m6 16">
+                </div>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -101,5 +100,5 @@
 <script type="text/javascript" src="../../javascripts/plugin.js"></script>
 
 
-
 <div class="hiddendiv common"></div></body>
+</html>
