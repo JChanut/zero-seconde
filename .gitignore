@@ -17,7 +17,6 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
-.idea
 # =========================
 # Operating System Files
 # =========================
@@ -42,3 +41,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Directory in this folder
+.idea
