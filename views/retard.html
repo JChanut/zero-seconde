@@ -3,100 +3,105 @@
 	Version: 1.0
 	Author: GeeksLabs
 	Author URL: http://www.themeforest.net/user/geekslabs
-================================================================================ --><head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
-    <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
-    <title>0" - Déclenchement d'un retard</title>
+================================================================================ -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
+        <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
+        <title>0" - Déclenchement d'un retard</title>
 
-    <!-- Favicons-->
-    <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
-    <!-- Favicons-->
-    <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
-    <!-- For iPhone -->
-    <meta name="msapplication-TileColor" content="#00bcd4">
-    <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
-    <!-- For Windows Phone -->
-
-
-    <!-- CORE CSS-->
-
-    <link href="materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="stylesheets/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
-
-    <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
-    <link href="stylesheets/prism.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="stylesheets/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
-
-</head>
-
-<body class="cyan loaded" ng-app="trainDataApp" ng-controller="trainDataCtrl">
-<!-- Start Page Loading -->
-<div id="loader-wrapper">
-    <div id="loader"></div>
-    <div class="loader-section section-left"></div>
-    <div class="loader-section section-right"></div>
-</div>
-<!-- End Page Loading -->
+        <!-- Favicons-->
+        <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+        <!-- Favicons-->
+        <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+        <!-- For iPhone -->
+        <meta name="msapplication-TileColor" content="#00bcd4">
+        <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+        <!-- For Windows Phone -->
 
 
+        <!-- CORE CSS-->
 
-<div id="login-page" class="row">
-    <div class="col s12 z-depth-4 card-panel">
-        <form class="login-form">
-            <div class="row">
-                <div class="input-field col s12 center">
-                    <h4>Retard</h4>
-                    <p class="center">Vous êtes sur le point de déclencher un retard.</p>
-                </div>
+        <link href="materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="stylesheets/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+        <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
+        <link href="stylesheets/prism.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="stylesheets/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+    </head>
+
+    <body class="cyan loaded" ng-app="trainDataApp" ng-controller="trainDataCtrl">
+        <!-- Start Page Loading -->
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+        </div>
+        <!-- End Page Loading -->
+
+
+
+        <div id="login-page" class="row">
+            <div class="col s12 z-depth-4 card-panel">
+                <form class="login-form">
+                    <div class="row">
+                        <div class="input-field col s12 center">
+                            <h4>Retard</h4>
+                            <p class="center">Vous êtes sur le point de déclencher un retard.</p>
+                        </div>
+                    </div>
+                    <div class="input-field col s12">
+                        <label class="label-list" for="list">Sélectionez le n° de train</label>
+                        <select class="browser-default">
+                            <option id="list" ng-repeat="train in trains" ng-value="{{train.id_train}}">{{train.num_train}}</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <a href="/infos_retard" class="waves-effect waves-light btn-large retard"><i class="mdi-image-timer left"></i>En retard...</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <a href="alheure.html" class="waves-effect waves-light btn-large alheure"><i class="mdi-image-timer left"></i>A l'heure !</a>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                    </div>
+                </form>
             </div>
-            <div class="input-field col s12">
-                <label class="label-list" for="list">Sélectionez le n° de train</label>
-                <select class="browser-default">
-                    <option id="list" ng-repeat="train in trains" ng-value="{{train.id_train}}">{{train.num_train}}</option>
-                </select>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <a href="/infos_retard" class="waves-effect waves-light btn-large retard"><i class="mdi-image-timer left"></i>En retard...</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="input-field col s12">
-                    <a href="alheure.html" class="waves-effect waves-light btn-large alheure"><i class="mdi-image-timer left"></i>A l'heure !</a>
-                </div>
-            </div>
-            <div class="row">
-
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
 
 
-<!-- ================================================
-  Scripts
-  ================================================ -->
+        <!-- ================================================
+          Scripts
+          ================================================ -->
 
-<!-- jQuery Library -->
-<script src="//code.angularjs.org/1.2.20/angular.js"></script>
-<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-<!--materialize js-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
-<!--prism-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
-<!--scrollbar-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.3/js/min/perfect-scrollbar.min.js"></script>
+        <!-- jQuery Library -->
+        <script src="//code.angularjs.org/1.2.20/angular.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <!--materialize js-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+        <!--prism-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
+        <!--scrollbar-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.3/js/min/perfect-scrollbar.min.js"></script>
 
-<!--plugins.js - Some Specific JS codes for Plugin Settings-->
-<script type="text/javascript" src="javascripts/plugin.js"></script>
-<script type="text/javascript" src="javascripts/trainData.js"></script>
+        <!--plugins.js - Some Specific JS codes for Plugin Settings-->
+        <script type="text/javascript" src="javascripts/plugin.js"></script>
+        <script type="text/javascript" src="javascripts/trainData.js"></script>
 
 
 
-<div class="hiddendiv common"></div></body>
+        <div class="hiddendiv common"></div>
+    </body>
+</html>

@@ -23,16 +23,14 @@ module.exports = function(app, express) {
     });
 
     router.get('/retard', isLoggedIn, function (req, res){
-
         res.sendFile(path.resolve(__dirname + '/../views/retard.html'));
     });
 
     router.get('/ace/historique', isLoggedIn, function (req, res){
-
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
 
-    router.get('/ace/ajoutHoraires/send', function(req,res){
+    router.get('/ace/ajoutHoraires/send',isLoggedIn , function(req,res){
         require('../script/excel_reader.js')(req,res,1);
     });
 
@@ -51,7 +49,7 @@ module.exports = function(app, express) {
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);
 
-            var getQuery = 'SELECT DISTINCT zs_unite.libelle as libelle_unite, id_retard, zs_cause_retard.id_unite, zs_cause_retard.libelle as libelle_motif FROM zs_cause_retard LEFT JOIN zs_unite ON zs_cause_retard.id_unite = zs_unite.id_unite';
+            var getQuery = 'SELECT DISTINCT zs_unite.libelle as libelle_unite, id_retard, zs_unite.id_unite, zs_cause_retard.libelle as libelle_motif FROM zs_cause_retard RIGHT JOIN zs_unite ON zs_cause_retard.id_unite = zs_unite.id_unite';
             var query = conn.query(getQuery, function(err, rows){
                 if (err) {
 
@@ -91,7 +89,7 @@ module.exports = function(app, express) {
     router.get('/trains', isLoggedIn, function(req, res){
         req.getConnection(function (err, conn) {
             if (err) return console.log('Connection fail: ' + err);
-            console.log(req.body);
+
 
             var getQuery = 'SELECT id_train, num_train FROM zs_train';
             var query = conn.query(getQuery, function(err, rows){
@@ -100,17 +98,8 @@ module.exports = function(app, express) {
                     console.log(err);
                     res.status(500).send(err);
                 }
-                var result = [];
 
-                for(var i=0;i<rows.length;i++){
-                    var row = rows[i];
-                    result.push({
-                        id_train: row.id_train,
-                        num_train : row.num_train
-                    });
-                };
-
-                res.json(result);
+                res.json(rows);
             });
         });
     });
