@@ -95,10 +95,10 @@ module.exports = function(app, express) {
             if (err) return console.log('Connection fail: ' + err);
 
             var date_min = new Date();
-            date_min.setHours(date_min.getHours()-12);
+            date_min.setHours(date_min.getHours()-10);
             date_min.setMinutes(date_min.getMinutes()-date_min.getTimezoneOffset());
             var date_max = new Date();
-            date_max.setHours(date_max.getHours()+1);
+            date_max.setHours(date_max.getHours()+3);
             date_max.setMinutes(date_max.getMinutes()-date_max.getTimezoneOffset());
 
             var string_date_min = date_min.toISOString();
