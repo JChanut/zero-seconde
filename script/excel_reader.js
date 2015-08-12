@@ -14,8 +14,7 @@ module.exports = function(req,res,id_gare) {
             // use workbook
             var worksheet = workbook.getWorksheet("TST");
             var sortir = false;
-            while(i<30){
-            //while(!sortir) {
+            while(!sortir) {
                 var row = worksheet.getRow(i);
 
                 var num_train = row.values[1];
