@@ -7,18 +7,24 @@
     ZStrainData.controller('trainDataCtrl', ['$scope', '$http',
         function($scope, $http) {
 
-            var url = 'http://localhost:3000/trains';
+            var url = '/trains';
 
-            $scope.trains = [];
+            $scope.selected = {};
+
 
             //Méthode GET -> Récupérer et afficher les données
             $http.get(url).
                 then(function(response) {
-                    $scope.trains = response.data;
+                    $scope.data = response.data;
                 }, function(response) {
                     // called asynchronously if an error occurs
                     // or server returns response with an error status.
                 });
+
+            $scope.getIdTrain = function () {
+                train = $scope.selected.trains;
+                console.log(train);
+            };
 
 
         }]);

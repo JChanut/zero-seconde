@@ -92,6 +92,12 @@ module.exports = function(app, express) {
 
 
             var getQuery = 'SELECT id_train, num_train FROM zs_train';
+            /*SELECT ZSPT.id_train, ZST.num_train, ZSP.date, ZSP.id_prevision
+             FROM zs_prevision_train ZSPT
+             LEFT JOIN zs_prevision ZSP ON ZSPT.id_prevision = ZSP.id_prevision
+             LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train
+             LEFT JOIN zs_historique ZSH ON ZSPT.id_prevision = ZSH.id_prevision
+             WHERE ZSP.id_prevision NOT IN(SELECT id_prevision FROM zs_historique)*/
             var query = conn.query(getQuery, function(err, rows){
                 if (err) {
 
