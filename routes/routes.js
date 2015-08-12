@@ -88,12 +88,12 @@ module.exports = function(app, express) {
         });
     });
 
-    router.get('/motifs', isLoggedIn, function(req, res){
+    router.get('/trains', isLoggedIn, function(req, res){
         req.getConnection(function (err, conn) {
             if (err) return console.log('Connection fail: ' + err);
             console.log(req.body);
 
-            var getQuery = 'SELECT id_retard, id_unite, libelle FROM zs_cause_retard';
+            var getQuery = 'SELECT id_train, num_train FROM zs_train';
             var query = conn.query(getQuery, function(err, rows){
                 if (err) {
 
@@ -105,9 +105,8 @@ module.exports = function(app, express) {
                 for(var i=0;i<rows.length;i++){
                     var row = rows[i];
                     result.push({
-                        id_retard: row.id_retard,
-                        id_unite : row.id_unite,
-                        libelle : row.libelle
+                        id_train: row.id_train,
+                        num_train : row.num_train
                     });
                 };
 

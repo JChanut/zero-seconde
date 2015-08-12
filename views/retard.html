@@ -10,7 +10,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
     <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
-    <title>Login Page | Materialize - Material Design Admin Template</title>
+    <title>0" - Déclenchement d'un retard</title>
 
     <!-- Favicons-->
     <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
@@ -34,7 +34,7 @@
 
 </head>
 
-<body class="cyan loaded">
+<body class="cyan loaded" ng-app="trainDataApp" ng-controller="trainDataCtrl">
 <!-- Start Page Loading -->
 <div id="loader-wrapper">
     <div id="loader"></div>
@@ -55,14 +55,10 @@
                 </div>
             </div>
             <div class="input-field col s12">
-                <select>
-                    <option value="0" disabled selected >-- --</option>
-                    <option value="1">7200</option>
-                    <option value="2">Z 73500</option>
-                    <option value="3">BB 26000</option>
-                    <option value="4">7900</option>
+                <label class="label-list" for="list">Sélectionez le n° de train</label>
+                <select class="browser-default">
+                    <option id="list" ng-repeat="train in trains" ng-value="{{train.id_train}}">{{train.num_train}}</option>
                 </select>
-                <label>Sélectionez le n° de train</label>
             </div>
             <div class="row">
                 <div class="input-field col s12">
@@ -88,6 +84,7 @@
   ================================================ -->
 
 <!-- jQuery Library -->
+<script src="//code.angularjs.org/1.2.20/angular.js"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
 <!--materialize js-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
@@ -98,6 +95,7 @@
 
 <!--plugins.js - Some Specific JS codes for Plugin Settings-->
 <script type="text/javascript" src="javascripts/plugin.js"></script>
+<script type="text/javascript" src="javascripts/trainData.js"></script>
 
 
 
