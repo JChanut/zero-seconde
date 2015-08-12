@@ -7,15 +7,16 @@ module.exports = function(req,res,id_gare) {
 
     console.log("********** PARSEUR XLSX **********");
     var workbook = new Excel.Workbook();
-    var $i = 8;
+    var i = 8;
     var prevision = [];
     workbook.xlsx.readFile(path.resolve(__dirname + '../../../tst_14_12_2014_00_00_00___12_12_2015_00_00_00.xlsx'))
         .then(function() {
             // use workbook
             var worksheet = workbook.getWorksheet("TST");
             var sortir = false;
-            while(!sortir) {
-                var row = worksheet.getRow($i);
+            while(i<30){
+            //while(!sortir) {
+                var row = worksheet.getRow(i);
 
                 var num_train = row.values[1];
                 if(num_train != undefined && num_train.length > 0) {
@@ -23,15 +24,17 @@ module.exports = function(req,res,id_gare) {
                     if (num_parite == undefined || num_parite.length == 0)
                         num_parite = null;
                     var date = new Date();
+
                     var heure = row.values[7].toString().split(':');
-                    date.setHours(heure[0]);
+                    date.setHours(parseInt(heure[0])+2);
+
                     date.setMinutes(heure[1]);
 
                     var string_date = date.toISOString();
                     string_date = string_date.split("T");
                     string_date = string_date[0] +" "+string_date[1];
                     string_date = string_date.split(".");
-
+                    
                     prevision.push({
                         train : num_train,
                         parite : num_parite,
@@ -40,7 +43,7 @@ module.exports = function(req,res,id_gare) {
                         id_parite : null,
                         id_prevision : null
                     });
-                    $i++;
+                    i++;
 
                     /* SQL
 
