@@ -94,14 +94,35 @@ module.exports = function(app, express) {
         req.getConnection(function (err, conn) {
             if (err) return console.log('Connection fail: ' + err);
 
+            var date_min = new Date();
+            date_min.setHours(date_min.getHours()-12);
+            date_min.setMinutes(date_min.getMinutes()-date_min.getTimezoneOffset());
+            var date_max = new Date();
+            date_max.setHours(date_max.getHours()+1);
+            date_max.setMinutes(date_max.getMinutes()-date_max.getTimezoneOffset());
 
-            var getQuery = 'SELECT id_train, num_train FROM zs_train';
-            /*SELECT ZSPT.id_train, ZST.num_train, ZSP.date, ZSP.id_prevision
-             FROM zs_prevision_train ZSPT
-             LEFT JOIN zs_prevision ZSP ON ZSPT.id_prevision = ZSP.id_prevision
-             LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train
-             LEFT JOIN zs_historique ZSH ON ZSPT.id_prevision = ZSH.id_prevision
-             WHERE ZSP.id_prevision NOT IN(SELECT id_prevision FROM zs_historique)*/
+            var string_date_min = date_min.toISOString();
+            string_date_min = string_date_min.split("T");
+            string_date_min = string_date_min[0] +" "+string_date_min[1];
+            string_date_min = string_date_min.split(".")[0];
+
+            var string_date_max = date_max.toISOString();
+            string_date_max = string_date_max.split("T");
+            string_date_max = string_date_max[0] +" "+string_date_max[1];
+            string_date_max = string_date_max.split(".")[0];
+
+            var getQuery = 'SELECT ZSPT.id_train, ZST.num_train, ZSP.date, ZSP.id_prevision ' +
+                'FROM zs_prevision_train ZSPT ' +
+                'LEFT JOIN zs_prevision ZSP ON ZSPT.id_prevision = ZSP.id_prevision ' +
+                'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+                'LEFT JOIN zs_historique ZSH ON ZSPT.id_prevision = ZSH.id_prevision ' +
+                'WHERE ZSP.id_prevision NOT IN(SELECT id_prevision FROM zs_historique) ' +
+                'AND ZSP.date BETWEEN TIMESTAMP("' + string_date_min + '") AND TIMESTAMP("' + string_date_max + '") ' +
+                'AND ZSPT.second_train = 0 ' +
+                'ORDER BY ZSP.date ASC';
+
+            console.log(getQuery);
+            console.log(date_max.getTimezoneOffset());
             var query = conn.query(getQuery, function(err, rows){
                 if (err) {
 
