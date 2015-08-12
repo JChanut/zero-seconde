@@ -11,7 +11,7 @@
             var commentaire = null;
 
             var url_get = '/unites';
-            var url_post = ''
+            var url_post = '/post_retard';
 
             $scope.selected = {};
 
