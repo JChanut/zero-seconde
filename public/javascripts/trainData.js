@@ -30,7 +30,7 @@
             $scope.postTrain = function() {
                 if(train != null){
                     data = {
-                        id_train : train.id_train
+                        id_prevision : train.id_prevision
                     };
                     $http.post(url_post, data);
                     setTimeout(function () {

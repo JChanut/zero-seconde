@@ -59,7 +59,7 @@
                     </div>
                     <div class="input-field col s12">
                         <label class="label-list" for="list">Sélectionez le n° de train</label>
-                        <select class="browser-default" ng-model="selected.trains" ng-options="t.num_train for t in data" ng-change="getIdTrain()">
+                        <select class="browser-default" ng-model="selected.trains" ng-options="t.infoTrain for t in data" ng-change="getIdTrain()">
                             <option value="" id="list">-- TRAINS --</option>
                         </select>
                     </div>

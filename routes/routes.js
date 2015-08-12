@@ -40,7 +40,7 @@ module.exports = function(app, express) {
     });
 
     router.post('/infos_retard', isLoggedIn, function (req, res){
-        req.session.id_train = req.body.id_train;
+        req.session.id_prevision = req.body.id_prevision;
     });
 
     router.get('/infos_retard', isLoggedIn, function (req, res){
@@ -111,7 +111,7 @@ module.exports = function(app, express) {
             string_date_max = string_date_max[0] +" "+string_date_max[1];
             string_date_max = string_date_max.split(".")[0];
 
-            var getQuery = 'SELECT ZSPT.id_train, ZST.num_train, ZSP.date, ZSP.id_prevision ' +
+            var getQuery = 'SELECT ZST.num_train, ZSP.date, ZSP.id_prevision ' +
                 'FROM zs_prevision_train ZSPT ' +
                 'LEFT JOIN zs_prevision ZSP ON ZSPT.id_prevision = ZSP.id_prevision ' +
                 'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
@@ -129,8 +129,24 @@ module.exports = function(app, express) {
                     console.log(err);
                     res.status(500).send(err);
                 }
+                var result = [];
+                for(var i=0; i<rows.length; i++){
+                    console.log(rows[i]);
+                    var date = rows[i].date;
+                    date = date.toISOString();
+                    console.log( date);
+                    date = date.split('T');
+                    date = date[1];
+                    date = date.split(':');
+                    date = date[0] + ':' + date[1];
+                    var infoTrain ="(" +date + ") - " + rows[i].num_train;
+                    result.push({
+                        id_prevision : rows[i].id_prevision,
+                        infoTrain : infoTrain
+                    });
+                }
 
-                res.json(rows);
+                res.json(result);
             });
         });
     });
