@@ -4,7 +4,7 @@
 	Author: GeeksLabs
 	Author URL: http://www.themeforest.net/user/geekslabs
 ================================================================================ -->
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -59,8 +59,8 @@
                     </div>
                     <div class="input-field col s12">
                         <label class="label-list" for="list">Sélectionez le n° de train</label>
-                        <select class="browser-default">
-                            <option id="list" ng-repeat="train in trains" ng-value="{{train.id_train}}">{{train.num_train}}</option>
+                        <select class="browser-default" ng-model="selected.trains" ng-options="t.num_train for t in data" ng-change="getIdTrain()">
+                            <option value="" id="list">-- TRAINS --</option>
                         </select>
                     </div>
                     <div class="row">
