@@ -39,10 +39,14 @@ module.exports = function(app, express) {
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHoraires.html'));
     });
 
+    router.post('/infos_retard', isLoggedIn, function (req, res){
+        req.session.id_train = req.body.id_train;
+    });
+
     router.get('/infos_retard', isLoggedIn, function (req, res){
         res.sendFile(path.resolve(__dirname + '/../views/infos_retard.html'));
-
     });
+
 
     router.get('/unites', isLoggedIn, function(req, res){
         req.getConnection(function (err, conn) {

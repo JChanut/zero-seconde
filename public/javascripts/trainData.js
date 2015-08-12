@@ -7,13 +7,15 @@
     ZStrainData.controller('trainDataCtrl', ['$scope', '$http',
         function($scope, $http) {
 
-            var url = '/trains';
+            var url_get = '/trains';
+            var url_post = '/infos_retard';
 
+            var train = null;
             $scope.selected = {};
 
 
             //Méthode GET -> Récupérer et afficher les données
-            $http.get(url).
+            $http.get(url_get).
                 then(function(response) {
                     $scope.data = response.data;
                 }, function(response) {
@@ -23,10 +25,20 @@
 
             $scope.getIdTrain = function () {
                 train = $scope.selected.trains;
-                console.log(train);
             };
 
+            $scope.postTrain = function() {
+                if(train != null){
+                    data = {
+                        id_train : train.id_train
+                    };
+                    $http.post(url_post, data);
+                    setTimeout(function () {
+                        window.location.href = '/infos_retard'
+                    }, 1000);
+                }
 
+            }
         }]);
 
 })();
