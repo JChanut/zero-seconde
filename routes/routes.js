@@ -20,9 +20,9 @@ module.exports = function(app, express) {
     router.get('/', function (req, res) {
         req.session.user = "guest";
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
+       // delete req.session.id_user;
+       // delete req.session.id_prevision;
     });
-
-    router.get('')
 
     router.get('/retard', isLoggedIn, function (req, res){
         res.sendFile(path.resolve(__dirname + '/../views/retard.html'));
@@ -213,6 +213,12 @@ module.exports = function(app, express) {
         });
     });
 
+    //==============================================================================
+    //               404 NOT FOUND
+    //==============================================================================
+    app.use(function (req, res, next) {
+        res.status(404).sendFile(path.resolve(__dirname + '/../public/404/notFound.html'));
+    });
 
     // route middleware to make sure a user is logged in
     function isLoggedIn(req, res, next) {
