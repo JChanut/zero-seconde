@@ -32,8 +32,8 @@
                     data = {
                         id_prevision : train.id_prevision
                     };
-                    $http.post(url_post, data);
                     setTimeout(function () {
+                        $http.post(url_post, data);
                         window.location.href = '/infos_retard'
                     }, 1000);
                 }

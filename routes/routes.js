@@ -22,8 +22,14 @@ module.exports = function(app, express) {
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
     });
 
+    router.get('')
+
     router.get('/retard', isLoggedIn, function (req, res){
         res.sendFile(path.resolve(__dirname + '/../views/retard.html'));
+    });
+
+    router.post('/retard', isLoggedIn, function(req, res) {
+       req.session.id_user = req.body.id_user;
     });
 
     router.get('/ace/historique', isLoggedIn, function (req, res){
@@ -35,12 +41,12 @@ module.exports = function(app, express) {
     });
 
     router.get('/ace/ajoutHoraires', isLoggedIn, function (req, res){
-
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHoraires.html'));
     });
 
     router.post('/infos_retard', isLoggedIn, function (req, res){
-        req.session.id_prevision = req.body.id_prevision;
+        req.session['id_prevision'] = req.body.id_prevision;
+
     });
 
     router.get('/infos_retard', isLoggedIn, function (req, res){
@@ -144,6 +150,7 @@ module.exports = function(app, express) {
                         id_prevision : rows[i].id_prevision,
                         infoTrain : infoTrain
                     });
+                    req.session.id_prevision = rows[i].id_prevision;
                 }
 
                 res.json(result);
@@ -174,7 +181,7 @@ module.exports = function(app, express) {
                 var result = {};
                 result.connexion = data;
                 if(data){
-                    result.id = rows[0].id;
+                    result.id = rows[0].id_utilisateur;
                     req.session.user = "user";
                     req.session.id_user = result.id;
                     result.fonction = rows[0].fonction;
@@ -187,6 +194,25 @@ module.exports = function(app, express) {
         });
 
     });
+
+    router.post('/post_retard', isLoggedIn, function(req, res) {
+        req.getConnection(function(err, conn){
+            if(err) return console.log('Connection fail: ' + err);
+
+            var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_retard, retard, commentaire) ' +
+                'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ', 1,"' + req.body.commentaire + '")';
+
+            var query = conn.query(postQuery, function(err, rows) {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+
+            });
+
+        });
+    });
+
 
     // route middleware to make sure a user is logged in
     function isLoggedIn(req, res, next) {

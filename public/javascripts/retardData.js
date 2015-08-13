@@ -52,8 +52,13 @@
                         id_motif : motif.id_retard,
                         commentaire : commentaire
                     };
-                    console.log(data);
-                    $http.post(url_post,data);
+                    $http.post(url_post, data);
+                    Materialize.toast('Le retard a bien &eacute;t&eacute; enregistr&eacute;. Vous allez &ecirc;tre redirig&eacute;.', 3000);
+                    setTimeout(function () {
+                        window.location.href = '/'
+                    }, 4000);
+                }else {
+                    Materialize.toast('Probl&egrave;me lors de l\'enregistrement...', 3000);
                 }
             }
         }]);
