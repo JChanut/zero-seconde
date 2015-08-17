@@ -37,6 +37,7 @@ module.exports = function(app, express) {
     });
 
     router.get('/ace/ajoutHoraires/send',isLoggedIn , function(req,res){
+        /*TODO Changer le "1" en variable contenant l'id de la gare courante*/
         require('../script/excel_reader.js')(req,res,1);
     });
 

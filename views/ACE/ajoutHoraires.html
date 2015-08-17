@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
-
-<html>
+<html lang="fr" ng-app="ajoutHoraireApp">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
@@ -44,7 +42,7 @@
 
 
 
-<div id="login-page" class="row">
+<div id="login-page" class="row" ng-controller="ajoutHoraireCtrl">
     <div class="col s12 z-depth-4 card-panel">
         <form class="login-form">
             <div class="row">
@@ -61,7 +59,7 @@
                             <input class="file-path validate" type="text"/>
                             <div class="btn">
                                 <span>Fichier</span>
-                                <input type="file" />
+                                <input type="file" accept=".xlsx" onchange="angular.element(this).scope().onFileSelect()"/>
                             </div>
                         </div>
                     </form>
@@ -88,7 +86,7 @@
 <!-- jQuery Library -->
 <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 <script src="//code.angularjs.org/1.2.20/angular.js"></script>
-<script type="text/javascript" src="../javascripts/LogIn.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../javascripts/ajoutHoraire.js" charset="UTF-8"></script>
 <!--materialize js-->
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
 <!--prism-->
