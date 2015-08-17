@@ -64,13 +64,13 @@
                         </select>
                     </div>
                     <div class="row">
-                        <div class="input-field col s12">
+                        <div class="input-field col s12" ng-disabled="selected.trains">
                             <a ng-click="postTrain()" class="waves-effect waves-light btn-large retard"><i class="mdi-image-timer left"></i>En retard...</a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <a href="alheure.html" class="waves-effect waves-light btn-large alheure"><i class="mdi-image-timer left"></i>A l'heure !</a>
+                            <a href="alheure.html" ng-disabled="selected.trains" class="waves-effect waves-light btn-large alheure"><i class="mdi-image-timer left"></i>A l'heure !</a>
                         </div>
                     </div>
                     <div class="row">

@@ -32,6 +32,7 @@ module.exports = function(app, express) {
        req.session.id_user = req.body.id_user;
     });
 
+
     router.get('/ace/historique', isLoggedIn, function (req, res){
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
@@ -202,6 +203,24 @@ module.exports = function(app, express) {
 
             var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_retard, retard, commentaire) ' +
                 'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ', 1,"' + req.body.commentaire + '")';
+
+            var query = conn.query(postQuery, function(err, rows) {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+
+            });
+
+        });
+    });
+
+    router.post('/danslestemps', isLoggedIn, function(req, res) {
+        req.getConnection(function(err, conn){
+            if(err) return console.log('Connection fail: ' + err);
+
+            var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard) ' +
+                'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0)';
 
             var query = conn.query(postQuery, function(err, rows) {
                 if (err) {

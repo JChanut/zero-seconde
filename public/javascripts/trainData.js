@@ -10,6 +10,7 @@
             var url_get = '/trains';
             var url_post = '/infos_retard';
 
+
             var train = null;
             $scope.selected = {};
 
@@ -38,6 +39,19 @@
                     }, 1000);
                 }
 
+            }
+
+            $scope.postTrainAlheure = function() {
+                if(train != null){
+                    data = {
+                        id_prevision : train.id_prevision
+                    };
+                    Materialize.toast("Le train a bien &eacute;t&eacute; d&eacute;clar&eacute; 	&agrave; l'heure. Vous allez &ecirc;tre redirig&eacute;", 3000)
+                    setTimeout(function () {
+                        $http.post(url_post_alheure, data);
+                        window.location.href = '/index'
+                    }, 1000);
+                }
             }
         }]);
 
