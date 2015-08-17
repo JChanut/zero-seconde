@@ -26,6 +26,7 @@
 
             $scope.getIdTrain = function () {
                 train = $scope.selected.trains;
+                console.log(train);
             };
 
             $scope.postTrain = function() {

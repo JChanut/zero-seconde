@@ -59,10 +59,13 @@
                             <input class="file-path validate" type="text"/>
                             <div class="btn">
                                 <span>Fichier</span>
-                                <input type="file" accept=".xlsx" onchange="angular.element(this).scope().onFileSelect()"/>
+                                <input type="file" fileread="file" accept=".xlsx"/>
                             </div>
                         </div>
                     </form>
+                </div>
+                <div class="btn">
+                    <span ng-click="sendFile()">Envoie</span>
                 </div>
             </div>
 
