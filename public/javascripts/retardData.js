@@ -2,7 +2,7 @@
  * Created by Alan on 06/08/2015.
  */
 (function () {
-    var ZSretardData = angular.module('retardDataApp', []);
+    var ZSretardData = angular.module('zeroSecApp', []);
 
     ZSretardData.controller('retardDataCtrl', ['$scope', '$http',
         function($scope, $http) {

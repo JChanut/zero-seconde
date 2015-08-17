@@ -2,14 +2,14 @@
  * Created by Alan on 11/08/2015.
  */
 (function () {
-    var ZStrainData = angular.module('trainDataApp', []);
+    var ZStrainData = angular.module('zeroSecApp', []);
 
     ZStrainData.controller('trainDataCtrl', ['$scope', '$http',
         function($scope, $http) {
 
             var url_get = '/trains';
             var url_post = '/infos_retard';
-
+            var url_post_alheure = '/danslestemps';
 
             var train = null;
             $scope.selected = {};
@@ -50,8 +50,8 @@
                     Materialize.toast("Le train a bien &eacute;t&eacute; d&eacute;clar&eacute; 	&agrave; l'heure. Vous allez &ecirc;tre redirig&eacute;", 3000)
                     setTimeout(function () {
                         $http.post(url_post_alheure, data);
-                        window.location.href = '/index'
-                    }, 1000);
+                        window.location.href = '/'
+                    }, 5000);
                 }
             }
         }]);

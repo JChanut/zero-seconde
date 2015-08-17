@@ -37,7 +37,7 @@
 
     </head>
 
-    <body class="cyan loaded" ng-app="trainDataApp" ng-controller="trainDataCtrl">
+    <body class="cyan loaded" ng-app="zeroSecApp" ng-controller="trainDataCtrl">
         <!-- Start Page Loading -->
         <div id="loader-wrapper">
             <div id="loader"></div>
@@ -64,13 +64,13 @@
                         </select>
                     </div>
                     <div class="row">
-                        <div class="input-field col s12" ng-disabled="selected.trains">
+                        <div class="input-field col s12">
                             <a ng-click="postTrain()" class="waves-effect waves-light btn-large retard"><i class="mdi-image-timer left"></i>En retard...</a>
                         </div>
                     </div>
                     <div class="row">
                         <div class="input-field col s12">
-                            <a href="alheure.html" ng-disabled="selected.trains" class="waves-effect waves-light btn-large alheure"><i class="mdi-image-timer left"></i>A l'heure !</a>
+                            <a ng-click="postTrainAlheure()" class="waves-effect waves-light btn-large alheure"><i class="mdi-image-timer left"></i>A l'heure !</a>
                         </div>
                     </div>
                     <div class="row">

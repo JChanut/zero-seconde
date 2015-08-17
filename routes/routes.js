@@ -48,7 +48,8 @@ module.exports = function(app, express) {
 
     router.post('/infos_retard', isLoggedIn, function (req, res){
         req.session['id_prevision'] = req.body.id_prevision;
-
+        console.log("===‡‡Á'Á======");
+        console.log(req.session);
     });
 
     router.get('/infos_retard', isLoggedIn, function (req, res){
@@ -152,7 +153,6 @@ module.exports = function(app, express) {
                         id_prevision : rows[i].id_prevision,
                         infoTrain : infoTrain
                     });
-                    req.session.id_prevision = rows[i].id_prevision;
                 }
 
                 res.json(result);
@@ -200,7 +200,8 @@ module.exports = function(app, express) {
     router.post('/post_retard', isLoggedIn, function(req, res) {
         req.getConnection(function(err, conn){
             if(err) return console.log('Connection fail: ' + err);
-
+            console.log("=========================");
+            console.log(req.session.id_prevision);
             var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_retard, retard, commentaire) ' +
                 'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ', 1,"' + req.body.commentaire + '")';
 
@@ -218,7 +219,7 @@ module.exports = function(app, express) {
     router.post('/danslestemps', isLoggedIn, function(req, res) {
         req.getConnection(function(err, conn){
             if(err) return console.log('Connection fail: ' + err);
-
+            req.session['id_prevision'] = req.body.id_prevision;
             var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard) ' +
                 'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0)';
 
