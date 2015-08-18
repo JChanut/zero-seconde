@@ -1,105 +1,106 @@
 <!DOCTYPE html>
 <html lang="fr" ng-app="ajoutHoraireApp">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="msapplication-tap-highlight" content="no">
-    <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
-    <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
-    <title>Ajout des trains</title>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="description" content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google. ">
+        <meta name="keywords" content="materialize, admin template, dashboard template, flat admin template, responsive admin template,">
+        <title>Ajout des trains</title>
 
-    <!-- Favicons-->
-    <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
-    <!-- Favicons-->
-    <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
-    <!-- For iPhone -->
-    <meta name="msapplication-TileColor" content="#00bcd4">
-    <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
-    <!-- For Windows Phone -->
-
-
-    <!-- CORE CSS-->
-
-    <link href="../materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="../stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="../stylesheets/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
-
-    <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
-    <link href="../stylesheets/prism.css" type="text/css" rel="stylesheet" media="screen,projection">
-    <link href="../stylesheets/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
-
-</head>
-
-<body class="cyan loaded">
-<!-- Start Page Loading -->
-<div id="loader-wrapper">
-    <div id="loader"></div>
-    <div class="loader-section section-left"></div>
-    <div class="loader-section section-right"></div>
-</div>
-<!-- End Page Loading -->
+        <!-- Favicons-->
+        <link rel="icon" href="images/favicon/favicon-32x32.png" sizes="32x32">
+        <!-- Favicons-->
+        <link rel="apple-touch-icon-precomposed" href="images/favicon/apple-touch-icon-152x152.png">
+        <!-- For iPhone -->
+        <meta name="msapplication-TileColor" content="#00bcd4">
+        <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
+        <!-- For Windows Phone -->
 
 
+        <!-- CORE CSS-->
 
-<div id="login-page" class="row" ng-controller="ajoutHoraireCtrl">
-    <div class="col s12 z-depth-4 card-panel">
-        <form class="login-form">
-            <div class="row">
-                <div class="input-field col s12 center">
-                    <h4>Insertion de fichier</h4>
-                </div>
-            </div>
+        <link href="../materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="../stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="../stylesheets/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+        <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
+        <link href="../stylesheets/prism.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link href="../stylesheets/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
+
+    </head>
+
+    <body class="cyan loaded">
+        <!-- Start Page Loading -->
+        <div id="loader-wrapper">
+            <div id="loader"></div>
+            <div class="loader-section section-left"></div>
+            <div class="loader-section section-right"></div>
+        </div>
+        <!-- End Page Loading -->
 
 
-            <div class="row">
-                <div class="input-field col s12">
-                    <form action="#">
-                        <div class="file-field input-field">
-                            <input class="file-path validate" type="text"/>
-                            <div class="btn">
-                                <span>Fichier</span>
-                                <input type="file" fileread="file" accept=".xlsx"/>
+
+        <div id="login-page" class="row" ng-controller="ajoutHoraireCtrl">
+            <div class="col s12 z-depth-4 card-panel">
+                <form class="login-form">
+                    <div class="row">
+                        <div class="input-field col s12 center">
+                            <h4>Insertion de fichier</h4>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="input-field col s12">
+                            <form action="#">
+                                <div class="file-field input-field">
+                                    <input class="file-path validate" type="text"/>
+                                    <div class="btn">
+                                        <span>Fichier</span>
+                                        <input type="file" name="fileImport" fileread="file" accept=".xlsx"/>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-field col s6 m6 16">
+                            <a href="/" class="waves-effect waves-light btn-large"><i class="mdi-av-skip-previous right" style="width: 56px;margin-left: 0px;"></i></a>
+                        </div>
+                        <div class="input-field col s6 m6 16" id="btn_send">
+                            <div class="btn" style="height: 54px;line-height: 54px;">
+                                <span ng-click="sendFile()">Envoi</span>
                             </div>
                         </div>
-                    </form>
-                </div>
-                <div class="btn">
-                    <span ng-click="sendFile()">Envoie</span>
-                </div>
+                    </div>
+                </form>
             </div>
-
-            <div class="row">
-                <div class="input-field col s6 m6 16">
-                    <a href="/" class="waves-effect waves-light btn-large"><i class="mdi-av-skip-previous right"></i></a>
-                </div>
-                <div class="input-field col s6 m6 16">
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
 
 
 
-<!-- ================================================
-  Scripts
-  ================================================ -->
+        <!-- ================================================
+          Scripts
+          ================================================ -->
 
-<!-- jQuery Library -->
-<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-<script src="//code.angularjs.org/1.2.20/angular.js"></script>
-<script type="text/javascript" src="../javascripts/ajoutHoraire.js" charset="UTF-8"></script>
-<!--materialize js-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
-<!--prism-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
-<!--scrollbar-->
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.3/js/min/perfect-scrollbar.min.js"></script>
+        <!-- jQuery Library -->
+        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="//code.angularjs.org/1.2.20/angular.js"></script>
+        <script type="text/javascript" src="../javascripts/ajoutHoraire.js" charset="UTF-8"></script>
+        <!--materialize js-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
+        <!--prism-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
+        <!--scrollbar-->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.3/js/min/perfect-scrollbar.min.js"></script>
 
-<!--plugins.js - Some Specific JS codes for Plugin Settings-->
-<script type="text/javascript" src="../../javascripts/plugin.js"></script>
+        <!--plugins.js - Some Specific JS codes for Plugin Settings-->
+        <script type="text/javascript" src="../../javascripts/plugin.js"></script>
 
 
-<div class="hiddendiv common"></div></body>
+        <div class="hiddendiv common"></div>
+    </body>
 </html>

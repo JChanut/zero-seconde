@@ -5,7 +5,8 @@ module.exports = function(app, express) {
 
     var bodyParser = require('body-parser'),
         router = express.Router(),
-        path = require('path');
+        path = require('path'),
+        multiparty = require('multiparty');
 
    // app.use(express.cookieParser());
 
@@ -37,9 +38,16 @@ module.exports = function(app, express) {
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
     });
 
-    router.get('/ace/ajoutHoraires/send',isLoggedIn , function(req,res){
-        /*TODO Changer le "1" en variable contenant l'id de la gare courante*/
-        require('../script/excel_reader.js')(req,res,1);
+    router.post('/ace/ajoutHoraires/send',isLoggedIn , function(req,res){
+        var form = new multiparty.Form();
+
+        form.parse(req, function(err, fields, files) {
+            if(err)console.log(err);
+            else {
+                if (files.file[0])
+                    require('../script/excel_reader.js')(req, res,  files.file[0].path);
+            }
+        });
     });
 
     router.get('/ace/ajoutHoraires', isLoggedIn, function (req, res){
@@ -84,14 +92,14 @@ module.exports = function(app, express) {
                         };
                     };
                     if(!bool){
-                      result.push({
-                         id_unite : row.id_unite,
-                          libelle_unite : row.libelle_unite,
-                          motif : [{
-                              id_retard : row.id_retard,
-                              libelle_motif : row.libelle_motif
-                          }]
-                      });
+                        result.push({
+                            id_unite : row.id_unite,
+                            libelle_unite : row.libelle_unite,
+                            motif : [{
+                                id_retard : row.id_retard,
+                                libelle_motif : row.libelle_motif
+                            }]
+                        });
                     };
                 };
                 res.json(result);
@@ -172,7 +180,7 @@ module.exports = function(app, express) {
 
             //construction de la query
 
-            var getQuery = 'SELECT id_utilisateur , fonction FROM zs_utilisateur WHERE identifiant = "' + req.body.username + '" AND mot_de_passe ="' + req.body.password+ '"';
+            var getQuery = 'SELECT id_utilisateur , id_gare, fonction FROM zs_utilisateur WHERE identifiant = "' + req.body.username + '" AND mot_de_passe ="' + req.body.password+ '"';
             var query = conn.query(getQuery, function (err, rows) {
 
                 if (err) {
@@ -183,9 +191,10 @@ module.exports = function(app, express) {
                 var result = {};
                 result.connexion = data;
                 if(data){
-                    result.id = rows[0].id_utilisateur;
+                    row = rows[0];
                     req.session.user = "user";
-                    req.session.id_user = result.id;
+                    req.session.id_user = row.id_utilisateur;
+                    req.session.id_gare = row.id_gare;
                     result.fonction = rows[0].fonction;
                 }
 

@@ -1,15 +1,15 @@
 /**
  * Created by Thomas on 07/08/2015.
  */
-module.exports = function(req,res,id_gare) {
-    var Excel = require('exceljs');
-    var path = require('path');
+module.exports = function(req,res,path_file) {
+    var Excel = require('exceljs'),
+        path = require('path');
 
     console.log("********** PARSEUR XLSX **********");
     var workbook = new Excel.Workbook();
     var i = 8;
     var prevision = [];
-    workbook.xlsx.readFile(path.resolve(__dirname + '../../../tst_14_12_2014_00_00_00___12_12_2015_00_00_00.xlsx'))
+    workbook.xlsx.readFile(path.resolve(path_file))
         .then(function() {
             // use workbook
             var worksheet = workbook.getWorksheet("TST");
@@ -58,13 +58,13 @@ module.exports = function(req,res,id_gare) {
                 }
             }
 
-            function Data_excel(req,res,data,id_gare) {
+            function Data_excel(req,res,data) {
                 this.data = data;
                 this.req = req;
                 this.res = res;
                 this.first = true;
                 this.rang = 0;
-                this.id_gare = id_gare;
+                this.id_gare = req.session.id_gare;
             };
 
             Data_excel.prototype.setTrain = function(){
@@ -198,7 +198,7 @@ module.exports = function(req,res,id_gare) {
                 });
             };
 
-            var ajout_bd = new Data_excel(req,res,prevision,id_gare);
+            var ajout_bd = new Data_excel(req,res,prevision);
             ajout_bd.getTrain();
         }
     );
