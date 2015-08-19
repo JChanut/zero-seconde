@@ -54,6 +54,11 @@ module.exports = function(app, express) {
         res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHoraires.html'));
     });
 
+    router.get('/ace/menu', isLoggedIn, function (req, res){
+        res.sendFile(path.resolve(__dirname + '/../views/ACE/menu.html'));
+    });
+
+
     router.post('/infos_retard', isLoggedIn, function (req, res){
         req.session['id_prevision'] = req.body.id_prevision;
         console.log("===‡‡Á'Á======");

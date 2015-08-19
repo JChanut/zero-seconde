@@ -26,7 +26,7 @@ var ZSauthApp = angular.module('authApp', []);
                         } else if (data.fonction === "ACE") {
                             Materialize.toast('V&eacute;rification des infos...', 3000);
                             setTimeout(function () {
-                                window.location.href = '/ace/historique'
+                                window.location.href = '/ace/menu'
                             }, 4000);
                         } else {
                             Materialize.toast('Votre compte n\'est pas habilité.', 3000);
