@@ -191,7 +191,10 @@ module.exports = function(req,res,path_file) {
                                 current.getTrain();
                             }
                             else {
-                                current.res.send("ok");
+                                var result = {
+                                    good : "ok"
+                                };
+                                current.res.json(result);
                             }
                         }
                     });

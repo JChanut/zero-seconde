@@ -38,6 +38,8 @@
                         $http.post(url_post, data);
                         window.location.href = '/od/infos_retard'
                     }, 1000);
+                }else {
+                    Materialize.toast("Vous n'avez pas saisie de train.", 3000);
                 }
 
             }
@@ -52,6 +54,8 @@
                         $http.post(url_post_alheure, data);
                         window.location.href = '/od'
                     }, 5000);
+                }else {
+                    Materialize.toast("Vous n'avez pas saisie de train.", 3000);
                 }
             }
         }]);

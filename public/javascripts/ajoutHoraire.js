@@ -15,8 +15,10 @@
                     headers: {'Content-Type': undefined}
                 })
                     .success(function(){
+                        Materialize.toast("L'envoie a &eacute;t&eacute; effectu&eacute; !", 3000);
                     })
                     .error(function(){
+                        Materialize.toast("L'envoie a &eacute;chou&eacute; !", 3000);
                     });
             }
         }]);

@@ -5,8 +5,7 @@ module.exports = function(app, express) {
 
     var bodyParser = require('body-parser'),
         router = express.Router(),
-        path = require('path'),
-        multiparty = require('multiparty');
+        path = require('path');
 
    // app.use(express.cookieParser());
 
