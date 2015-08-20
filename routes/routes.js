@@ -50,9 +50,9 @@ module.exports = function(app, express) {
                 if(data){
                     row = rows[0];
                     req.session = {
-                        user: "guest",
-                        id_user: -1,
-                        id_gare: -1,
+                        user: row.fonction,
+                        id_user: row.id_utilisateur,
+                        id_gare: row.id_gare,
                         id_prevision:-1
                     };
                     result.fonction = row.fonction;
