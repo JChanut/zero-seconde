@@ -24,8 +24,6 @@ module.exports = function(app, express) {
     app.all('/', function (req, res) {
         req.session.user = "guest";
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
-       // delete req.session.id_user;
-       // delete req.session.id_prevision;
     });
 
 
@@ -52,9 +50,12 @@ module.exports = function(app, express) {
                 result.connexion = data;
                 if(data){
                     row = rows[0];
-                    req.session.user = row.fonction;
-                    req.session.id_user = row.id_utilisateur;
-                    req.session.id_gare = row.id_gare;
+                    req.session = {
+                        user: "guest",
+                        id_user: -1,
+                        id_gare: -1,
+                        id_prevision:-1
+                    };
                     result.fonction = row.fonction;
                 }
 
@@ -64,6 +65,17 @@ module.exports = function(app, express) {
 
         });
 
+    });
+
+    app.all("/deconnexion",function(req,res){
+        console.log(req.session);
+        req.session = {
+            user: "guest",
+            id_user: -1,
+            id_gare: -1,
+            id_prevision:-1
+        };
+        res.redirect('/');
     });
 
     var ace = require(path.resolve(__dirname + "/routeur_ace.js"));

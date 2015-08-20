@@ -10,13 +10,14 @@
             var motif = null;
             var commentaire = null;
 
-            var url_get = '/od/unites';
-            var url_post = '/od/post_retard';
+            const URL_MENU = '/od';
+            const URL_GET = '/od/unites';
+            const URL_POST = '/od/post_retard';
 
             $scope.selected = {};
 
             //Méthode GET -> Récupérer et afficher les données
-            $http.get(url_get).
+            $http.get(URL_GET).
                 then(function(response) {
                     $scope.data = response.data;
                 }, function(response) {
@@ -52,10 +53,10 @@
                         id_motif : motif.id_retard,
                         commentaire : commentaire
                     };
-                    $http.post(url_post, data);
+                    $http.post(URL_POST, data);
                     Materialize.toast('Le retard a bien &eacute;t&eacute; enregistr&eacute;. Vous allez &ecirc;tre redirig&eacute;.', 3000);
                     setTimeout(function () {
-                        window.location.href = '/od'
+                        window.location.href = URL_MENU;
                     }, 4000);
                 }else {
                     Materialize.toast('Probl&egrave;me lors de l\'enregistrement...', 3000);

@@ -7,16 +7,17 @@
     ZStrainData.controller('trainDataCtrl', ['$scope', '$http',
         function($scope, $http) {
 
-            var url_get = '/od/trains';
-            var url_post = '/od/infos_retard';
-            var url_post_alheure = '/od/danslestemps';
+            const URL_MENU = '/od';
+            const URL_GET = '/od/trains';
+            const URL_RETARD = '/od/infos_retard';
+            const URL_ALHEURE = '/od/danslestemps';
 
             var train = null;
             $scope.selected = {};
 
 
             //Méthode GET -> Récupérer et afficher les données
-            $http.get(url_get).
+            $http.get(URL_GET).
                 then(function(response) {
                     $scope.data = response.data;
                 }, function(response) {
@@ -35,8 +36,8 @@
                         id_prevision : train.id_prevision
                     };
                     setTimeout(function () {
-                        $http.post(url_post, data);
-                        window.location.href = '/od/infos_retard'
+                        $http.post(URL_RETARD, data);
+                        window.location.href = URL_RETARD;//'/od/infos_retard';
                     }, 1000);
                 }
 
@@ -49,8 +50,8 @@
                     };
                     Materialize.toast("Le train a bien &eacute;t&eacute; d&eacute;clar&eacute; 	&agrave; l'heure. Vous allez &ecirc;tre redirig&eacute;", 3000)
                     setTimeout(function () {
-                        $http.post(url_post_alheure, data);
-                        window.location.href = '/od'
+                        $http.post(URL_ALHEURE, data);
+                        window.location.href = URL_MENU;
                     }, 5000);
                 }
             }

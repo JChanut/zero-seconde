@@ -16,13 +16,14 @@ router.get('/',isLoggedOD,function(req,res) {
 router.get('/retard', isLoggedOD, function (req, res){
     res.sendFile(path.resolve(__dirname + '/../views/OD/retard.html'));
 });
-
+/*TODO pourquoi?????????????????????????????????*/
+/*
 router.post('/retard', isLoggedOD, function(req, res) {
     req.session.id_user = req.body.id_user;
 });
-
+*/
 router.post('/infos_retard', isLoggedOD, function (req, res){
-    req.session['id_prevision'] = req.body.id_prevision;
+    req.session.id_prevision = req.body.id_prevision;
 });
 
 router.get('/infos_retard', isLoggedOD, function (req, res){
@@ -163,7 +164,8 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
 function isLoggedOD(req, res, next) {
 
     // if user is authenticated in the session, carry on
-
+    console.log("*****************")
+    console.log(req.session.user + "      +     OD")
     if (req.session.user == "OD")
         return next();
 

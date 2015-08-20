@@ -17,21 +17,11 @@
         <link href="../materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
         <link href="../stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection">
         <link href="../stylesheets/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
-
-        <!-- INCLUDED PLUGIN CSS ON THIS PAGE -->
-        <link href="../stylesheets/prism.css" type="text/css" rel="stylesheet" media="screen,projection">
-        <link href="../stylesheets/perfect-scrollbar.css" type="text/css" rel="stylesheet" media="screen,projection">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
     </head>
 
-    <body class="cyan loaded">
-        <!-- Start Page Loading -->
-        <div id="loader-wrapper">
-            <div id="loader"></div>
-            <div class="loader-section section-left"></div>
-            <div class="loader-section section-right"></div>
-        </div>
-        <!-- End Page Loading -->
+    <body class="cyan">
 
 
 
@@ -60,25 +50,35 @@
         </div>
 
 
+    </body>
 
+    <footer style="position:fixed;
+                   left:0px;
+                   bottom:0px;
+                   height:80px;
+                   width:100%;
+                   padding: inherit;
+                   background:rgb(0,154,166) !important">
+        <div class="row" style="display: table;">
+            <div style="text-align: center; display: table-cell; width: 100px; color:rgb(60,55,50);">
+                <a href="/deconnexion"><i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></a>
+                <p style="margin-top:0;">Déconnexion</p>
+            </div>
+            <div style="text-align: center; display: table-cell; width: 100px;color:rgb(60,55,50);">
+                <a href="/ace"><i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></a>
+                <p style="margin-top:0;">Menu</p>
+            </div>
+        </div>
         <!-- ================================================
-          Scripts
-          ================================================ -->
+        Scripts
+        ================================================ -->
 
         <!-- jQuery Library -->
-        <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="//code.angularjs.org/1.2.20/angular.js"></script>
-        <script type="text/javascript" src="../javascripts/ace_statistique.js" charset="UTF-8"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
         <!--materialize js-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
-        <!--prism-->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
-        <!--scrollbar-->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.3/js/min/perfect-scrollbar.min.js"></script>
-        <!--plugins.js - Some Specific JS codes for Plugin Settings-->
-        <script type="text/javascript" src="../../javascripts/plugin.js"></script>
 
-
-        <div class="hiddendiv common"></div>
-    </body>
+        <script type="text/javascript" src="/javascripts/trainData.js"></script>
+    </footer>
 </html>
