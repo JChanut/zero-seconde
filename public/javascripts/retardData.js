@@ -10,8 +10,8 @@
             var motif = null;
             var commentaire = null;
 
-            var url_get = '/unites';
-            var url_post = '/post_retard';
+            var url_get = '/od/unites';
+            var url_post = '/od/post_retard';
 
             $scope.selected = {};
 
@@ -55,7 +55,7 @@
                     $http.post(url_post, data);
                     Materialize.toast('Le retard a bien &eacute;t&eacute; enregistr&eacute;. Vous allez &ecirc;tre redirig&eacute;.', 3000);
                     setTimeout(function () {
-                        window.location.href = '/'
+                        window.location.href = '/od'
                     }, 4000);
                 }else {
                     Materialize.toast('Probl&egrave;me lors de l\'enregistrement...', 3000);

@@ -1,5 +1,5 @@
 (function () {
-var ZSauthApp = angular.module('authApp', []);
+var ZSauthApp = angular.module('zeroSecApp', []);
 
     ZSauthApp.controller('authCtrl', ['$scope', '$http',
         function($scope, $http) {

@@ -7,9 +7,9 @@
     ZStrainData.controller('trainDataCtrl', ['$scope', '$http',
         function($scope, $http) {
 
-            var url_get = '/trains';
-            var url_post = '/infos_retard';
-            var url_post_alheure = '/danslestemps';
+            var url_get = '/od/trains';
+            var url_post = '/od/infos_retard';
+            var url_post_alheure = '/od/danslestemps';
 
             var train = null;
             $scope.selected = {};
@@ -36,7 +36,7 @@
                     };
                     setTimeout(function () {
                         $http.post(url_post, data);
-                        window.location.href = '/infos_retard'
+                        window.location.href = '/od/infos_retard'
                     }, 1000);
                 }
 
@@ -50,7 +50,7 @@
                     Materialize.toast("Le train a bien &eacute;t&eacute; d&eacute;clar&eacute; 	&agrave; l'heure. Vous allez &ecirc;tre redirig&eacute;", 3000)
                     setTimeout(function () {
                         $http.post(url_post_alheure, data);
-                        window.location.href = '/'
+                        window.location.href = '/od'
                     }, 5000);
                 }
             }

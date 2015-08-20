@@ -69,7 +69,7 @@ module.exports = function(app, express) {
     var ace = require(path.resolve(__dirname + "/routeur_ace.js"));
     app.use('/ace',ace);
 
-    var ace = require(path.resolve(__dirname + "/routeur_od.js"));
+    var od = require(path.resolve(__dirname + "/routeur_od.js"));
     app.use('/od',od);
 
     //==============================================================================

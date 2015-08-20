@@ -1,8 +1,9 @@
 /**
  * Created by Thomas on 19/08/2015.
  */
-var express = require('express');
-var router = express.Router();
+var express = require('express'),
+    path = require('path'),
+    router = express.Router();
 
 
 //==============================================================================
@@ -22,8 +23,6 @@ router.post('/retard', isLoggedOD, function(req, res) {
 
 router.post('/infos_retard', isLoggedOD, function (req, res){
     req.session['id_prevision'] = req.body.id_prevision;
-    console.log("===‡‡Á'Á======");
-    console.log(req.session);
 });
 
 router.get('/infos_retard', isLoggedOD, function (req, res){
@@ -34,13 +33,10 @@ router.get('/infos_retard', isLoggedOD, function (req, res){
 router.get('/unites', isLoggedOD, function(req, res){
     req.getConnection(function (err, conn) {
         if (err) return console.log('Connection fail: ' + err);
-        console.log(req.body);
 
         var getQuery = 'SELECT DISTINCT zs_unite.libelle as libelle_unite, id_retard, zs_unite.id_unite, zs_cause_retard.libelle as libelle_motif FROM zs_cause_retard RIGHT JOIN zs_unite ON zs_cause_retard.id_unite = zs_unite.id_unite';
         var query = conn.query(getQuery, function(err, rows){
             if (err) {
-
-                console.log(err);
                 res.status(500).send(err);
             }
             var result = [];
@@ -104,20 +100,14 @@ router.get('/trains', isLoggedOD, function(req, res){
             'AND ZSPT.second_train = 0 ' +
             'ORDER BY ZSP.date ASC';
 
-        console.log(getQuery);
-        console.log(date_max.getTimezoneOffset());
         var query = conn.query(getQuery, function(err, rows){
             if (err) {
-
-                console.log(err);
                 res.status(500).send(err);
             }
             var result = [];
             for(var i=0; i<rows.length; i++){
-                console.log(rows[i]);
                 var date = rows[i].date;
                 date = date.toISOString();
-                console.log( date);
                 date = date.split('T');
                 date = date[1];
                 date = date.split(':');
@@ -128,7 +118,6 @@ router.get('/trains', isLoggedOD, function(req, res){
                     infoTrain : infoTrain
                 });
             }
-
             res.json(result);
         });
     });
@@ -138,14 +127,11 @@ router.get('/trains', isLoggedOD, function(req, res){
 router.post('/post_retard', isLoggedOD, function(req, res) {
     req.getConnection(function(err, conn){
         if(err) return console.log('Connection fail: ' + err);
-        console.log("=========================");
-        console.log(req.session.id_prevision);
         var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_retard, retard, commentaire) ' +
             'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ', 1,"' + req.body.commentaire + '")';
 
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
-                console.log(err);
                 res.status(500).send(err);
             }
 
@@ -163,7 +149,6 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
 
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
-                console.log(err);
                 res.status(500).send(err);
             }
 

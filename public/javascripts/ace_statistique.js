@@ -2,7 +2,7 @@
  * Created by Thomas on 19/08/2015.
  */
 (function () {
-    var ZSajoutHoraire = angular.module('ajoutHoraireApp', []);
+    var ZSajoutHoraire = angular.module('zeroSecApp', []);
 
     ZSajoutHoraire.controller('statistiqueCtrl', ['$scope', '$http',
         function ($scope, $http) {
