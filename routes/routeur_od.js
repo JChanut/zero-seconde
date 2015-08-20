@@ -168,7 +168,8 @@ function isLoggedOD(req, res, next) {
     console.log(req.session.user + "      +     OD")
     if (req.session.user == "OD")
         return next();
-
+    else if(req.session.user == "ACE")
+        res.redirect('/ace');
     // if they aren't redirect them to the home page
     res.redirect('/');
 }
