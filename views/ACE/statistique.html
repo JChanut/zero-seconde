@@ -36,41 +36,27 @@
 
 
 
-        <div id="login-page" class="row" ng-controller="ajoutHoraireCtrl">
+        <div id="stat-page" class="row" ng-controller="statistiqueCtrl">
             <div class="col s12 z-depth-4 card-panel">
-                <form class="login-form">
-                    <div class="row">
-                        <div class="input-field col s12 center">
-                            <h4>Insertion de fichier</h4>
-                        </div>
+                <div class="row">
+                    <div class="input-field col s12 center">
+                        <h4>Statistique</h4>
                     </div>
-
-
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <form action="#">
-                                <div class="file-field input-field">
-                                    <input class="file-path validate" type="text"/>
-                                    <div class="btn">
-                                        <span>Fichier</span>
-                                        <input type="file" name="fileImport" fileread="file" accept=".xlsx"/>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="input-field col s6 m6 16">
-                            <a href="/" class="waves-effect waves-light btn-large"><i class="mdi-av-skip-previous right" style="width: 56px;margin-left: 0px;"></i></a>
-                        </div>
-                        <div class="input-field col s6 m6 16" id="btn_send">
-                            <div class="btn" style="height: 54px;line-height: 54px;">
-                                <span ng-click="sendFile()">Envoi</span>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                </div>
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header">Général</div>
+                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Par agent</div>
+                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header">Par série</div>
+                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                    </li>
+                </ul>
             </div>
         </div>
 
@@ -83,7 +69,7 @@
         <!-- jQuery Library -->
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="//code.angularjs.org/1.2.20/angular.js"></script>
-        <script type="text/javascript" src="../javascripts/ajoutHoraire.js" charset="UTF-8"></script>
+        <script type="text/javascript" src="../javascripts/ace_statistique.js" charset="UTF-8"></script>
         <!--materialize js-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
         <!--prism-->

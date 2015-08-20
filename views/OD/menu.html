@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr" ng-app="ajoutHoraireApp">
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="msapplication-tap-highlight" content="no">
-        <title>Ajout des trains</title>
+        <title>0" - Menu ACE</title>
 
         <!-- For iPhone -->
         <meta name="msapplication-TileColor" content="#00bcd4">
@@ -25,7 +25,7 @@
 
     </head>
 
-    <body class="cyan loaded">
+    <body class="cyan">
         <!-- Start Page Loading -->
         <div id="loader-wrapper">
             <div id="loader"></div>
@@ -34,62 +34,36 @@
         </div>
         <!-- End Page Loading -->
 
-
-
-        <div id="login-page" class="row" ng-controller="ajoutHoraireCtrl">
+        <div class="row">
             <div class="col s12 z-depth-4 card-panel">
-                <form class="login-form">
-                    <div class="row">
-                        <div class="input-field col s12 center">
-                            <h4>Insertion de fichier</h4>
-                        </div>
-                    </div>
 
-
-                    <div class="row">
-                        <div class="input-field col s12">
-                            <form action="#">
-                                <div class="file-field input-field">
-                                    <input class="file-path validate" type="text"/>
-                                    <div class="btn">
-                                        <span>Fichier</span>
-                                        <input type="file" name="fileImport" fileread="file" accept=".xlsx"/>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <a class="btn waves-effect waves-light col s12" href="#">Nouveau départ</a>
                     </div>
-
-                    <div class="row">
-                        <div class="input-field col s6 m6 16">
-                            <a href="/" class="waves-effect waves-light btn-large"><i class="mdi-av-skip-previous right" style="width: 56px;margin-left: 0px;"></i></a>
-                        </div>
-                        <div class="input-field col s6 m6 16" id="btn_send">
-                            <div class="btn" style="height: 54px;line-height: 54px;">
-                                <span ng-click="sendFile()">Envoi</span>
-                            </div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <a class="btn waves-effect waves-light col s12" href="#">Consultation des statistiques</a>
                     </div>
-                </form>
+                </div>
+
             </div>
         </div>
 
-
-
         <!-- ================================================
-          Scripts
-          ================================================ -->
+                  Scripts
+                  ================================================ -->
 
         <!-- jQuery Library -->
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-        <script src="//code.angularjs.org/1.2.20/angular.js"></script>
-        <script type="text/javascript" src="../javascripts/ajoutHoraire.js" charset="UTF-8"></script>
         <!--materialize js-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
         <!--prism-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.js"></script>
         <!--scrollbar-->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.perfect-scrollbar/0.6.3/js/min/perfect-scrollbar.min.js"></script>
+
         <!--plugins.js - Some Specific JS codes for Plugin Settings-->
         <script type="text/javascript" src="../../javascripts/plugin.js"></script>
 

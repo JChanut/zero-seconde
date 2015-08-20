@@ -21,12 +21,12 @@ var ZSauthApp = angular.module('authApp', []);
                         if (data.fonction === "OD") {
                             Materialize.toast('V&eacute;rification des infos...', 3000);
                             setTimeout(function () {
-                                window.location.href = '/retard'
+                                window.location.href = '/od';
                             }, 4000);
                         } else if (data.fonction === "ACE") {
                             Materialize.toast('V&eacute;rification des infos...', 3000);
                             setTimeout(function () {
-                                window.location.href = '/ace/menu'
+                                window.location.href = '/ace';
                             }, 4000);
                         } else {
                             Materialize.toast('Votre compte n\'est pas habilité.', 3000);
