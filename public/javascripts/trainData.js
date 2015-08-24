@@ -35,10 +35,12 @@
                     data = {
                         id_prevision : train.id_prevision
                     };
-                    setTimeout(function () {
-                        $http.post(URL_RETARD, data);
-                        window.location.href = URL_RETARD;//'/od/infos_retard';
-                    }, 1000);
+                    $http.post(URL_RETARD, data).
+                        then(function(response) {
+                            window.location.href = URL_RETARD;//'/od/infos_retard';
+                        }, function(response) {
+                            console.log(response);
+                        });
                 }else {
                     Materialize.toast("Vous n'avez pas saisie de train.", 3000);
                 }

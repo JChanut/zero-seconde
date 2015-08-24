@@ -22,25 +22,15 @@ module.exports = function(req,res,path_file) {
                     var num_parite = row.values[2];
                     if (num_parite == undefined || num_parite.length == 0)
                         num_parite = null;
-                    var date = new Date();
 
-                    var heure = row.values[7].toString().split(':');
-                    date.setHours(parseInt(heure[0])+2);
+                    var heure = row.values[7].toString();
 
-                    date.setMinutes(heure[1]);
-
-                    var string_date = date.toISOString();
-                    string_date = string_date.split("T");
-                    string_date = string_date[0] +" "+string_date[1];
-                    string_date = string_date.split(".");
-                    
                     prevision.push({
                         train : num_train,
                         parite : num_parite,
-                        date: string_date[0],
+                        heure: heure,
                         id_train : null,
-                        id_parite : null,
-                        id_prevision : null
+                        id_parite : null
                     });
                     i++;
 
@@ -125,9 +115,10 @@ module.exports = function(req,res,path_file) {
             };
 
             Data_excel.prototype.setPrevision = function(){
-                var getQuery = 'INSERT INTO zs_prevision (id_gare, date) VALUES ('+this.id_gare+',TIMESTAMP("'+this.data[this.rang].date+'"))';
+                console.log(this.data[this.rang]);
+                var getQuery = 'INSERT INTO zs_prevision (id_gare, heure) VALUES ('+this.id_gare+',TIME_FORMAT("'+this.data[this.rang].heure+'","%H:%i"))';
                 var current = this;
-                console.log(this.data[this.rang].date);//INSERT INTO `zero_sec`.`zs_prevision` (`id_prevision`, `id_gare`, `date`) VALUES (NULL, '1', TIMESTAMP('2015-08-31 00:00:00'));
+                //INSERT INTO `zero_sec`.`zs_prevision` (`id_prevision`, `id_gare`, `date`) VALUES (NULL, '1', TIMESTAMP('2015-08-31 00:00:00'));
                 req.getConnection(function (err, conn) {
 
                     if (err) return console.log('Connection fail: ' + err);

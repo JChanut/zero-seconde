@@ -24,6 +24,8 @@ router.post('/retard', isLoggedOD, function(req, res) {
 */
 router.post('/infos_retard', isLoggedOD, function (req, res){
     req.session.id_prevision = req.body.id_prevision;
+    console.log(req.session);
+    res.status(200).send();
 });
 
 router.get('/infos_retard', isLoggedOD, function (req, res){
@@ -74,46 +76,100 @@ router.get('/trains', isLoggedOD, function(req, res){
     req.getConnection(function (err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
-        var date_min = new Date();
-        date_min.setHours(date_min.getHours()-10);
-        date_min.setMinutes(date_min.getMinutes()-date_min.getTimezoneOffset());
-        var date_max = new Date();
-        date_max.setHours(date_max.getHours()+3);
-        date_max.setMinutes(date_max.getMinutes()-date_max.getTimezoneOffset());
+        Date.prototype.toString = function () {
+            return this.getDate()+"/"+(this.getMonth()+1)+"/"+this.getFullYear();
+        };
+        Date.prototype.timeToString = function () {
+            return this.getHours()+":"+this.getMinutes();
+        };
+        Date.prototype.addHours = function(h) {
+            this.setTime(this.getTime() + (h*60*60*1000));
+        };
 
-        var string_date_min = date_min.toISOString();
-        string_date_min = string_date_min.split("T");
-        string_date_min = string_date_min[0] +" "+string_date_min[1];
-        string_date_min = string_date_min.split(".")[0];
-
-        var string_date_max = date_max.toISOString();
-        string_date_max = string_date_max.split("T");
-        string_date_max = string_date_max[0] +" "+string_date_max[1];
-        string_date_max = string_date_max.split(".")[0];
-
-        var getQuery = 'SELECT ZST.num_train, ZSP.date, ZSP.id_prevision ' +
-            'FROM zs_prevision_train ZSPT ' +
-            'LEFT JOIN zs_prevision ZSP ON ZSPT.id_prevision = ZSP.id_prevision ' +
-            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
-            'LEFT JOIN zs_historique ZSH ON ZSPT.id_prevision = ZSH.id_prevision ' +
-            'WHERE ZSP.id_prevision NOT IN(SELECT id_prevision FROM zs_historique) ' +
-            'AND ZSP.date BETWEEN TIMESTAMP("' + string_date_min + '") AND TIMESTAMP("' + string_date_max + '") ' +
-            'AND ZSPT.second_train = 0 ' +
-            'ORDER BY ZSP.date ASC';
-
+        var aujourdhui = new Date();
+        var debut_periode = new Date();
+        var fin_periode = new Date();
+        debut_periode.addHours(-12);
+        fin_periode.addHours(1);
+        var sous_requete = "";
+        var between = "";
+        if(aujourdhui.getDate() == debut_periode.getDate()){
+            between ='' +
+                'ZSP.heure BETWEEN ' +
+                'TIME_FORMAT("' + debut_periode.timeToString() + '","%H:%i") ' +
+                'AND TIME_FORMAT("' + fin_periode.timeToString() + '","%H:%i") ';
+            sous_requete =
+                "SELECT " +
+                    "id_prevision " +
+                "FROM " +
+                    "zs_historique " +
+                "WHERE " +
+                    "date = DATE_FORMAT('"+debut_periode.toString()+"','%d/%m/%Y')"
+        }
+        else{
+            between ='' +
+                '(ZSP.heure BETWEEN ' +
+                    'TIME_FORMAT("' + debut_periode.timeToString() + '","%H:%i") ' +
+                    'AND TIME_FORMAT("23:59","%H:%i") ' +
+                'OR ' +
+                    'ZSP.heure BETWEEN ' +
+                    'TIME_FORMAT("00:00","%H:%i") ' +
+                    'AND TIME_FORMAT("' + fin_periode.timeToString() + '","%H:%i")) ';
+            sous_requete =
+                "SELECT " +
+                    "zs_historique.id_prevision " +
+                "FROM " +
+                    "zs_historique " +
+                "LEFT JOIN " +
+                    "zs_prevision " +
+                    "ON zs_prevision.id_prevision = zs_historique.id_historique " +
+                "WHERE " +
+                    "ZSPT.id_prevision = zs_historique.id_prevision " +
+                    "AND " +
+                        "(date = DATE_FORMAT('"+debut_periode.toString()+"','%d/%m/%Y')" +
+                        "and " +
+                            "zs_prevision.heure > TIME_FORMAT('"+debut_periode.timeToString()+"','%H:%i'))" +
+                        "OR" +
+                        "(date = CURDATE())";
+        }
+        var getQuery = '' +
+            'SELECT ' +
+                'ZST.num_train, ' +
+                'ZSP.heure, ' +
+                'ZSP.id_prevision ' +
+            'FROM ' +
+                'zs_prevision_train ZSPT ' +
+            'LEFT JOIN ' +
+                'zs_prevision ZSP ' +
+                'ON ZSPT.id_prevision = ZSP.id_prevision ' +
+            'LEFT JOIN ' +
+                'zs_train ZST ' +
+                'ON ZSPT.id_train = ZST.id_train ' +
+            'LEFT JOIN ' +
+                'zs_historique ZSH ' +
+                'ON ZSPT.id_prevision = ZSH.id_prevision ' +
+            'WHERE ' +
+                /*TODO a faire...*/
+               /* 'NOT EXISTS (' +
+                sous_requete +
+                ')' +
+                'AND ' +*/
+                    'ZSPT.second_train = 0 ' +
+                'AND ' +
+                    between +
+                'ORDER BY ' +
+                    'ZSP.heure ASC';
+        console.log(sous_requete);
+        console.log(getQuery);
         var query = conn.query(getQuery, function(err, rows){
             if (err) {
                 res.status(500).send(err);
             }
+            console.log(rows)
             var result = [];
             for(var i=0; i<rows.length; i++){
-                var date = rows[i].date;
-                date = date.toISOString();
-                date = date.split('T');
-                date = date[1];
-                date = date.split(':');
-                date = date[0] + ':' + date[1];
-                var infoTrain ="(" +date + ") - " + rows[i].num_train;
+                var heure = rows[i].heure.split(':');
+                var infoTrain =rows[i].num_train +" - (" + heure[0]+":"+heure[1] + ")";
                 result.push({
                     id_prevision : rows[i].id_prevision,
                     infoTrain : infoTrain
@@ -124,13 +180,19 @@ router.get('/trains', isLoggedOD, function(req, res){
     });
 });
 
-
 router.post('/post_retard', isLoggedOD, function(req, res) {
     req.getConnection(function(err, conn){
         if(err) return console.log('Connection fail: ' + err);
-        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_retard, retard, commentaire) ' +
-            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ', 1,"' + req.body.commentaire + '")';
-
+        console.log("+++++++++++++++");
+        console.log(req.session);
+        Date.prototype.toString = function () {
+            return (this.getMonth()+1)+"-"+this.getDate()+"-"+this.getFullYear() ;
+        };
+        var date = new Date();
+        var commentaire = req.body.commentaire;
+        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_cause_retard, date, retard, commentaire) ' +
+            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ',STR_TO_DATE("08-24-2015","%m-%d-%Y"), 1,' + req.body.commentaire + ')';
+    console.log(postQuery);
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -164,8 +226,7 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
 function isLoggedOD(req, res, next) {
 
     // if user is authenticated in the session, carry on
-    console.log("*****************")
-    console.log(req.session.user + "      +     OD")
+
     if (req.session.user == "OD")
         return next();
     else if(req.session.user == "ACE")
