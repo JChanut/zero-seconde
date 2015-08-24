@@ -7,7 +7,7 @@ var express = require('express'),
     multiparty = require('multiparty');
 
 //==============================================================================
-//               Parti ACE
+//               Partie ACE
 //==============================================================================
 
 // middleware specific to this router
@@ -23,6 +23,23 @@ router.get('/', isLoggedACE, function (req, res){
 
 router.get('/historique', isLoggedACE, function (req, res){
     res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
+});
+
+router.get('/histo', isLoggedOD, function(req, res){
+    req.getConnection(function (err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT DISTINCT zs_unite.libelle as libelle_unite, id_retard, zs_unite.id_unite, zs_cause_retard.libelle as libelle_motif FROM zs_cause_retard RIGHT JOIN zs_unite ON zs_cause_retard.id_unite = zs_unite.id_unite';
+        var query = conn.query(getQuery, function(err, rows){
+            if (err) {
+                res.status(500).send(err);
+            }
+            var result = [];
+
+
+            res.json(result);
+        });
+    });
 });
 
 router.post('/ajoutHoraires/send',isLoggedACE , function(req,res){
