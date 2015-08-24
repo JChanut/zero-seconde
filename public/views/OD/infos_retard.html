@@ -1,0 +1,60 @@
+<div id="login-page" class="row">
+    <div class="col s12 z-depth-4 card-panel">
+        <form class="login-form">
+            <div class="row">
+                <div class="input-field col s12 center">
+                    <h4>Informations supplémentaires</h4>
+                </div>
+            </div>
+
+
+            <div class="input-field col s12" >
+                <label class="label-list" for="list">Sélectionez l'unité :</label>
+                <select class="browser-default" id="list" ng-model="selected.unite" ng-change="update_unite()" ng-options="u.libelle_unite for u in data">
+                    <option value="">-- UNITES --</option>
+                </select>
+            </div>
+
+
+            <div class="input-field col s12">
+                <label class="label-list" >Sélectionez le motif du retard :</label>
+                <select class="browser-default" ng-model="selected.motif" ng-change="update_motif()" ng-options="m.libelle_motif for m in selected.unite.motif">
+                    <option value="">-- MOTIFS --</option>
+                </select>
+
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <i class="mdi-editor-mode-edit prefix"></i>
+                    <textarea id="icon_prefix2" class="materialize-textarea" ng-model="selected.commentaire" ng-change="update_commentaire()"></textarea>
+                    <label for="icon_prefix2" class="">Commentaire :</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <a href="#" ng-click="validation()" class="btn waves-effect waves-light col s12">Envoyez les infos</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="position:fixed;
+                   left:0px;
+                   bottom:0px;
+                   height:80px;
+                   width:100%;
+                   padding: inherit;
+                   background:rgb(0,154,166) !important">
+    <div class="row" style="display: table;">
+        <div style="text-align: center; display: table-cell; width: 100px; color:rgb(60,55,50);">
+            <div ng-click="deconnexion()"><i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+            <p style="margin-top:0;">Déconnexion</p>
+        </div>
+        <div style="text-align: center; display: table-cell; width: 100px;color:rgb(60,55,50);">
+            <div ng-click="menu()"><i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+            <p style="margin-top:0;">Menu</p>
+        </div>
+    </div>
+</div>

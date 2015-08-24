@@ -9,29 +9,12 @@ var express = require('express'),
 //==============================================================================
 //               Parti OD
 //==============================================================================
-router.get('/',isLoggedOD,function(req,res) {
-    res.sendFile(path.resolve(__dirname + '/../views/OD/menu.html'));
-});
 
-router.get('/retard', isLoggedOD, function (req, res){
-    res.sendFile(path.resolve(__dirname + '/../views/OD/retard.html'));
-});
-/*TODO pourquoi?????????????????????????????????*/
-/*
-router.post('/retard', isLoggedOD, function(req, res) {
-    req.session.id_user = req.body.id_user;
-});
-*/
 router.post('/infos_retard', isLoggedOD, function (req, res){
     req.session.id_prevision = req.body.id_prevision;
     console.log(req.session);
     res.status(200).send();
 });
-
-router.get('/infos_retard', isLoggedOD, function (req, res){
-    res.sendFile(path.resolve(__dirname + '/../views/OD/infos_retard.html'));
-});
-
 
 router.get('/unites', isLoggedOD, function(req, res){
     req.getConnection(function (err, conn) {
@@ -227,10 +210,8 @@ function isLoggedOD(req, res, next) {
 
     // if user is authenticated in the session, carry on
 
-    if (req.session.user == "OD")
+    if (req.session.user != "guest")
         return next();
-    else if(req.session.user == "ACE")
-        res.redirect('/ace');
     // if they aren't redirect them to the home page
     res.redirect('/');
 }

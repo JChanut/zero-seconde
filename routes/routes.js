@@ -26,6 +26,7 @@ module.exports = function(app, express) {
     });
 
 
+
     //==============================================================================
     //               Authentification
     //==============================================================================
@@ -74,7 +75,7 @@ module.exports = function(app, express) {
             id_gare: -1,
             id_prevision:-1
         };
-        res.redirect('/');
+        res.send();
     });
 
     var ace = require(path.resolve(__dirname + "/routeur_ace.js"));

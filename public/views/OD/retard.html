@@ -1,0 +1,50 @@
+<div id="login-page" class="row">
+    <div class="col s12 z-depth-4 card-panel">
+        <form class="login-form">
+            <div class="row">
+                <div class="input-field col s12 center">
+                    <h4>Retard</h4>
+                    <p class="center">Vous êtes sur le point de déclencher un retard.</p>
+                </div>
+            </div>
+            <div class="input-field col s12">
+                <label class="label-list" for="list">Sélectionez le n° de train</label>
+                <select class="browser-default" ng-model="selected.trains" ng-options="t.infoTrain for t in data" ng-change="getIdTrain()">
+                    <option value="" id="list">-- TRAINS --</option>
+                </select>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <a ng-click="postTrain()" class="waves-effect waves-light btn-large retard"><i class="mdi-image-timer left"></i>En retard...</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <a ng-click="postTrainAlheure()" class="waves-effect waves-light btn-large alheure"><i class="mdi-image-timer left"></i>A l'heure !</a>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div style="position:fixed;
+                   left:0px;
+                   bottom:0px;
+                   height:80px;
+                   width:100%;
+                   padding: inherit;
+                   background:rgb(0,154,166) !important">
+    <div class="row" style="display: table;">
+        <div style="text-align: center; display: table-cell; width: 100px; color:rgb(60,55,50);">
+            <div ng-click="deconnexion()"><i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+            <p style="margin-top:0;">Déconnexion</p>
+        </div>
+        <div style="text-align: center; display: table-cell; width: 100px;color:rgb(60,55,50);">
+            <div ng-click="menu()"><i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+            <p style="margin-top:0;">Menu</p>
+        </div>
+    </div>
+</div>

@@ -10,20 +10,6 @@ var express = require('express'),
 //               Parti ACE
 //==============================================================================
 
-// middleware specific to this router
-router.use(function timeLog(req, res, next) {
-    console.log('Time: ', Date.now());
-    next();
-});
-
-router.get('/', isLoggedACE, function (req, res){
-    console.log(path.resolve(__dirname + '/../views/ACE/menu.html'));
-    res.sendFile(path.resolve(__dirname + '/../views/ACE/menu.html'));
-});
-
-router.get('/historique', isLoggedACE, function (req, res){
-    res.sendFile(path.resolve(__dirname + '/../views/ACE/ace_historique.html'));
-});
 
 router.post('/ajoutHoraires/send',isLoggedACE , function(req,res){
     var form = new multiparty.Form();
@@ -35,14 +21,6 @@ router.post('/ajoutHoraires/send',isLoggedACE , function(req,res){
                 require('../script/excel_reader.js')(req, res,  files.file[0].path);
         }
     });
-});
-
-router.get('/ajoutHoraires', isLoggedACE, function (req, res){
-    res.sendFile(path.resolve(__dirname + '/../views/ACE/ajoutHoraires.html'));
-});
-
-router.get('/stat', isLoggedACE, function (req, res){
-    res.sendFile(path.resolve(__dirname + '/../views/ACE/statistique.html'));
 });
 
 //==============================================================================

@@ -1,0 +1,35 @@
+<div class="row" controller="menu_aceCtrl">
+    <div class="col s12 z-depth-4 card-panel">
+
+        <div class="row">
+            <div class="input-field col s12">
+                <a class="btn waves-effect waves-light col s12" ng-click="affiche_historique()">Historique des retards</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <a class="btn waves-effect waves-light col s12" href="#">Consultation des statistiques</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <a class="btn waves-effect waves-light col s12" ng-click="ajout_horaire()">Envoi du fichier</a>
+            </div>
+        </div>
+    </div>
+
+    <div style="position:fixed;
+               left:0px;
+               bottom:0px;
+               height:80px;
+               width:100%;
+               padding: inherit;
+               background:rgb(0,154,166) !important">
+        <div class="row" style="display: table;">
+            <div style="text-align: center; display: table-cell; width: 100px; color:rgb(60,55,50);">
+                <div ng-click="deconnexion()"><i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+                <p style="margin-top:0;">Déconnexion</p>
+            </div>
+        </div>
+    </div>
+</div>

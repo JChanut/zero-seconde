@@ -1,0 +1,60 @@
+<div class="row">
+    <div class="col s12 z-depth-4 card-panel">
+        <table class="table-responsive bordered centered">
+            <thead>
+            <tr>
+                <th data-field="id">N° train</th>
+                <th data-field="retard">Retard</th>
+                <th data-field="temps">Temps de retard</th>
+                <th data-field="temps">Opérateur Départ</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>87123</td>
+                <td>OUI</td>
+                <td>3.54</td>
+                <td>MARCHALL</td>
+            </tr>
+            <tr>
+                <td>7234</td>
+                <td>NON</td>
+                <td>---</td>
+                <td>RICO</td>
+            </tr>
+            <tr>
+                <td>7276</td>
+                <td>OUI</td>
+                <td>16.34</td>
+                <td>LESTAGE</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="row">
+        <div class="input-field col s6 m6 16">
+            <a href="/ace/ajoutHoraires" class="waves-effect waves-light btn-large"><i class="mdi-editor-insert-chart left"></i></a>
+        </div>
+    </div>
+</div>
+
+<div style="position:fixed;
+               left:0px;
+               bottom:0px;
+               height:80px;
+               width:100%;
+               padding: inherit;
+               background:rgb(0,154,166) !important">
+    <div class="row" style="display: table;">
+        <div style="text-align: center; display: table-cell; width: 100px; color:rgb(60,55,50);">
+            <div ng-click="deconnexion()"><i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+            <p style="margin-top:0;">Déconnexion</p>
+        </div>
+        <div style="text-align: center; display: table-cell; width: 100px;color:rgb(60,55,50);">
+            <div ng-click="menu()"><i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+            <p style="margin-top:0;">Menu</p>
+        </div>
+    </div>
+
+</div>
