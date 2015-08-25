@@ -416,9 +416,9 @@ zero_seconde.directive("fileread", [function () {
                 reader.onload = function (loadEvent) {
                     $scope.$apply(function () {
                         $scope.fileread = loadEvent.target.result;
-                        $scope.file = changeEvent.target.files[0];
                     });
                 };
+                $scope.file = changeEvent.target.files[0];
             });
         }
     }

@@ -60,7 +60,10 @@ router.get('/trains', isLoggedOD, function(req, res){
         if (err) return console.log('Connection fail: ' + err);
 
         Date.prototype.toString = function () {
-            return this.getDate()+"/"+(this.getMonth()+1)+"/"+this.getFullYear();
+            var mois = this.getMonth()+1;
+            if(mois<10)
+                mois = "0"+mois.toString();
+            return this.getFullYear()+"-"+mois+"-"+this.getDate();
         };
         Date.prototype.timeToString = function () {
             return this.getHours()+":"+this.getMinutes();
@@ -90,7 +93,7 @@ router.get('/trains', isLoggedOD, function(req, res){
                     "zs_historique ZSH " +
                     "ON ZSP.id_prevision = ZSH.id_prevision " +
                 "WHERE " +
-                    "date = DATE_FORMAT('"+debut_periode.toString()+"','%d/%m/%Y')"
+                    "date = DATE_FORMAT('"+debut_periode.toString()+"','%Y-%m-%d')"
         }
         else{
             between ='' +
@@ -112,7 +115,7 @@ router.get('/trains', isLoggedOD, function(req, res){
                 "WHERE " +
                     "ZSP.id_prevision = zs_historique.id_prevision " +
                     "AND " +
-                        "(date = DATE_FORMAT('"+debut_periode.toString()+"','%d/%m/%Y')" +
+                        "(date = DATE_FORMAT('"+debut_periode.toString()+"','%Y-%m-%d')" +
                         "and " +
                             "zs_prevision.heure > TIME_FORMAT('"+debut_periode.timeToString()+"','%H:%i'))" +
                         "OR" +
@@ -170,7 +173,7 @@ router.post('/post_retard', isLoggedOD, function(req, res) {
         if(err) return console.log('Connection fail: ' + err);
 
         Date.prototype.toString = function () {
-            return (this.getMonth()+1)+"-"+this.getDate()+"-"+this.getFullYear() ;
+            return (this.getMonth()+1) +"-"+this.getDate()+"-"+this.getFullYear() ;
         };
         var date = new Date();
         var commentaire = req.body.commentaire;
@@ -192,7 +195,7 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
         if(err) return console.log('Connection fail: ' + err);
         req.session['id_prevision'] = req.body.id_prevision;
         Date.prototype.toString = function () {
-            return (this.getMonth()+1)+"-"+this.getDate()+"-"+this.getFullYear() ;
+            return (this.getMonth()+1) +"-"+this.getDate()+"-"+this.getFullYear() ;
         };
         var date = new Date();
         var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard, date) ' +
@@ -201,6 +204,9 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
                 res.status(500).send(err);
+            }
+            else {
+                res.end();
             }
 
         });
