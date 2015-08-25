@@ -174,7 +174,7 @@ router.post('/post_retard', isLoggedOD, function(req, res) {
         var date = new Date();
         var commentaire = req.body.commentaire;
         var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_cause_retard, date, retard, commentaire) ' +
-            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ',STR_TO_DATE("08-24-2015","%m-%d-%Y"), 1,' + req.body.commentaire + ')';
+            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ',STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"), 1,"' + req.body.commentaire + '")';
     console.log(postQuery);
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
@@ -190,8 +190,12 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
     req.getConnection(function(err, conn){
         if(err) return console.log('Connection fail: ' + err);
         req.session['id_prevision'] = req.body.id_prevision;
-        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard) ' +
-            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0)';
+        Date.prototype.toString = function () {
+            return (this.getMonth()+1)+"-"+this.getDate()+"-"+this.getFullYear() ;
+        };
+        var date = new Date();
+        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard, date) ' +
+            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0 ,STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"))';
 
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {

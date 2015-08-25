@@ -2,7 +2,7 @@
  * Created by Thomas on 24/08/2015.
  */
 
-var zero_seconde = angular.module('zero_seconde', ['ngRoute']);
+var zero_seconde = angular.module('zero_seconde', ['xeditable', 'ngRoute']);
 
 zero_seconde.config(function($routeProvider, $locationProvider) {
     $routeProvider
@@ -337,6 +337,17 @@ zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$ti
 
 zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
+        var url_histo = "/ace/histo"
+        var url_unite = "/od/unites"
+        $scope.unites = [];
+        $scope.retards = [];
+
+        $http.get(url_histo)
+            .success(function(resultat) {
+                $scope.retards = resultat;
+                console.log($scope.retards);
+
+            });
 
         $scope.deconnexion = function() {
             $http.post('/deconnexion')
