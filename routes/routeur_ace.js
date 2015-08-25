@@ -15,15 +15,23 @@ router.get('/histo', isLoggedACE, function(req, res){
     req.getConnection(function (err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
-        var getQuery = 'SELECT DISTINCT zs_unite.libelle as libelle_unite, id_retard, zs_unite.id_unite, zs_cause_retard.libelle as libelle_motif FROM zs_cause_retard RIGHT JOIN zs_unite ON zs_cause_retard.id_unite = zs_unite.id_unite';
+        var getQuery = 'SELECT DISTINCT ZSH.id_historique, ZST.num_train, ZSU.nom, ZSH.retard, ZSUN.libelle, ZSCR.libelle AS libelleCR, ZSH.commentaire, ZSH.duree_retard' +
+            ' FROM zs_historique ZSH' +
+            ' LEFT JOIN zs_cause_retard ZSCR ON ZSH.id_cause_retard = ZSCR.id_retard' +
+            ' LEFT JOIN zs_utilisateur ZSU ON ZSH.id_od = ZSU.id_utilisateur' +
+            ' LEFT JOIN zs_prevision ZSP ON ZSH.id_prevision = ZSP.id_prevision' +
+            ' LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision' +
+            ' LEFT JOIN zs_unite ZSUN ON ZSCR.id_unite = ZSUN.id_unite' +
+            ' LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train' +
+            ' WHERE ZSPT.second_train = 0';
+
+        console.log(getQuery);
         var query = conn.query(getQuery, function(err, rows){
             if (err) {
                 res.status(500).send(err);
             }
-            var result = [];
 
-
-            res.json(result);
+            res.json(rows);
         });
     });
 });
