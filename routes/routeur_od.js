@@ -82,10 +82,13 @@ router.get('/trains', isLoggedOD, function(req, res){
                 'TIME_FORMAT("' + debut_periode.timeToString() + '","%H:%i") ' +
                 'AND TIME_FORMAT("' + fin_periode.timeToString() + '","%H:%i") ';
             sous_requete =
-                "SELECT " +
-                    "id_prevision " +
+                "SELECT DISTINCT " +
+                    "ZSP.id_prevision " +
                 "FROM " +
-                    "zs_historique " +
+                    "zs_prevision ZSP " +
+                "INNER JOIN " +
+                    "zs_historique ZSH " +
+                    "ON ZSP.id_prevision = ZSH.id_prevision " +
                 "WHERE " +
                     "date = DATE_FORMAT('"+debut_periode.toString()+"','%d/%m/%Y')"
         }
@@ -99,15 +102,15 @@ router.get('/trains', isLoggedOD, function(req, res){
                     'TIME_FORMAT("00:00","%H:%i") ' +
                     'AND TIME_FORMAT("' + fin_periode.timeToString() + '","%H:%i")) ';
             sous_requete =
-                "SELECT " +
+                "SELECT DISTINCT " +
                     "zs_historique.id_prevision " +
                 "FROM " +
-                    "zs_historique " +
-                "LEFT JOIN " +
-                    "zs_prevision " +
-                    "ON zs_prevision.id_prevision = zs_historique.id_historique " +
+                    "zs_prevision ZSP" +
+                "INNER JOIN " +
+                    "zs_historique ZSH" +
+                    "ON ZSP.id_prevision = ZSH.id_historique " +
                 "WHERE " +
-                    "ZSPT.id_prevision = zs_historique.id_prevision " +
+                    "ZSP.id_prevision = zs_historique.id_prevision " +
                     "AND " +
                         "(date = DATE_FORMAT('"+debut_periode.toString()+"','%d/%m/%Y')" +
                         "and " +
@@ -116,7 +119,7 @@ router.get('/trains', isLoggedOD, function(req, res){
                         "(date = CURDATE())";
         }
         var getQuery = '' +
-            'SELECT ' +
+            'SELECT DISTINCT ' +
                 'ZST.num_train, ' +
                 'ZSP.heure, ' +
                 'ZSP.id_prevision ' +
@@ -132,11 +135,10 @@ router.get('/trains', isLoggedOD, function(req, res){
                 'zs_historique ZSH ' +
                 'ON ZSPT.id_prevision = ZSH.id_prevision ' +
             'WHERE ' +
-                /*TODO a faire...*/
-               /* 'NOT EXISTS (' +
+                'ZSP.id_prevision NOT IN (' +
                 sous_requete +
                 ')' +
-                'AND ' +*/
+                'AND ' +
                     'ZSPT.second_train = 0 ' +
                 'AND ' +
                     between +
@@ -148,7 +150,7 @@ router.get('/trains', isLoggedOD, function(req, res){
             if (err) {
                 res.status(500).send(err);
             }
-            console.log(rows)
+
             var result = [];
             for(var i=0; i<rows.length; i++){
                 var heure = rows[i].heure.split(':');
@@ -166,8 +168,7 @@ router.get('/trains', isLoggedOD, function(req, res){
 router.post('/post_retard', isLoggedOD, function(req, res) {
     req.getConnection(function(err, conn){
         if(err) return console.log('Connection fail: ' + err);
-        console.log("+++++++++++++++");
-        console.log(req.session);
+
         Date.prototype.toString = function () {
             return (this.getMonth()+1)+"-"+this.getDate()+"-"+this.getFullYear() ;
         };
@@ -175,7 +176,7 @@ router.post('/post_retard', isLoggedOD, function(req, res) {
         var commentaire = req.body.commentaire;
         var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_cause_retard, date, retard, commentaire) ' +
             'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ',STR_TO_DATE("08-24-2015","%m-%d-%Y"), 1,' + req.body.commentaire + ')';
-    console.log(postQuery);
+
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
                 res.status(500).send(err);

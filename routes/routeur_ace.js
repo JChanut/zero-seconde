@@ -11,7 +11,7 @@ var express = require('express'),
 //==============================================================================
 
 
-router.get('/histo', isLoggedOD, function(req, res){
+router.get('/histo', isLoggedACE, function(req, res){
     req.getConnection(function (err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 

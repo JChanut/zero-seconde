@@ -1,4 +1,4 @@
-<div id="login-page" class="row" ng-app="zeroSecApp" ng-controller="ajoutHoraireCtrl">
+<div id="login-page" class="row" ng-controller="ajoutHoraireCtrl">
     <div class="col s12 z-depth-4 card-panel">
         <form class="login-form">
             <div class="row">
@@ -8,28 +8,24 @@
             </div>
 
 
-            <div class="row">
-                <div class="input-field col s12">
-                    <form action="#">
-                        <div class="file-field input-field" style="text-align: center">
-                            <input class="file-path validate" type="text"/>
-                            <div class="btn">
-                                <span>Fichier</span>
-                                <input type="file" name="fileImport" fileread="file" accept=".xlsx"/>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+            <div class="row" style="text-align: center;">
+                <label class="import-file">
+                    <input type="file" name="fileImport" fileread="file" style="display: none;"  onchange="angular.element(this).scope().fileNameChanged(this)">
+                    <p style="height: 27px;color: #000;border-bottom: 1px solid rgb(0, 0, 0);font-size: 1.4em;text-align: center;">{{nom_fichier}}</p>
+                    <div class="btn" style="height: 43px;line-height: 43px;width: 216px;">Sélectionner un fichier</div>
+                </label>
             </div>
 
             <div class="row" style="text-align: center">
-                    <div class="btn" style="height: 43px;line-height: 43px;width: 115px;">
-                        <span ng-click="sendFile()">Envoi</span>
-                    </div>
+                <div class="btn" style="height: 43px;line-height: 43px;width: 216px;">
+                    <span ng-click="sendFile()">Envoi</span>
+                </div>
             </div>
         </form>
     </div>
 </div>
+
+
 
 <div style="position:fixed;
                left:0px;
@@ -37,16 +33,17 @@
                height:80px;
                width:100%;
                padding: inherit;
+               z-index: 2;
                background:rgb(0,154,166) !important">
     <div class="row" style="display: table;">
-        <div style="text-align: center; display: table-cell; width: 100px; color:rgb(60,55,50);">
-            <div ng-click="deconnexion()"><i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+        <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="deconnexion()">
+            <i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
             <p style="margin-top:0;">Déconnexion</p>
-        </div>
-        <div style="text-align: center; display: table-cell; width: 100px;color:rgb(60,55,50);">
-            <div ng-click="menu()"><i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
+        </button>
+        <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="menu()">
+            <i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
             <p style="margin-top:0;">Menu</p>
-        </div>
+        </button>
     </div>
 
 </div>

@@ -31,7 +31,9 @@ zero_seconde.config(function($routeProvider, $locationProvider) {
             controller: 'historiqueCtrl'
         })
         .when('/ace/ajoutHoraires', {
-            templateUrl: "/views/ACE/ajoutHoraires.html",
+            /*TODO remplacer :
+             templateUrl: "/views/ACE/ajoutHoraires.html",*/
+             templateUrl: "/views/ACE/ajoutHoraires.html",
             controller: 'ajoutHoraireCtrl'
         })
         .when('/ace/stat', {
@@ -68,7 +70,7 @@ function($scope, $http, $location,$timeout) {
                                 $location.path('/ace').replace();
                             });
                         } else {
-                            Materialize.toast('Votre compte n\'est pas habilité.', 3000);
+                            Materialize.toast('Votre compte n\'est pas habilit&eacute;.', 3000);
                         }
                     }
                     else {
@@ -201,6 +203,8 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
         };
 
         $scope.postTrain = function() {
+            console.log("post train retard");
+            console.log(train);
             if(train != null){
                 data = {
                     id_prevision : train.id_prevision
@@ -221,6 +225,8 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
         };
 
         $scope.postTrainAlheure = function() {
+            console.log("post train à l'heure");
+            console.log(train);
             if(train != null){
                 data = {
                     id_prevision : train.id_prevision
@@ -243,19 +249,27 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
 
 zero_seconde.controller('ajoutHoraireCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
-
-        $scope.deconnexion = function() {
+        $scope.deconnexion = function () {
+            console.log("deconnexion");
             $http.post('/deconnexion')
                 .then(function () {
-                    $timeout(function() {
+                    $timeout(function () {
                         $location.path('/').replace();
                     });
                 });
         };
 
-        $scope.menu = function() {
-            $timeout(function() {
+        $scope.menu = function () {
+            $timeout(function () {
                 $location.path('/ace').replace();
+            });
+        };
+
+        $scope.fileNameChanged = function (ele) {
+            $scope.$apply(function() {
+                $scope.nom_fichier = ele.files[0].name;
+                if($scope.nom_fichier.length>20)
+                    $scope.nom_fichier=$scope.nom_fichier.slice(0,20)+"...";
             });
         };
 
@@ -277,27 +291,8 @@ zero_seconde.controller('ajoutHoraireCtrl', ['$scope', '$http', '$location', '$t
                     Materialize.toast("L'envoie a &eacute;chou&eacute; !", 3000);
                 });
         }
-    }]);
-
-zero_seconde.directive("fileread", [function () {
-    return {
-        $scope: {
-            fileread: "="
-        },
-        link: function ($scope, element, attributes) {
-            element.bind("change", function (changeEvent) {
-                var reader = new FileReader();
-                reader.onload = function (loadEvent) {
-                    $scope.$apply(function () {
-                        $scope.fileread = loadEvent.target.result;
-                    });
-                };
-                $scope.file = changeEvent.target.files[0];
-                //reader.readAsDataURL(changeEvent.target.files[0]);
-            });
-        }
     }
-}]);
+]);
 
 zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
@@ -392,9 +387,28 @@ zero_seconde.controller('menu_aceCtrl', ['$scope', '$http', '$location', '$timeo
             $http.post('/deconnexion')
                 .then(function () {
                     $timeout(function() {
-                        $location.path('/').replace();
+                        $location.path('/');
                     });
                 });
         }
     }
 ]);
+
+zero_seconde.directive("fileread", [function () {
+    return {
+        $scope: {
+            fileread: "="
+        },
+        link: function ($scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                var reader = new FileReader();
+                reader.onload = function (loadEvent) {
+                    $scope.$apply(function () {
+                        $scope.fileread = loadEvent.target.result;
+                        $scope.file = changeEvent.target.files[0];
+                    });
+                };
+            });
+        }
+    }
+}]);

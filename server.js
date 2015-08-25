@@ -30,6 +30,7 @@ app.use(
         user     : 'root',
         password : '',
         database : 'zero_sec',
+        charset : 'utf8_bin',
         debug    : false // true -> debug logger
     }, 'request')
 );

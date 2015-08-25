@@ -13,6 +13,11 @@
         </div>
         <div class="row">
             <div class="input-field col s12">
+                <a class="btn waves-effect waves-light col s12" ng-click="ajout_horaire()">Prévoir un retard</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
                 <a class="btn waves-effect waves-light col s12" ng-click="ajout_horaire()">Envoi du fichier</a>
             </div>
         </div>
@@ -27,8 +32,11 @@
                background:rgb(0,154,166) !important">
         <div class="row" style="display: table;">
             <div style="text-align: center; display: table-cell; width: 100px; color:rgb(60,55,50);">
-                <div ng-click="deconnexion()"><i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i></div>
-                <p style="margin-top:0;">Déconnexion</p>
+                <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="deconnexion()">
+                    <i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
+                    <p style="margin-top:0;">Déconnexion</p>
+                </button>
+
             </div>
         </div>
     </div>

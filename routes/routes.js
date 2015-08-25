@@ -88,7 +88,7 @@ module.exports = function(app, express) {
     //               404 NOT FOUND
     //==============================================================================
     app.use(function (req, res, next) {
-        res.status(404).sendFile(path.resolve(__dirname + '/../public/404/notFound.html'));
+        res.redirect("/");
     });
 };
 

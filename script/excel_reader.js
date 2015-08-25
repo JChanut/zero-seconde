@@ -4,7 +4,7 @@
 module.exports = function(req,res,path_file) {
     var Excel = require('exceljs'),
         path = require('path');
-
+    res.charset = 'utf-8';
     console.log("********** PARSEUR XLSX **********");
     var workbook = new Excel.Workbook();
     var i = 8;
@@ -41,7 +41,7 @@ module.exports = function(req,res,path_file) {
                      'INSERT INTO zs_train  (num_train) VALUES ('+num_parite+')'
 
                      'INSERT INTO zs_prevision
-                    */
+                     */
                 }
                 else {
                     sortir = true;
@@ -59,8 +59,23 @@ module.exports = function(req,res,path_file) {
 
             Data_excel.prototype.setTrain = function(){
                 var train = (this.first)? this.data[this.rang].train : this.data[this.rang].parite;
-                var getQuery = 'INSERT INTO zs_train  (num_train) VALUES ('+train+')';
+                var famille = null;
+                var fc = /^(894)/;
+                var bourgogne = /^(17|839|860|875|8913|8915|8917|8919|8914)/;
+                var intercite = /^(1543|1545)$/;
+                var tgv = /^([1-9][0-9]{3})$/;
+                if(fc.exec(train)){
+                    famille = "Franche Comté";
+                }else if(bourgogne.exec(train)){
+                    famille = "Bourgogne";
+                }else if(intercite.exec(train)){
+                    famille = "Intercité";
+                }else if(tgv.exec(train)){
+                    famille = "TGV";
+                }
+                var getQuery = 'INSERT INTO zs_train  (num_train,famille) VALUES ('+train+',"'+ famille +'")';
                 var current = this;
+                console.log(getQuery)
                 req.getConnection(function (err, conn) {
 
                     if (err) return console.log('Connection fail: ' + err);
@@ -115,7 +130,7 @@ module.exports = function(req,res,path_file) {
             };
 
             Data_excel.prototype.setPrevision = function(){
-                console.log(this.data[this.rang]);
+
                 var getQuery = 'INSERT INTO zs_prevision (id_gare, heure) VALUES ('+this.id_gare+',TIME_FORMAT("'+this.data[this.rang].heure+'","%H:%i"))';
                 var current = this;
                 //INSERT INTO `zero_sec`.`zs_prevision` (`id_prevision`, `id_gare`, `date`) VALUES (NULL, '1', TIMESTAMP('2015-08-31 00:00:00'));
