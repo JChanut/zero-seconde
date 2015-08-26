@@ -270,19 +270,33 @@ zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$ti
     }
 ]);
 
-zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$timeout',
-    function ($scope, $http, $location, $timeout) {
-        var url_histo = "/ace/histo"
-        var   url_unite = "/od/unites"
+zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$timeout', '$filter',
+    function ($scope, $http, $location, $timeout, $filter) {
+        var url_histo = "/ace/histo";
+        var url_unite = "/od/unites";
+
         $scope.unites = [];
         $scope.retards = [];
 
         $http.get(url_histo)
             .success(function(resultat) {
                 $scope.retards = resultat;
-                console.log($scope.retards);
-
             });
+
+        $scope.loadUnites = function() {
+            return $scope.unites.length ? null : $http.get(url_unite)
+                .success(function(data) {
+                    $scope.unites = data;
+            });
+        };
+
+        $scope.showUnites = function() {
+            var selected = $filter('filter')($scope.retards.id_historique, {value : $scope.unites.libelle_unite});
+            console.log("selected");
+            console.log(selected);
+            return ($scope.unites.libelle_unite && selected.length);
+
+        };
 
     }
 ]);

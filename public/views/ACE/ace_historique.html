@@ -27,8 +27,8 @@
                     </span>
                 </td>
                 <td>
-                    <span editable-text="ret.libelle" e-name="libelle" e-form="rowform"  e-required>
-                        {{ret.libelle || "/"}}
+                    <span editable-select="ret.libelle" e-name="libelle" onshow="loadUnites()" e-form="rowform" e-ng-options="u.id_unite as u.libelle_unite for u in unites">
+                        {{ showUnites() }}
                     </span>
                 </td>
                 <td>
@@ -64,6 +64,7 @@
             </tr>
             </tbody>
         </table>
+
     </div>
 </div>
 
