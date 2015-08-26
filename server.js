@@ -7,7 +7,6 @@ var express = require('express'),
     cookieSession = require('cookie-session'),
     connection = require('express-myconnection'),
     mysql = require('mysql'),
-    favicon = require('serve-favicon'),
     morgan = require('morgan'),
    // cookieParser = require('cookie-parser'),
     app = express();

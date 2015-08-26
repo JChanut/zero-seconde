@@ -106,19 +106,19 @@ router.get('/trains', isLoggedOD, function(req, res){
                     'AND TIME_FORMAT("' + fin_periode.timeToString() + '","%H:%i")) ';
             sous_requete =
                 "SELECT DISTINCT " +
-                    "zs_historique.id_prevision " +
+                    "ZSH.id_prevision " +
                 "FROM " +
-                    "zs_prevision ZSP" +
+                    "zs_prevision ZSP " +
                 "INNER JOIN " +
-                    "zs_historique ZSH" +
+                    "zs_historique ZSH " +
                     "ON ZSP.id_prevision = ZSH.id_historique " +
                 "WHERE " +
-                    "ZSP.id_prevision = zs_historique.id_prevision " +
+                    "ZSP.id_prevision = ZSH.id_prevision " +
                     "AND " +
-                        "(date = DATE_FORMAT('"+debut_periode.toString()+"','%Y-%m-%d')" +
+                        "(date = DATE_FORMAT('"+debut_periode.toString()+"','%Y-%m-%d') " +
                         "and " +
-                            "zs_prevision.heure > TIME_FORMAT('"+debut_periode.timeToString()+"','%H:%i'))" +
-                        "OR" +
+                            "ZSP.heure > TIME_FORMAT('"+debut_periode.timeToString()+"','%H:%i')) " +
+                        "OR " +
                         "(date = CURDATE())";
         }
         var getQuery = '' +
@@ -155,14 +155,45 @@ router.get('/trains', isLoggedOD, function(req, res){
             }
 
             var result = [];
+            var hier = false;
+            var rang = 0;
+            console.log(rows);
+            console.log(rows.length);
             for(var i=0; i<rows.length; i++){
+                console.log(i + " "+!hier);
                 var heure = rows[i].heure.split(':');
-                var infoTrain =rows[i].num_train +" - (" + heure[0]+":"+heure[1] + ")";
-                result.push({
-                    id_prevision : rows[i].id_prevision,
-                    infoTrain : infoTrain
-                });
+                var date = new Date();
+                date.setHours(heure[0]);
+                date.setMinutes(heure[1]);
+                var current = new Date();
+                current.setTime(current.getTime() + (60*60*1000));
+                if(date<=current) {
+                    var infoTrain = rows[i].num_train + " - (" + heure[0] + ":" + heure[1] + ")";
+                    result.push({
+                        id_prevision: rows[i].id_prevision,
+                        infoTrain: infoTrain
+                    });
+                }
+                else {
+                    hier = true;
+                    rang = i-1;
+                    break;
+                }
             }
+            if(hier)
+                for(i=rows.length-1;i>rang;i--){
+                    var heure = rows[i].heure.split(':');
+                    var date = new Date();
+                    date.setHours(heure[0]);
+                    date.setMinutes(heure[1]);
+                    var current = new Date();
+                    current.setTime(current.getTime() + (60*60*1000));
+                    var infoTrain = rows[i].num_train + " - (" + heure[0] + ":" + heure[1] + ")";
+                    result.unshift({
+                        id_prevision: rows[i].id_prevision,
+                        infoTrain: infoTrain
+                    });
+                }
             res.json(result);
         });
     });

@@ -1,4 +1,4 @@
-<div class="row" controller="menu_odCtrl">
+<div class="row">
     <div class="col s12 z-depth-4 card-panel">
 
         <div class="row">
@@ -11,22 +11,15 @@
                 <a class="btn waves-effect waves-light col s12" href="#">Consultation des statistiques</a>
             </div>
         </div>
+        <div class="row" ng-show="userFonction=='ACE'">
+            <div class="input-field col s12">
+                <a class="btn waves-effect waves-light col s12" ng-click="go_ace()">Partie ACE</a>
+            </div>
+        </div>
 
     </div>
 </div>
 
-<div style="position:fixed;
-                   left:0px;
-                   bottom:0px;
-                   height:80px;
-                   width:100%;
-                   padding: inherit;
-                   background:rgb(0,154,166) !important">
-    <div class="row" style="display: table;">
-        <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="deconnexion()">
-            <i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
-            <p style="margin-top:0;">Déconnexion</p>
-        </button>
-    </div>
-</div>
+<div ng-include="'/views/menu_bottom.html'"></div>
+
 

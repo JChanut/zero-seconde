@@ -7,7 +7,7 @@ var express = require('express'),
     multiparty = require('multiparty');
 
 //==============================================================================
-//               Partie ACE
+//                 Partie ACE
 //==============================================================================
 
 
@@ -57,8 +57,6 @@ function isLoggedACE(req, res, next) {
 
     if (req.session.user == "ACE")
         return next();
-    else if(req.session.user == "OD")
-        res.redirect('/od');
     // if they aren't redirect them to the home page
     res.redirect('/');
 }

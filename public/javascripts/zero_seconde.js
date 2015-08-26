@@ -2,17 +2,17 @@
  * Created by Thomas on 24/08/2015.
  */
 
-var zero_seconde = angular.module('zero_seconde', ['xeditable', 'ngRoute']);
+var zero_seconde = angular.module('zero_seconde', ['xeditable', 'ngRoute', 'ngCookies']);
 
 zero_seconde.config(function($routeProvider, $locationProvider) {
     $routeProvider
-        .when('/od', {
-            templateUrl: "/views/OD/menu.html",
-            controller :"menu_odCtrl"
-        })
         .when('/', {
             templateUrl : '/views/connexion.html',
             controller  : 'authCtrl'
+        })
+        .when('/od', {
+            templateUrl: "/views/OD/menu.html",
+            controller :"menu_odCtrl"
         })
         .when('/od/retard', {
             templateUrl: "/views/OD/retard.html",
@@ -31,8 +31,6 @@ zero_seconde.config(function($routeProvider, $locationProvider) {
             controller: 'historiqueCtrl'
         })
         .when('/ace/ajoutHoraires', {
-            /*TODO remplacer :
-             templateUrl: "/views/ACE/ajoutHoraires.html",*/
              templateUrl: "/views/ACE/ajoutHoraires.html",
             controller: 'ajoutHoraireCtrl'
         })
@@ -43,8 +41,14 @@ zero_seconde.config(function($routeProvider, $locationProvider) {
     $locationProvider.html5Mode(true);
 });
 
-zero_seconde.controller('authCtrl', ['$scope', '$http', '$location', '$timeout',
-function($scope, $http, $location,$timeout) {
+zero_seconde.value('infoUser',{fonction:'guest'});
+
+zero_seconde.factory('serviceRetard',function($http){
+
+});
+
+zero_seconde.controller('authCtrl', ['$scope', '$http', '$location', '$timeout', 'infoUser',
+function($scope, $http, $location, $timeout, infoUser) {
         $scope.authPostForm = function() {
 
             var encodedJson = {
@@ -56,13 +60,13 @@ function($scope, $http, $location,$timeout) {
                 url: '/authentification',
                 data: encodedJson
             })
-                .success(function(data, status, headers, config) {
-                    console.log(data);
+                .success(function(data) {
                     if (data.connexion) {
+                        infoUser.fonction = data.fonction;
                         if (data.fonction === "OD") {
                             Materialize.toast('Connexion effectu&eacute;e', 3000);
                             $timeout(function () {
-                                $location.path('/od').replace();
+                                $location.path('/od');
                             });
                         } else if (data.fonction === "ACE") {
                             Materialize.toast('Connexion effectu&eacute;e', 3000);
@@ -79,7 +83,7 @@ function($scope, $http, $location,$timeout) {
                         Materialize.toast('CP ou mot de passe incorrect !', 5000);
                     }
                 })
-                .error(function(data, status, headers, config) {
+                .error(function(data) {
                     console.log(data);
                     console.log("error");
                     Materialize.toast('Connexion momentan&eacute;ment indisponible...', 6000);
@@ -100,19 +104,6 @@ zero_seconde.controller('retardDataCtrl', ['$scope', '$http', '$location', '$tim
 
         $scope.selected = {};
 
-        $scope.deconnexion = function() {
-            $http.post('/deconnexion')
-                .then(function () {
-                    $timeout(function() {
-                        $location.path('/').replace();
-                    });
-                });
-        };
-        $scope.menu = function() {
-            $timeout(function() {
-                $location.path('/od').replace();
-            });
-        };
         //Méthode GET -> Récupérer et afficher les données
         $http.get(URL_GET).
             then(function(response) {
@@ -145,7 +136,7 @@ zero_seconde.controller('retardDataCtrl', ['$scope', '$http', '$location', '$tim
             }
 
             if(valide) {
-                data = {
+                var data = {
                     id_unite : unite.id_unite,
                     id_motif : motif.id_retard,
                     commentaire : commentaire
@@ -174,20 +165,6 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
         var train = null;
         $scope.selected = {};
 
-        $scope.deconnexion = function() {
-            $http.post('/deconnexion')
-                .then(function () {
-                    $timeout(function() {
-                        $location.path('/').replace();
-                    });
-                });
-        };
-        $scope.menu = function() {
-            $timeout(function() {
-                $location.path('/od').replace();
-            });
-        };
-
         //Méthode GET -> Récupérer et afficher les données
         $http.get(URL_GET).
             then(function(response) {
@@ -199,19 +176,15 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
 
         $scope.getIdTrain = function () {
             train = $scope.selected.trains;
-            console.log(train);
         };
 
         $scope.postTrain = function() {
-            console.log("post train retard");
-            console.log(train);
             if(train != null){
-                data = {
+                var data = {
                     id_prevision : train.id_prevision
                 };
                 $http.post(URL_RETARD, data).
-                    then(function(response) {
-
+                    then(function() {
                         $timeout(function () {
                             $location.path(URL_RETARD).replace();
                         });
@@ -225,15 +198,13 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
         };
 
         $scope.postTrainAlheure = function() {
-            console.log("post train à l'heure");
-            console.log(train);
             if(train != null){
-                data = {
+                var data = {
                     id_prevision : train.id_prevision
                 };
                 $http.post(URL_ALHEURE, data)
                     .then(function(){
-                        Materialize.toast("Le train a bien &eacute;t&eacute; d&eacute;clar&eacute; 	&agrave; l'heure. Vous allez &ecirc;tre redirig&eacute;", 3000)
+                        Materialize.toast("Le train a bien &eacute;t&eacute; d&eacute;clar&eacute; 	&agrave; l'heure. Vous allez &ecirc;tre redirig&eacute;", 3000);
 
                         $timeout(function () {
                             $location.path(URL_MENU).replace();
@@ -249,21 +220,6 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
 
 zero_seconde.controller('ajoutHoraireCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
-        $scope.deconnexion = function () {
-            console.log("deconnexion");
-            $http.post('/deconnexion')
-                .then(function () {
-                    $timeout(function () {
-                        $location.path('/').replace();
-                    });
-                });
-        };
-
-        $scope.menu = function () {
-            $timeout(function () {
-                $location.path('/ace').replace();
-            });
-        };
 
         $scope.fileNameChanged = function (ele) {
             $scope.$apply(function() {
@@ -275,7 +231,6 @@ zero_seconde.controller('ajoutHoraireCtrl', ['$scope', '$http', '$location', '$t
 
         $scope.sendFile = function(){
             var fd = new FormData();
-            console.log($scope.file);
             fd.append('file', $scope.file);
             $http.post("/ace/ajoutHoraires/send", fd, {
                 transformRequest: angular.identity,
@@ -297,23 +252,8 @@ zero_seconde.controller('ajoutHoraireCtrl', ['$scope', '$http', '$location', '$t
 zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
 
-        $scope.deconnexion = function() {
-            $http.post('/deconnexion')
-                .then(function () {
-                    $timeout(function() {
-                        $location.path('/').replace();
-                    });
-                });
-        };
-
-        $scope.menu = function() {
-            $timeout(function() {
-                $location.path('/ace').replace();
-            });
-        };
         $scope.sendFile = function(){
             var fd = new FormData();
-            console.log($scope.file);
             fd.append('file', $scope.file);
             $http.post("/ace/ajoutHoraires/send", fd, {
                 transformRequest: angular.identity,
@@ -333,7 +273,7 @@ zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$ti
 zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
         var url_histo = "/ace/histo"
-        var url_unite = "/od/unites"
+        var   url_unite = "/od/unites"
         $scope.unites = [];
         $scope.retards = [];
 
@@ -344,39 +284,22 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
 
             });
 
-        $scope.deconnexion = function() {
-            $http.post('/deconnexion')
-                .then(function () {
-                    $timeout(function() {
-                        $location.path('/').replace();
-                    });
-                });
-        };
-
-        $scope.menu = function() {
-            $timeout(function() {
-                $location.path('/ace').replace();
-            });
-        };
-
     }
 ]);
 
-zero_seconde.controller('menu_odCtrl', ['$scope', '$http', '$location', '$timeout',
-    function ($scope, $http, $location, $timeout) {
+zero_seconde.controller('menu_odCtrl', ['$scope', '$http', '$location', '$timeout', 'infoUser',
+    function ($scope, $http, $location, $timeout,infoUser) {
+        $scope.userFonction = infoUser.fonction;
         $scope.newDep = function() {
             $timeout(function () {
                 $location.path('/od/retard').replace();
             });
         };
 
-        $scope.deconnexion = function() {
-            $http.post('/deconnexion')
-                .then(function () {
-                    $timeout(function() {
-                        $location.path('/').replace();
-                    });
-                });
+        $scope.go_ace = function() {
+            $timeout(function () {
+                $location.path('/ace').replace();
+            });
         }
     }
 ]);
@@ -394,6 +317,30 @@ zero_seconde.controller('menu_aceCtrl', ['$scope', '$http', '$location', '$timeo
                 $location.path('/ace/historique').replace();
             });
         };
+
+        $scope.go_od = function() {
+            $timeout(function () {
+                $location.path('/od').replace();
+            });
+        }
+    }
+]);
+
+zero_seconde.controller('menu_bottomCtrl', ['$scope', '$rootScope', '$http', '$location',  '$timeout', 'infoUser',
+    function ($scope, $rootScope, $http, $location,  $timeout, infoUser) {
+        $scope.affichage_menu = (($location.path() == "/od")||($location.path() == "/ace"));
+
+        $scope.affichage_boutton = function() {
+            return $scope.affichage_menu;
+        };
+
+        $scope.menu = function() {
+            var path = (infoUser.fonction == "OD")?'/od':'/ace';
+            $timeout(function () {
+                $location.path(path).replace();
+            });
+        };
+
         $scope.deconnexion = function() {
             $http.post('/deconnexion')
                 .then(function () {
@@ -401,7 +348,7 @@ zero_seconde.controller('menu_aceCtrl', ['$scope', '$http', '$location', '$timeo
                         $location.path('/');
                     });
                 });
-        }
+        };
     }
 ]);
 
@@ -410,7 +357,7 @@ zero_seconde.directive("fileread", [function () {
         $scope: {
             fileread: "="
         },
-        link: function ($scope, element, attributes) {
+        link: function ($scope, element) {
             element.bind("change", function (changeEvent) {
                 var reader = new FileReader();
                 reader.onload = function (loadEvent) {

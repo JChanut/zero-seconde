@@ -4,7 +4,6 @@
 module.exports = function(app, express) {
 
     var bodyParser = require('body-parser'),
-        router = express.Router(),
         path = require('path');
 
    // app.use(express.cookieParser());
@@ -34,7 +33,7 @@ module.exports = function(app, express) {
         req.getConnection(function (err, conn) {
 
             if (err) return console.log('Connection fail: ' + err);
-            console.log(req.body);      // JSON req
+
 
             //construction de la query
 
@@ -47,18 +46,20 @@ module.exports = function(app, express) {
                 }
                 var data = (rows.length > 0);
                 var result = {};
-                result.connexion = data;
                 if(data){
-                    row = rows[0];
+                    var row = rows[0];
                     req.session = {
                         user: row.fonction,
                         id_user: row.id_utilisateur,
                         id_gare: row.id_gare,
                         id_prevision:-1
                     };
-                    result.fonction = row.fonction;
-                }
 
+                    result= {
+                        fonction: row.fonction
+                    };
+                }
+                result.connexion = data;
                 res.json(result);
 
             });
@@ -87,7 +88,7 @@ module.exports = function(app, express) {
     //==============================================================================
     //               404 NOT FOUND
     //==============================================================================
-    app.use(function (req, res, next) {
+    app.use(function (req, res) {
         res.redirect("/");
     });
 };

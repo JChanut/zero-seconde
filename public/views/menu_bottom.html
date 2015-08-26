@@ -1,0 +1,19 @@
+<div style="position:fixed;
+                   left:0px;
+                   bottom:0px;
+                   height:80px;
+                   width:100%;
+                   padding: inherit;
+                   z-index: 2;
+                   background:rgb(0,154,166) !important" ng-controller="menu_bottomCtrl">
+    <div class="row" style="display: table;">
+        <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="deconnexion()">
+            <i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
+            <p style="margin-top:0;">Déconnexion</p>
+        </button>
+        <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="menu()" ng-show="!affichage_boutton(affichage_menu)">
+            <i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
+            <p style="margin-top:0;">Menu</p>
+        </button>
+    </div>
+</div>
