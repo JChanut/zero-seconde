@@ -104,7 +104,7 @@ zero_seconde.controller('retardDataCtrl', ['$scope', '$http', '$location', '$tim
 
         $scope.selected = {};
 
-        //MÈthode GET -> RÈcupÈrer et afficher les donnÈes
+        //M√©thode GET -> R√©cup√©rer et afficher les donn√©es
         $http.get(URL_GET).
             then(function(response) {
                 $scope.data = response.data;
@@ -165,7 +165,7 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
         var train = null;
         $scope.selected = {};
 
-        //MÈthode GET -> RÈcupÈrer et afficher les donnÈes
+        //M√©thode GET -> R√©cup√©rer et afficher les donn√©es
         $http.get(URL_GET).
             then(function(response) {
                 $scope.data = response.data;
@@ -274,32 +274,81 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
     function ($scope, $http, $location, $timeout, $filter) {
         var url_histo = "/ace/histo";
         var url_unite = "/od/unites";
+        var url_put = "/ace/histo/send";
+
 
         $scope.unites = [];
         $scope.retards = [];
+        $scope.cretards = [];
 
         $http.get(url_histo)
-            .success(function(resultat) {
+            .success(function (resultat) {
                 $scope.retards = resultat;
+                $scope.loadUnites();
+                console.log($scope.retards[0]);
             });
 
-        $scope.loadUnites = function() {
-            return $scope.unites.length ? null : $http.get(url_unite)
-                .success(function(data) {
+
+        $scope.loadUnites = function () {
+            $http.get(url_unite)
+                .success(function (data) {
                     $scope.unites = data;
-            });
+                });
         };
 
-        $scope.showUnites = function() {
-            var selected = $filter('filter')($scope.retards.id_historique, {value : $scope.unites.libelle_unite});
-            console.log("selected");
-            console.log(selected);
-            return ($scope.unites.libelle_unite && selected.length);
+
+        $scope.showUnites = function (libelle) {
+            var selected = $filter('filter')($scope.unites, {id_unite: libelle});
+            $scope.motifs = (selected.length) ? selected[0].motif : [];
+
+            return (selected.length) ? selected[0].libelle_unite : 'Non renseign√©';
+
+        };
+        $scope.showMotifs = function (libelle, index) {
+            var selected = $filter('filter')($scope.motifs, {id_retard: libelle});
+
+            return (selected.length) ? selected[0].libelle_motif : 'Non renseign√©';
 
         };
 
-    }
-]);
+        $scope.updateUnite = function (data, ret, index) {
+            ret.id_unite = data;
+            $scope.retards[index].id_retard = null;
+            console.log("info2");
+            console.log($scope.retards[index]);
+
+        };
+
+        $scope.updateRetard = function (data, ret) {
+            ret.id_retard = data;
+        };
+
+        $scope.changeUnite = function (id_unite) {
+            console.log("onChange");
+            console.log(id_unite);
+        };
+
+        $scope.updateHisto = function (index) {
+
+            setTimeout(function(){
+                var infos = $scope.retards[index];
+                var result =  {
+                    id_historique: infos.id_historique,
+                    id_prevision: infos.id_prevision,
+                    retard: infos.retard,
+                    id_unite: infos.id_unite,
+                    id_retard: infos.id_retard,
+                    commentaire: infos.commentaire,
+                    duree_retard: infos.duree_retard
+                };
+                console.log("INFOS");
+                console.log(infos);
+                console.log(result);
+                $http.put(url_put, result);
+            },2000);
+        };
+
+    }]);
 
 zero_seconde.controller('menu_odCtrl', ['$scope', '$http', '$location', '$timeout', 'infoUser',
     function ($scope, $http, $location, $timeout,infoUser) {

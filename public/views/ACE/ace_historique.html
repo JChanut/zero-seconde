@@ -16,7 +16,7 @@
             </thead>
 
             <tbody>
-            <tr ng-repeat="ret in retards">
+            <tr ng-repeat="ret in retards" e-ng-change="nimporte($data)">
                 <td>
                     {{ret.num_train}}
                 </td>
@@ -27,17 +27,17 @@
                     </span>
                 </td>
                 <td>
-                    <span editable-select="ret.libelle" e-name="libelle" onshow="loadUnites()" e-form="rowform" e-ng-options="u.id_unite as u.libelle_unite for u in unites">
-                        {{ showUnites() }}
+                    <span editable-select="ret.id_unite" e-name="id_unite" onbeforesave="updateUnite($data, ret, $index)" e-form="rowform" e-ng-options="u.id_unite as u.libelle_unite for u in unites">
+                        {{ showUnites(ret.id_unite) }}
                     </span>
                 </td>
                 <td>
-                    <span editable-text="ret.libelleCR" e-name="libelleCR" e-form="rowform"  e-required>
-                        {{ret.libelleCR || "/"}}
+                    <span editable-select="ret.id_retard" onbeforesave="updateRetard($data, ret)" e-name="id_retard" e-form="rowform" e-ng-options="m.id_retard as m.libelle_motif for m in motifs">
+                        {{ showMotifs(ret.id_retard,$index)}}
                     </span>
                 </td>
                 <td>
-                    <span editable-text="ret.commentaire" e-name="commentaire" e-form="rowform"  e-required>
+                    <span editable-text="ret.commentaire" e-name="commentaire" e-form="rowform">
                         {{ret.commentaire || "/"}}
                     </span>
                 </td>
@@ -49,7 +49,7 @@
                 <td style="white-space: nowrap">
                     <!-- form -->
                     <form editable-form name="rowform" ng-show="rowform.$visible" class="form-buttons form-inline">
-                        <button type="submit" ng-disabled="rowform.$waiting" class="btn btn-primary">
+                        <button type="submit" ng-disabled="rowform.$waiting" ng-click="updateHisto($index)" class="btn btn-primary">
                             Sauvegarder
                         </button>
                         <button type="button" ng-disabled="rowform.$waiting" ng-click="rowform.$cancel()" class="btn btn-default">

@@ -9,7 +9,7 @@
 
 
             <div class="input-field col s12" >
-                <label class="label-list" for="list">Sélectionez l'unité :</label>
+                <label class="label-list" for="list">Sélectionnez l'unité :</label>
                 <select class="browser-default" id="list" ng-model="selected.unite" ng-change="update_unite()" ng-options="u.libelle_unite for u in data">
                     <option value="">-- UNITES --</option>
                 </select>
@@ -17,7 +17,7 @@
 
 
             <div class="input-field col s12">
-                <label class="label-list" >Sélectionez le motif du retard :</label>
+                <label class="label-list" >Sélectionnez le motif du retard :</label>
                 <select class="browser-default" ng-model="selected.motif" ng-change="update_motif()" ng-options="m.libelle_motif for m in selected.unite.motif">
                     <option value="">-- MOTIFS --</option>
                 </select>
