@@ -389,13 +389,28 @@ zero_seconde.controller('menu_aceCtrl', ['$scope', '$http', '$location', '$timeo
     }
 ]);
 
-zero_seconde.controller('menu_bottomCtrl', ['$scope', '$rootScope', '$http', '$location',  '$timeout', 'infoUser',
-    function ($scope, $rootScope, $http, $location,  $timeout, infoUser) {
-        $scope.affichage_menu = (($location.path() == "/od")||($location.path() == "/ace"));
-
-        $scope.affichage_boutton = function() {
-            return $scope.affichage_menu;
+zero_seconde.controller('menu_bottomCtrl', ['$scope', '$rootScope', '$http', '$location', '$timeout', 'infoUser',
+    function ($scope, $rootScope, $http, $location, $timeout, infoUser) {
+        $scope.affichage = {
+            menu : false,
+            boutton_menu : false
         };
+
+        $rootScope.$on("$routeChangeStart", function (event, next, current) {
+            $timeout(function(){
+                if($location.path() == "/") {
+                    $scope.affichage.menu = false;
+                } else {
+                    $scope.affichage.menu = true;
+                    if(($location.path() == "/od")||($location.path() == "/ace")){
+                        $scope.affichage.boutton_menu = false;
+                    }
+                    else {
+                        $scope.affichage.boutton_menu = true;
+                    }
+                }
+            });
+        });
 
         $scope.menu = function() {
             var path = (infoUser.fonction == "OD")?'/od':'/ace';

@@ -42,14 +42,14 @@
 
 
 
-            <!-- angular templating -->
-            <!-- this is where content will be injected -->
-            <ng-view
-                    [onload="string"]
-                    [autoscroll="string"]></ng-view>
+        <!-- angular templating -->
+        <!-- this is where content will be injected -->
+        <ng-view
+                [onload="string"]
+                [autoscroll="string"]></ng-view>
 
 
-
+        <div ng-include="'/views/menu_bottom.html'"></div>
 
         <!-- ================================================
           Scripts
