@@ -93,7 +93,9 @@ router.get('/trains', isLoggedOD, function(req, res){
                     "zs_historique ZSH " +
                     "ON ZSP.id_prevision = ZSH.id_prevision " +
                 "WHERE " +
-                    "date = DATE_FORMAT('"+debut_periode.toString()+"','%Y-%m-%d')"
+                    "date = DATE_FORMAT('"+debut_periode.toString()+"','%Y-%m-%d') " +
+                    "AND " +
+                        "ZSH.etat != 'attente'";
         }
         else{
             between ='' +
@@ -114,6 +116,8 @@ router.get('/trains', isLoggedOD, function(req, res){
                     "ON ZSP.id_prevision = ZSH.id_historique " +
                 "WHERE " +
                     "ZSP.id_prevision = ZSH.id_prevision " +
+                    "AND " +
+                        "ZSH.etat != 'attente'" +
                     "AND " +
                         "(date = DATE_FORMAT('"+debut_periode.toString()+"','%Y-%m-%d') " +
                         "and " +
@@ -208,9 +212,8 @@ router.post('/post_retard', isLoggedOD, function(req, res) {
         };
         var date = new Date();
         var commentaire = req.body.commentaire;
-        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_cause_retard, date, retard, commentaire) ' +
-            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ',STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"), 1,"' + req.body.commentaire + '")';
-    console.log(postQuery);
+        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, id_retard, date, etat, retard, commentaire) ' +
+            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ',' + req.body.id_motif + ',STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"), "ok", 1,"' + req.body.commentaire + '")';
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -229,8 +232,8 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
             return (this.getMonth()+1) +"-"+this.getDate()+"-"+this.getFullYear() ;
         };
         var date = new Date();
-        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard, date) ' +
-            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0 ,STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"))';
+        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard, date, etat) ' +
+            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0 ,STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"),"ok")';
 
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {

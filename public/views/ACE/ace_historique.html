@@ -7,6 +7,7 @@
             <tr>
                 <th data-field="id">N° train</th>
                 <th data-field="retard">OD</th>
+                <th data-field="etat">Etat</th>
                 <th data-field="temps">En retard ?</th>
                 <th >Unité du retard</th>
                 <th >Cause du retard</th>
@@ -16,24 +17,29 @@
             </thead>
 
             <tbody>
-            <tr ng-repeat="ret in retards" e-ng-change="nimporte($data)">
+            <tr ng-repeat="ret in retards">
                 <td>
                     {{ret.num_train}}
                 </td>
-                <td>{{ret.nom}}</td>
+                <td>{{ret.identite}}</td>
                 <td>
-                    <span editable-text="ret.retard" e-name="retard" e-form="rowform"  e-required>
-                        {{(ret.retard==1)?"Oui":"Non"}}
+                    <span editable-select="ret.etat" e-name="etat" e-form="rowform" e-ng-options="e.valeur as e.text for e in etats" e-required>
+                        {{showEtat(ret.etat)}}
                     </span>
                 </td>
                 <td>
-                    <span editable-select="ret.id_unite" e-name="id_unite" onbeforesave="updateUnite($data, ret, $index)" e-form="rowform" e-ng-options="u.id_unite as u.libelle_unite for u in unites">
+                    <span editable-select="ret.retard" e-name="retard" e-form="rowform"  e-ng-options="e.valeur as e.text for e in etat_retard" e-required>
+                        {{showEtat_retard(ret.retard)}}
+                    </span>
+                </td>
+                <td>
+                    <span editable-select="ret.id_unite" e-name="id_unite" e-ng-change="changeUnite($data, ret)" onbeforesave="updateUnite($data, ret, $index)" e-form="rowform" e-ng-options="u.id_unite as u.libelle for u in unites">
                         {{ showUnites(ret.id_unite) }}
                     </span>
                 </td>
                 <td>
-                    <span editable-select="ret.id_retard" onbeforesave="updateRetard($data, ret)" e-name="id_retard" e-form="rowform" e-ng-options="m.id_retard as m.libelle_motif for m in motifs">
-                        {{ showMotifs(ret.id_retard,$index)}}
+                    <span editable-select="ret.id_retard" e-name="id_retard" e-ng-change="changeRetard($data, ret)" onbeforesave="updateRetard($data, ret)" e-form="rowform" e-ng-options="r.id_retard as r.libelle for r in cretards | filter: {dependance:ret.id_unite}">
+                        {{ showMotifs(ret.id_retard)}}
                     </span>
                 </td>
                 <td>
