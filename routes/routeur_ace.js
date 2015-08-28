@@ -54,6 +54,21 @@ router.put('/histo/send', isLoggedACE, function(req,res){
 
 });
 
+router.delete('/histo/delete/:id_historique', isLoggedACE, function(req, res){
+   req.getConnection(function (err, conn) {
+       if (err) return console.log('Connection fail:' + err);
+
+       var delQuery = "DELETE FROM zs_historique WHERE id_historique=" + req.params.id_historique;
+       console.log(delQuery);
+
+       var query = conn.query(delQuery, function(err, rows) {
+          if (err) {
+              res.status(500).send(err);
+          }
+       });
+   });
+});
+
 router.post('/ajoutHoraires/send',isLoggedACE , function(req,res){
     var form = new multiparty.Form();
 

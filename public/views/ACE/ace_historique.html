@@ -16,7 +16,10 @@
             </thead>
 
             <tbody>
-            <tr ng-repeat="ret in retards" e-ng-change="nimporte($data)">
+            <tr ng-repeat="ret in retards">
+                <td>
+                    {{ $data }}
+                </td>
                 <td>
                     {{ret.num_train}}
                 </td>
@@ -58,7 +61,7 @@
                     </form>
                     <div class="buttons" ng-show="!rowform.$visible">
                         <button class="btn btn-primary" ng-click="rowform.$show()">Modifier</button>
-                        <button class="btn btn-danger" ng-click="removeUser(ret.id_historique)">Supprimer</button>
+                        <button class="btn btn-danger" ng-click="removeHisto(ret.id_historique, $index, ret)">Supprimer</button>
                     </div>
                 </td>
             </tr>
