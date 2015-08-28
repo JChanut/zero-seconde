@@ -276,6 +276,7 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
         var url_unite = "/ace/histo/unite";
         var url_cause_retard = "/ace/histo/cause_retard";
         var url_put = "/ace/histo/send";
+        var url_del = "/ace/histo/delete";
 
 
         $scope.unites = [];
@@ -375,8 +376,6 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
             ret.id_unite = data;
             $scope.retards[index].id_retard = null;
             console.log("info2");
-
-
         };
 
         $scope.updateRetard = function (data, ret) {
@@ -396,13 +395,23 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
                     commentaire: infos.commentaire,
                     duree_retard: infos.duree_retard
                 };
-                console.log("INFOS");
-                console.log(infos);
-                console.log(result);
-                $http.put(url_put, result);
+
+                $http.put(url_put, result).
+                    then(function(response){
+                        Materialize.toast("Modification effectuée", 2000);
+                    }, function(response){
+                        Materialize.toast("Erreur lors de la modification", 2000);
+                    });
             },2000);
         };
 
+        $scope.removeHisto = function(id_historique, index, ret) {
+            if (window.confirm("Êtes vous sur de vouloir supprimer le retard ?")){
+                $scope.retards.splice(index, 1);
+
+                $http.delete(url_del + '/' + ret.id_historique);
+            }
+        };
     }]);
 
 zero_seconde.controller('menu_odCtrl', ['$scope', '$http', '$location', '$timeout', 'infoUser',
