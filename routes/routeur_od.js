@@ -249,6 +249,70 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
 });
 
 //==============================================================================
+//               PARTIE LIEE AUX STATISTIQUES
+//==============================================================================
+
+router.get('/statODalheure', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeure FROM zs_historique WHERE retard = 0 AND id_OD =' + req.session.id_user;
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODenRetard', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetard FROM zs_historique WHERE retard = 1 AND id_OD =' + req.session.id_user;
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODenRetardMax', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT MAX(duree_retard) AS DureeRetardMax FROM zs_historique WHERE retard = 1 AND id_OD =' + req.session.id_user;
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODtotalTrain', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var rightNow = new Date();
+        var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbTotalTrain FROM zs_historique WHERE date ="' + DDJ + '"';
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+        console.log(getQuery);
+    });
+});
+
+//==============================================================================
 //               Verification de la connexion
 //==============================================================================
 function isLoggedOD(req, res, next) {

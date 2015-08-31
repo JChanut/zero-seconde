@@ -2,7 +2,7 @@
  * Created by Thomas on 24/08/2015.
  */
 
-var zero_seconde = angular.module('zero_seconde', ['xeditable', 'ngRoute', 'ngCookies']);
+var zero_seconde = angular.module('zero_seconde', ['xeditable', 'ngRoute', 'ngCookies', 'ngTable']);
 
 zero_seconde.config(function($routeProvider, $locationProvider) {
     $routeProvider
@@ -17,6 +17,10 @@ zero_seconde.config(function($routeProvider, $locationProvider) {
         .when('/od/retard', {
             templateUrl: "/views/OD/retard.html",
             controller: 'trainDataCtrl'
+        })
+        .when('/od/statistiques', {
+            templateUrl: "/views/OD/stats.html",
+            controller: 'ODStatCtrl'
         })
         .when('/od/infos_retard', {
             templateUrl: "/views/OD/infos_retard.html",
@@ -248,7 +252,41 @@ zero_seconde.controller('ajoutHoraireCtrl', ['$scope', '$http', '$location', '$t
         }
     }
 ]);
+zero_seconde.controller('ODStatCtrl', ['$scope', '$http', '$location', '$timeout',
+    function ($scope, $http, $location, $timeout) {
+        var url_statODalheure = '/od/statODalheure';
+        var url_statODenRetard = '/od/statODenRetard';
+        var url_statODenRetardMax = '/od/statODenRetardMax';
+        var url_statODtotalTrain = '/od/statODtotalTrain';
 
+            $scope.date = new Date();
+            $scope.alheure = [];
+            $scope.enretard = [];
+            $scope.enretardMax = [];
+            $scope.nbTotalTrain = [];
+
+            $http.get(url_statODalheure)
+                .success(function(resultat){
+                    $scope.alheure = resultat;
+                });
+
+            $http.get(url_statODenRetard)
+                .success(function(resultat){
+                   $scope.enretard = resultat;
+                });
+
+            $http.get(url_statODenRetardMax)
+                .success(function(resultat){
+                    $scope.enretardmax = resultat;
+                });
+
+        $http.get(url_statODtotalTrain)
+            .success(function(resultat){
+                $scope.nbTotalTrain = resultat;
+            });
+
+    }
+]);
 zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
 
@@ -270,8 +308,8 @@ zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$ti
     }
 ]);
 
-zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$timeout', '$filter',
-    function ($scope, $http, $location, $timeout, $filter) {
+zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$timeout', '$filter', 'ngTableParams',
+    function ($scope, $http, $location, $timeout, $filter, ngTableParams) {
         var url_histo = "/ace/histo";
         var url_unite = "/ace/histo/unite";
         var url_cause_retard = "/ace/histo/cause_retard";
@@ -300,11 +338,22 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
         },{
             valeur:1,
             text:'non'
-        }]
+        }];
 
         $http.get(url_histo)
             .success(function (resultat) {
                 $scope.retards = resultat;
+                $scope.tableParams = new ngTableParams({
+                    page: 1,
+                    count: 5
+                }, {
+                    total: resultat.length,
+                    counts: [5,10,20,50],
+                    getData: function ($defer, params) {
+                        $scope.retards = resultat.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                        $defer.resolve($scope.retards);
+                    }
+                });
                 $scope.loadUnites();
                 console.log($scope.retards[0]);
             });
@@ -420,6 +469,12 @@ zero_seconde.controller('menu_odCtrl', ['$scope', '$http', '$location', '$timeou
         $scope.newDep = function() {
             $timeout(function () {
                 $location.path('/od/retard').replace();
+            });
+        };
+
+        $scope.consultStat = function() {
+            $timeout(function() {
+               $location.path('/od/statistiques').replace();
             });
         };
 

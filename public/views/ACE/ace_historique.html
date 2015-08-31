@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col s12 z-depth-4 card-panel">
-        <table class="table-responsive bordered centered" ng-controlle="historiqueCtrl">
+        <table class="table-responsive bordered table-centered" ng-table="tableParams" ng-controller="historiqueCtrl">
             <thead>
             <tr>
                 <th data-field="id">N° train</th>
@@ -13,11 +13,12 @@
                 <th >Cause du retard</th>
                 <th >Commentaire</th>
                 <th >Durée du retard</th>
+                <th><i class="fa fa-search"></i><input type="text" ng-model="searchText" placeholder="Chercher par n° de train" name="filtre"></th>
             </tr>
             </thead>
 
             <tbody>
-            <tr ng-repeat="ret in retards">
+            <tr ng-repeat="ret in (filteredRetards = (retards | filter:searchText))">
                 <td>
                     {{ret.num_train}}
                 </td>
@@ -70,7 +71,6 @@
             </tr>
             </tbody>
         </table>
-
     </div>
 </div>
 
