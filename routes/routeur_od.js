@@ -218,6 +218,9 @@ router.post('/post_retard', isLoggedOD, function(req, res) {
             if (err) {
                 res.status(500).send(err);
             }
+            else {
+                res.end();
+            }
 
         });
 
@@ -235,6 +238,32 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
         var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard, date, etat) ' +
             'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0 ,STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"),"ok")';
 
+        console.log(postQuery);
+        var query = conn.query(postQuery, function(err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            else {
+                res.end();
+            }
+
+        });
+
+    });
+});
+
+router.post('/annule', isLoggedOD, function(req, res) {
+    req.getConnection(function(err, conn){
+        if(err) return console.log('Connection fail: ' + err);
+        req.session['id_prevision'] = req.body.id_prevision;
+        Date.prototype.toString = function () {
+            return (this.getMonth()+1) +"-"+this.getDate()+"-"+this.getFullYear() ;
+        };
+        var date = new Date();
+        var postQuery = 'INSERT INTO zs_historique (id_OD, id_prevision, retard, date, etat) ' +
+            'VALUES (' + req.session.id_user + ',' + req.session.id_prevision + ', 0 ,STR_TO_DATE("'+ date.toString() +'","%m-%d-%Y"),"ko")';
+
+        console.log(postQuery);
         var query = conn.query(postQuery, function(err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -251,17 +280,87 @@ router.post('/danslestemps', isLoggedOD, function(req, res) {
 //==============================================================================
 //               PARTIE LIEE AUX STATISTIQUES
 //==============================================================================
+// DATE DU JOUR FORMAT YYYY-MM-DD
+var rightNow = new Date();
+var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
+
+// DATE DU JOUR - 1
+var yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+var DDH = yesterday.toISOString().slice(0,10).replace(/-/g,"-");
 
 router.get('/statODalheure', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
-        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeure FROM zs_historique WHERE retard = 0 AND id_OD =' + req.session.id_user;
+        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeure FROM zs_historique WHERE retard = 0 AND etat="ok" AND date="' + DDJ + '"';
+        console.log(DDH);
         var query = conn.query(getQuery, function (err, rows) {
             if (err) {
                 res.status(500).send(err);
             }
             res.json(rows);
+        })
+    });
+});
+
+router.get('/statODalheureAgent', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeureAgent FROM zs_historique WHERE retard = 0 AND etat="ok" AND id_OD =' + req.session.id_user + ' AND date="' + DDJ + '"';
+        console.log(DDH);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODalheureHierAgent', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeureHierAgent FROM zs_historique WHERE retard = 0 AND etat="ok" AND id_OD =' + req.session.id_user + ' AND date="' + DDH + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODalheureHier', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeureHier FROM zs_historique WHERE retard = 0 AND etat="ok" AND date="' + DDH + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODalheureSemaine', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeureSemaine FROM zs_historique WHERE retard = 0  AND etat="ok" AND WEEK(date) = WEEK("' + DDJ + '")';
+
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+
         })
     });
 });
@@ -270,7 +369,7 @@ router.get('/statODenRetard', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
-        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetard FROM zs_historique WHERE retard = 1 AND id_OD =' + req.session.id_user;
+        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetard FROM zs_historique WHERE retard = 1 AND date="' + DDJ + '"';
         var query = conn.query(getQuery, function (err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -280,11 +379,67 @@ router.get('/statODenRetard', isLoggedOD, function(req, res){
     });
 });
 
-router.get('/statODenRetardMax', isLoggedOD, function(req, res){
+router.get('/statODenRetardAgent', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
-        var getQuery = 'SELECT MAX(duree_retard) AS DureeRetardMax FROM zs_historique WHERE retard = 1 AND id_OD =' + req.session.id_user;
+        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetardAgent FROM zs_historique WHERE retard = 1 AND id_OD =' + req.session.id_user + ' AND date="' + DDJ + '"';
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODenRetardHierAgent', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetardHierAgent FROM zs_historique WHERE retard = 1 AND id_OD =' + req.session.id_user + ' AND date="' + DDH + '"';
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODenRetardHier', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetardHier FROM zs_historique WHERE retard = 1 AND date="' + DDH + '"';
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODenRetardSemaine', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = "SELECT COUNT(id_historique) AS NbenRetardSemaine FROM zs_historique WHERE retard = 1 AND WEEK(date) = WEEK('" + DDJ + "')";
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statODannuleAgent', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbannuleAgent FROM zs_historique WHERE etat="ko" AND id_OD =' + req.session.id_user + ' AND date="' + DDJ + '"';
         var query = conn.query(getQuery, function (err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -301,7 +456,7 @@ router.get('/statODtotalTrain', isLoggedOD, function(req, res){
         var rightNow = new Date();
         var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
 
-        var getQuery = 'SELECT COUNT(id_historique) AS NbTotalTrain FROM zs_historique WHERE date ="' + DDJ + '"';
+        var getQuery = 'SELECT COUNT(id_historique) AS NbTotalTrain FROM zs_historique WHERE date ="' + DDJ + '" AND etat="ok"';
         var query = conn.query(getQuery, function (err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -309,6 +464,56 @@ router.get('/statODtotalTrain', isLoggedOD, function(req, res){
             res.json(rows);
         })
         console.log(getQuery);
+    });
+});
+
+router.get('/statODtotalTrainHier', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var rightNow = new Date();
+        var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
+
+        var getQuery = 'SELECT COUNT(id_historique) AS NbTotalTrain FROM zs_historique WHERE date ="' + DDH + '"';
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+        console.log(getQuery);
+    });
+});
+
+router.get('/statchart', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT date, retard, COUNT(*) AS nbTrains FROM zs_historique WHERE WEEK(date) = WEEK("' + DDJ + '") GROUP BY retard';
+        console.log(getQuery);
+
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            var result = [];
+
+            for(var i=0; i<rows.length;i++){
+                var row = rows[i];
+                result.push(
+                    {"cols": [
+                        {label: "Month", type: "string"},
+                        {retard: row.retard},
+                        {nbTrains: row.nbTrains}
+                    ], "rows": [
+                        {c: [
+                            {v: {date: row.date}}
+                        ]}
+                    ]}
+                );
+            };
+            res.json(result);
+        });
     });
 });
 

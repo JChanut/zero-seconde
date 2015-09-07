@@ -42,6 +42,16 @@ body {
 .alheure:hover {
   background-color: #D2FF00;
 }
+.annule {
+  line-height: 80px;
+  height: 100%;
+  width: 100%;
+  font-size: 19px;
+  background-color: #FFB612;
+}
+.annule:hover {
+  background-color: #E05206;
+}
 .scrolllist {
   border: 1px dashed red;
   height: 150px;
@@ -1465,5 +1475,27 @@ footer.page-footer {
 
 .label-list {
   position: static !important;
+}
 
+.statAgent {
+  background-color: #FFB612;
+}
+
+.statAgentDark {
+  background-color: #E05206;
+}
+
+.statGlobal {
+  background-color: #CD0037;
+}
+
+.statGlobalDark {
+  background-color: #A1006B;
+}
+
+.statMax {
+  background-color: #A1006B;
+}
+.statMaxDark {
+  background-color: #6E1E78;
 }

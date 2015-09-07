@@ -75,7 +75,7 @@ module.exports = function(req,res,path_file) {
                 }
                 var getQuery = 'INSERT INTO zs_train  (num_train,famille) VALUES ('+train+',"'+ famille +'")';
                 var current = this;
-                console.log(getQuery)
+                console.log(getQuery);
                 req.getConnection(function (err, conn) {
 
                     if (err) return console.log('Connection fail: ' + err);

@@ -2,7 +2,7 @@
  * Created by Thomas on 24/08/2015.
  */
 
-var zero_seconde = angular.module('zero_seconde', ['xeditable', 'ngRoute', 'ngCookies', 'ngTable']);
+var zero_seconde = angular.module('zero_seconde', ['googlechart', 'xeditable', 'ngRoute', 'ngCookies', 'ngTable']);
 
 zero_seconde.config(function($routeProvider, $locationProvider) {
     $routeProvider
@@ -165,6 +165,7 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
         const URL_GET = '/od/trains';
         const URL_RETARD = '/od/infos_retard';
         const URL_ALHEURE = '/od/danslestemps';
+        const URL_ANNULE = '/od/annule'
 
         var train = null;
         $scope.selected = {};
@@ -219,6 +220,25 @@ zero_seconde.controller('trainDataCtrl', ['$scope', '$http', '$location', '$time
                 Materialize.toast("Vous n'avez pas saisie de train.", 3000);
             }
         }
+
+        $scope.postTrainAnnule = function() {
+            if(train != null){
+                var data = {
+                    id_prevision : train.id_prevision
+                };
+                $http.post(URL_ANNULE, data)
+                    .then(function(){
+                        Materialize.toast("Le train a bien &eacute;t&eacute; d&eacute;clar&eacute; annul&eacute;. Vous allez &ecirc;tre redirig&eacute;", 3000);
+
+                        $timeout(function () {
+                            $location.path(URL_MENU).replace();
+                        });
+                    });
+
+            }else {
+                Materialize.toast("Vous n'avez pas saisie de train.", 3000);
+            }
+        }
     }
 ]);
 
@@ -255,35 +275,137 @@ zero_seconde.controller('ajoutHoraireCtrl', ['$scope', '$http', '$location', '$t
 zero_seconde.controller('ODStatCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
         var url_statODalheure = '/od/statODalheure';
+        var url_statODalheureAgent = '/od/statODalheureAgent';
+        var url_statODalheureHier = '/od/statODalheureHier';
+        var url_statODalheureHierAgent = '/od/statODalheureHierAgent';
+        var url_statODalheureSemaine = '/od/statODalheureSemaine';
+
         var url_statODenRetard = '/od/statODenRetard';
-        var url_statODenRetardMax = '/od/statODenRetardMax';
+        var url_statODenRetardAgent = '/od/statODenRetardAgent';
+        var url_statODenRetardHier = '/od/statODenRetardHier';
+        var url_statODenRetardHierAgent = '/od/statODenRetardHierAgent';
+        var url_statODenRetardSemaine = '/od/statODenRetardSemaine';
+
+        var url_statODannuleAgent = '/od/statODannuleAgent';
+
         var url_statODtotalTrain = '/od/statODtotalTrain';
+        var url_statODtotalTrainHier = '/od/statODtotalTrainHier';
 
-            $scope.date = new Date();
-            $scope.alheure = [];
-            $scope.enretard = [];
-            $scope.enretardMax = [];
-            $scope.nbTotalTrain = [];
 
-            $http.get(url_statODalheure)
-                .success(function(resultat){
-                    $scope.alheure = resultat;
-                });
+        $scope.date = new Date();
 
-            $http.get(url_statODenRetard)
-                .success(function(resultat){
-                   $scope.enretard = resultat;
-                });
+        $scope.alheure = [];
+        $scope.alheureAgent = [];
+        $scope.alheureHier = [];
+        $scope.alheureHierAgent = [];
+        $scope.alheureSemaine = [];
 
-            $http.get(url_statODenRetardMax)
-                .success(function(resultat){
-                    $scope.enretardmax = resultat;
-                });
+        $scope.enretard = [];
+        $scope.enretardAgent = [];
+        $scope.enretardHier = [];
+        $scope.enretardHierAgent = [];
+        $scope.enretardSemaine = [];
+
+        $scope.annuleAgent = [];
+
+        $scope.nbTotalTrain = [];
+        $scope.alheureHier = [];
+        $scope.nbTotalTrainHier = [];
+        $scope.statHier = [];
+        $scope.statAjd = [];
+        $scope.stat = [];
+
+
+        $http.get(url_statODalheure)
+            .success(function(resultat){
+                $scope.alheure = resultat;
+            });
+
+        $http.get(url_statODalheureAgent)
+            .success(function(resultat){
+                $scope.alheureAgent = resultat;
+            });
+
+        $http.get(url_statODenRetard)
+            .success(function(resultat){
+               $scope.enretard = resultat;
+            });
+
+        $http.get(url_statODenRetardAgent)
+            .success(function(resultat){
+                $scope.enretardAgent = resultat;
+            });
 
         $http.get(url_statODtotalTrain)
             .success(function(resultat){
                 $scope.nbTotalTrain = resultat;
             });
+
+        $http.get(url_statODalheureSemaine)
+            .success(function(resultat){
+               $scope.alheureSemaine = resultat;
+            });
+
+        $http.get(url_statODenRetardSemaine)
+            .success(function(resultat){
+               $scope.enretardSemaine = resultat;
+            });
+
+        $http.get(url_statODalheureHier)
+            .success(function(resultat){
+                $scope.alheureHier = resultat;
+            });
+
+        $http.get(url_statODalheureHierAgent)
+            .success(function(resultat){
+                $scope.alheureHierAgent = resultat;
+            });
+
+        $http.get(url_statODenRetardHier)
+            .success(function(resultat){
+                $scope.enretardHier = resultat;
+            });
+
+        $http.get(url_statODenRetardHierAgent)
+            .success(function(resultat){
+                $scope.enretardHierAgent = resultat;
+            });
+
+        $http.get(url_statODannuleAgent)
+            .success(function(resultat){
+                $scope.annuleAgent = resultat;
+            });
+
+            $http.get(url_statODtotalTrainHier)
+                .success(function(resultat){
+                    $scope.nbTotalTrainHier = resultat;
+                });
+
+            $timeout(function() {
+                if($scope.alheure.length > 0){
+                    $scope.statHier = ($scope.alheureHier[0].NbalHeureHier / $scope.nbTotalTrainHier[0].NbTotalTrain);
+                    $scope.statAjd = ($scope.alheure[0].NbalHeure / $scope.nbTotalTrain[0].NbTotalTrain);
+                    if($scope.statHier > $scope.statAjd){
+                        console.log($scope.statHier);
+                        console.log($scope.statAjd);
+                        $scope.stat = ($scope.statHier - $scope.statAjd);
+                        if($scope.stat > 0.09){
+                            $scope.stat = $scope.stat*10;
+                        }
+                        console.log($scope.stat);
+                    }else if($scope.statHier == $scope.statAjd){
+                        $scope.stat = "idem";
+                    }else {
+                        $scope.stat = ($scope.statAjd - $scope.statHier);
+                        if($scope.stat > 0.09){
+                            $scope.stat = $scope.stat*10;
+                        }
+                        console.log($scope.stat);
+                    }
+                }else{
+                    Materialize.toast("Un problème est survenu lors du chargement des statistiques.", 4000);
+                }
+            },1000);
 
     }
 ]);
@@ -343,16 +465,18 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
         $http.get(url_histo)
             .success(function (resultat) {
                 $scope.retards = resultat;
-                $scope.tableParams = new ngTableParams({
-                    page: 1,
-                    count: 5
-                }, {
-                    total: resultat.length,
-                    counts: [5,10,20,50],
-                    getData: function ($defer, params) {
-                        $scope.retards = resultat.slice((params.page() - 1) * params.count(), params.page() * params.count());
-                        $defer.resolve($scope.retards);
-                    }
+                $timeout(function(){
+                    $scope.tableParams = new ngTableParams({
+                        page: 1,
+                        count: 5
+                    }, {
+                        total: resultat.length,
+                        counts: [],
+                        getData: function ($defer, params) {
+                            $scope.retards = resultat.slice((params.page() - 1) * params.count(), params.page() * params.count());
+                            $defer.resolve($scope.retards);
+                        }
+                    });
                 });
                 $scope.loadUnites();
                 console.log($scope.retards[0]);
@@ -395,7 +519,7 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
 
             var selected = $filter('filter')($scope.etat_retard, {valeur: libelle});
 
-            return (selected.length) ? selected[0].text : 'non';
+            return (selected.length) ? selected[0].text : 'Non';
 
         };
 
@@ -445,8 +569,8 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
                     duree_retard: infos.duree_retard
                 };
 
-                $http.put(url_put, result).
-                    then(function(response){
+                $http.put(url_put, result)
+                    .then(function(response){
                         Materialize.toast("Modification effectuée", 2000);
                     }, function(response){
                         Materialize.toast("Erreur lors de la modification", 2000);
