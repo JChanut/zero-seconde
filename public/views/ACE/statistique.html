@@ -1,85 +1,146 @@
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title>Ajout des trains</title>
 
-        <!-- For iPhone -->
-        <meta name="msapplication-TileColor" content="#00bcd4">
-        <meta name="msapplication-TileImage" content="images/favicon/mstile-144x144.png">
-        <!-- For Windows Phone -->
-
-
-        <!-- CORE CSS-->
-
-        <link href="../materialize/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection">
-        <link href="../stylesheets/style.css" type="text/css" rel="stylesheet" media="screen,projection">
-        <link href="../stylesheets/page-center.css" type="text/css" rel="stylesheet" media="screen,projection">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
-    </head>
-
-    <body class="cyan">
-
-
-
-        <div id="stat-page" class="row" ng-app="zeroSecApp" ng-controller="statistiqueCtrl">
-            <div class="col s12 z-depth-4 card-panel">
-                <div class="row">
-                    <div class="input-field col s12 center">
-                        <h4>Statistique</h4>
-                    </div>
-                </div>
-                <ul class="collapsible" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header">Général</div>
-                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-                    </li>
-                    <li>
-                        <div class="collapsible-header">Par agent</div>
-                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-                    </li>
-                    <li>
-                        <div class="collapsible-header">Par série</div>
-                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
-                    </li>
-                </ul>
+<div class="container">
+    <div class="col s12 z-depth-4 card-panel">
+        <div class="row">
+            <div class="input-field col s12 center">
+                <h4>Statistiques</h4>
+                <p class="center">Nous sommes le : <b>{{date | date:'dd-MM-yyyy'}}</b></p>
             </div>
         </div>
 
-
-    </body>
-
-    <footer style="position:fixed;
-                   left:0px;
-                   bottom:0px;
-                   height:80px;
-                   width:100%;
-                   padding: inherit;
-                   z-index: 2;
-                   background:rgb(0,154,166) !important">
-        <div class="row" style="display: table;">
-            <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="deconnexion()">
-                <i class="fa fa-sign-out fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
-                <p style="margin-top:0;">Déconnexion</p>
-            </button>
-            <button style="background-color: rgb(0, 154, 166);border: none;" ng-click="menu()">
-                <i class="fa fa-home fa-4x" style="margin-bottom:0;color:rgb(185,185,185)"></i>
-                <p style="margin-top:0;">Menu</p>
-            </button>
+        <div id="card-stats">
+            <div class="row">
+                <hr class="hrshadow"><p class="center pcartoon">En fonction de la gare :</p><hr class="hrshadow">
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in alheure">
+                        <div class="card-content statGlobal white-text">
+                            <p class="card-stats-title"><i class="mdi-action-alarm-on"></i> A l'heure !</p>
+                            <h4 class="card-stats-number">{{nb.NbalHeure}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action  statGlobalDark"></div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in enretard track by $index">
+                        <div class="card-content statGlobal white-text">
+                            <p class="card-stats-title"><i class="mdi-action-restore"></i> En retard...</p>
+                            <h4 class="card-stats-number">{{nb.NbenRetard}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statGlobalDark"></div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in nbTotalTrain track by $index">
+                        <div class="card-content statGlobal white-text">
+                            <p class="card-stats-title"><i class="mdi-action-swap-vert"></i> Départs réalisés</p>
+                            <h4 class="card-stats-number">{{nb.NbTotalTrain}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statGlobalDark"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in alheureSemaine track by $index">
+                        <div class="card-content statMax white-text">
+                            <p class="card-stats-title"><i class="mdi-action-alarm-on"></i> A l'heure sur la semaine!</p>
+                            <h4 class="card-stats-number">{{nb.NbalHeureSemaine}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statMaxDark">
+                        </div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in enretardSemaine track by $index">
+                        <div class="card-content statMax white-text">
+                            <p class="card-stats-title"><i class="mdi-action-restore"></i> En retard sur la semaine</p>
+                            <h4 class="card-stats-number">{{nb.NbenRetardSemaine}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statMaxDark">
+                        </div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card">
+                        <div class="card-content statMax white-text">
+                            <p class="card-stats-title"><i class="mdi-av-timer"></i> Ponctualité Gare DV</p>
+                            <h4 class="card-stats-number">{{ponctuDV | number:0}} %</h4>
+                        </div>
+                        <div class="card-action statMaxDark">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <hr class="hrshadow"><p class="center pcartoon">En fonction de l'activité :</p><hr class="hrshadow">
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in TERBGalheure track by $index">
+                        <div class="card-content statTERBG white-text">
+                            <p class="card-stats-title "><i class="mdi-action-alarm-on"></i> A l'heure TER BG!</p>
+                            <h4 class="card-stats-number">{{nb.NBTERBG}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statTERBGdark">
+                            <p class="card-stats-compare"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in TERFCalheure track by $index">
+                        <div class="card-content statTERFC white-text">
+                            <p class="card-stats-title "><i class="mdi-action-alarm-on"></i> A l'heure TER FC!</p>
+                            <h4 class="card-stats-number">{{nb.NBTERFC}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statTERFCdark">
+                            <p class="card-stats-compare"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in VOYAGEalheure track by $index">
+                        <div class="card-content statVOYAGE white-text">
+                            <p class="card-stats-title "><i class="mdi-action-alarm-on"></i> A l'heure VOYAGES!</p>
+                            <h4 class="card-stats-number">{{nb.NBVOYAGE}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statVOYAGEdark">
+                            <p class="card-stats-compare"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in TERBGretard track by $index">
+                        <div class="card-content statTERBG white-text">
+                            <p class="card-stats-title "><i class="mdi-action-restore"></i> En retard TER BG!</p>
+                            <h4 class="card-stats-number">{{nb.NBTERBG}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statTERBGdark">
+                            <p class="card-stats-compare"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in TERFCretard track by $index">
+                        <div class="card-content statTERFC white-text">
+                            <p class="card-stats-title "><i class="mdi-action-restore"></i> En retard TER FC!</p>
+                            <h4 class="card-stats-number">{{nb.NBTERFC}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statTERFCdark">
+                            <p class="card-stats-compare"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s4 m4">
+                    <div class="card" ng-repeat="nb in VOYAGEretard track by $index">
+                        <div class="card-content statVOYAGE white-text">
+                            <p class="card-stats-title "><i class="mdi-action-restore"></i> En retard VOYAGES!</p>
+                            <h4 class="card-stats-number">{{nb.NBVOYAGE}}<i class="mdi-maps-directions-train"></i></h4>
+                        </div>
+                        <div class="card-action statVOYAGEdark">
+                            <p class="card-stats-compare"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row"></div>
         </div>
-
-        <!-- ================================================
-                            Scripts
-        ================================================ -->
-
-        <!-- jQuery Library -->
-        <script src="//code.angularjs.org/1.2.20/angular.js"></script>
-        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
-        <!--materialize js-->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.0/js/materialize.min.js"></script>
-
-    </footer>
-</html>
+    </div>
+</div>

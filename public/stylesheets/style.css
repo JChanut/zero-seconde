@@ -896,7 +896,7 @@ a.button-collapse.top-nav {
 }
 #flotchart td,
 th {
-  padding: 5px;
+  padding: 15px;
 }
 /* xCharts */
 
@@ -1194,6 +1194,8 @@ tr.group:hover {
   text-transform: uppercase;
   letter-spacing: 2px;
   font-size: 0.8rem;
+  border-bottom:1px dashed;
+  border-top:1px dashed;
 }
 .profile-image-login{
   width: 100px;
@@ -1498,4 +1500,38 @@ footer.page-footer {
 }
 .statMaxDark {
   background-color: #6E1E78;
+}
+
+.statTERBG {
+  background-color: #82786F;
+}
+.statTERBGdark {
+  background-color: #675C53;
+}
+.statTERFC {
+  background-color: #988F86;
+}
+.statTERFCdark {
+  background-color: #82786F;
+}
+.statVOYAGE {
+  background-color: #AEA79F;
+}
+.statVOYAGEdark {
+  background-color: #988F86;
+}
+
+.hrshadow {
+  border: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+}
+
+.pcartoon {
+  font-family: "Avenir LT Std";
+  font-size: 1.3em;
+}
+.pcartoonless {
+  font-family: "Avenir";
+  font-size: 12px;
 }

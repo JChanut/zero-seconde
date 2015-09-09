@@ -60,19 +60,29 @@ module.exports = function(req,res,path_file) {
             Data_excel.prototype.setTrain = function(){
                 var train = (this.first)? this.data[this.rang].train : this.data[this.rang].parite;
                 var famille = null;
-                var fc = /^(894)/;
-                var bourgogne = /^(17|839|860|875|8913|8915|8917|8919|8914)/;
-                var intercite = /^(1543|1545)$/;
-                var tgv = /^([1-9][0-9]{3})$/;
+                var fc = /^(894|21907|21909|784533|809225|78495|784801)/;
+                var bourgogne = /^(17|542099|839|860|875|8913|8915|8917|8919|8914|893|219|218|8918|784883|784633|784500|8918|54208|734908|734701)/;
+                var rhalpes = /^(21986|21987|21756|21988|542080)/;
+                //var intercite = /^(1543|1545)$/;
+                //var tgv = /^([1-9][0-9]{3})$/;
+                var sudest = /^(1435)/;
+                var voyage = /^(68|67|21955|506)/;
+                var champArdenne = /^(15|2197|2198|1194|8398)/;
+
                 if(fc.exec(train)){
-                    famille = "Franche Comté";
+                    famille = "TER Franche Comté";
                 }else if(bourgogne.exec(train)){
-                    famille = "Bourgogne";
-                }else if(intercite.exec(train)){
-                    famille = "Intercité";
-                }else if(tgv.exec(train)){
-                    famille = "TGV";
+                    famille = "TER Bourgogne";
+                }else if(rhalpes.exec(train)){
+                    famille = "TER Rhône Alpes";
+                }else if(sudest.exec(train)){
+                    famille = "Téoz Sud Est";
+                }else if(voyage.exec(train)){
+                    famille = "Voyages";
+                }else if(champArdenne.exec(train)){
+                    famille = "TER Champagne Ardennes";
                 }
+
                 var getQuery = 'INSERT INTO zs_train  (num_train,famille) VALUES ('+train+',"'+ famille +'")';
                 var current = this;
                 console.log(getQuery);

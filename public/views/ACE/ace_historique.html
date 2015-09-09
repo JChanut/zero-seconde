@@ -1,10 +1,11 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
 
 <div class="row" style="z-index:3;">
-    <div class="col s12 z-depth-4 card-panel">
-        <table class="table-responsive bordered table-centered" ng-table="tableParams" ng-controller="historiqueCtrl">
+    <div class="col s12 m12 z-depth-4 card-panel">
+        <table class="responsive-table bordered hoverable centered" ng-table="tableParams" ng-controller="historiqueCtrl">
             <thead>
             <tr>
+                <th data-field="date">Date</th>
                 <th data-field="id">N° train</th>
                 <th data-field="retard">OD</th>
                 <th data-field="etat">Etat</th>
@@ -19,6 +20,9 @@
 
             <tbody>
             <tr ng-repeat="ret in (filteredRetards = (retards | filter:searchText))">
+                <td>
+                    {{ret.dateformat}}
+                </td>
                 <td>
                     {{ret.num_train}}
                 </td>

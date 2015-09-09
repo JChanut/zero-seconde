@@ -293,8 +293,10 @@ router.get('/statODalheure', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
-        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeure FROM zs_historique WHERE retard = 0 AND etat="ok" AND date="' + DDJ + '"';
-        console.log(DDH);
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NbalHeure ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision ZSP ON ZSH.id_prevision = ZSP.id_prevision ' +
+            'WHERE ZSH.retard = 0 AND ZSH.etat="ok" AND ZSP.id_gare = 1 AND ZSH.date="' + DDJ + '"';
+
         var query = conn.query(getQuery, function (err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -303,6 +305,7 @@ router.get('/statODalheure', isLoggedOD, function(req, res){
         })
     });
 });
+
 
 router.get('/statODalheureAgent', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
@@ -456,7 +459,8 @@ router.get('/statODtotalTrain', isLoggedOD, function(req, res){
         var rightNow = new Date();
         var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
 
-        var getQuery = 'SELECT COUNT(id_historique) AS NbTotalTrain FROM zs_historique WHERE date ="' + DDJ + '" AND etat="ok"';
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NbTotalTrain FROM zs_historique ZSH LEFT JOIN zs_prevision ZSP ' +
+            'ON ZSH.id_prevision = ZSP.id_prevision WHERE date ="' + DDJ + '" AND etat="ok" AND ZSP.id_gare = 1';
         var query = conn.query(getQuery, function (err, rows) {
             if (err) {
                 res.status(500).send(err);
@@ -485,37 +489,6 @@ router.get('/statODtotalTrainHier', isLoggedOD, function(req, res){
     });
 });
 
-router.get('/statchart', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = 'SELECT date, retard, COUNT(*) AS nbTrains FROM zs_historique WHERE WEEK(date) = WEEK("' + DDJ + '") GROUP BY retard';
-        console.log(getQuery);
-
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            var result = [];
-
-            for(var i=0; i<rows.length;i++){
-                var row = rows[i];
-                result.push(
-                    {"cols": [
-                        {label: "Month", type: "string"},
-                        {retard: row.retard},
-                        {nbTrains: row.nbTrains}
-                    ], "rows": [
-                        {c: [
-                            {v: {date: row.date}}
-                        ]}
-                    ]}
-                );
-            };
-            res.json(result);
-        });
-    });
-});
 
 //==============================================================================
 //               Verification de la connexion

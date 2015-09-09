@@ -9,13 +9,20 @@ var express = require('express'),
 //==============================================================================
 //                 Partie ACE
 //==============================================================================
+// DATE DU JOUR FORMAT YYYY-MM-DD
+var rightNow = new Date();
+var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
 
+// DATE DU JOUR - 1
+var yesterday = new Date();
+yesterday.setDate(yesterday.getDate() - 1);
+var DDH = yesterday.toISOString().slice(0,10).replace(/-/g,"-");
 
 router.get('/histo', isLoggedACE, function(req, res){
     req.getConnection(function (err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
-        var getQuery = 'SELECT DISTINCT ZSH.id_historique, ZST.num_train, CONCAT(ZSU.nom," ",ZSU.prenom) AS identite, ZSH.retard, ZSH.etat, ZSH.id_prevision, ZSCR.id_unite, ZSCR.id_retard, ZSH.commentaire, ZSH.duree_retard' +
+        var getQuery = 'SELECT DISTINCT ZSH.id_historique, DATE_FORMAT(ZSH.date, "%d/%m/%Y") AS dateformat, ZST.num_train, CONCAT(ZSU.nom," ",ZSU.prenom) AS identite, ZSH.retard, ZSH.etat, ZSH.id_prevision, ZSCR.id_unite, ZSCR.id_retard, ZSH.commentaire, ZSH.duree_retard' +
             ' FROM zs_historique ZSH' +
             ' LEFT JOIN zs_cause_retard ZSCR ON ZSH.id_retard = ZSCR.id_retard' +
             ' LEFT JOIN zs_utilisateur ZSU ON ZSH.id_od = ZSU.id_utilisateur' +
@@ -23,7 +30,8 @@ router.get('/histo', isLoggedACE, function(req, res){
             ' LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision' +
             ' LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train' +
             ' WHERE ZSPT.second_train = 0' +
-            ' AND ZSH.etat <> "attente"';
+            ' AND ZSH.etat <> "attente"' +
+            ' AND MONTH(date) = MONTH("' + DDJ + '")';
 
         console.log(getQuery);
         var query = conn.query(getQuery, function(err, rows){
@@ -115,6 +123,135 @@ router.post('/ajoutHoraires/send',isLoggedACE , function(req,res){
     });
 });
 
+//==============================================================================
+//               PARTIE LIEE AUX STATISTIQUES
+//==============================================================================
+
+router.get('/statTERBGalheure', isLoggedACE, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBTERBG ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "TER Bourgogne" ' +
+            'AND retard = 0 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statTERBGretard', isLoggedACE, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBTERBG ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "TER Bourgogne" ' +
+            'AND retard = 1 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statTERFCalheure', isLoggedACE, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBTERFC ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "TER Franche Comté" ' +
+            'AND retard = 0 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statTERFCretard', isLoggedACE, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBTERFC ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "TER Franche Comté" ' +
+            'AND retard = 1 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statVoyagealheure', isLoggedACE, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBVOYAGE ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "Voyages" ' +
+            'AND retard = 0 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statVoyageretard', isLoggedACE, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBVOYAGE ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "Voyages" ' +
+            'AND retard = 1 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
 //==============================================================================
 //               Vérification authentification
 //==============================================================================

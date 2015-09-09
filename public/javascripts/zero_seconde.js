@@ -2,7 +2,7 @@
  * Created by Thomas on 24/08/2015.
  */
 
-var zero_seconde = angular.module('zero_seconde', ['googlechart', 'xeditable', 'ngRoute', 'ngCookies', 'ngTable']);
+var zero_seconde = angular.module('zero_seconde', ['xeditable', 'ngRoute', 'ngCookies', 'ngTable']);
 
 zero_seconde.config(function($routeProvider, $locationProvider) {
     $routeProvider
@@ -38,9 +38,9 @@ zero_seconde.config(function($routeProvider, $locationProvider) {
              templateUrl: "/views/ACE/ajoutHoraires.html",
             controller: 'ajoutHoraireCtrl'
         })
-        .when('/ace/stat', {
+        .when('/ace/statistiques', {
             templateUrl: "/views/ACE/statistique.html",
-            controller: 'statistiqueCtrl'
+            controller: 'ACEStatCtrl'
         });
     $locationProvider.html5Mode(true);
 });
@@ -406,27 +406,136 @@ zero_seconde.controller('ODStatCtrl', ['$scope', '$http', '$location', '$timeout
                     Materialize.toast("Un problème est survenu lors du chargement des statistiques.", 4000);
                 }
             },1000);
-
     }
 ]);
-zero_seconde.controller('statistiqueCtrl', ['$scope', '$http', '$location', '$timeout',
-    function ($scope, $http, $location, $timeout) {
 
-        $scope.sendFile = function(){
-            var fd = new FormData();
-            fd.append('file', $scope.file);
-            $http.post("/ace/ajoutHoraires/send", fd, {
-                transformRequest: angular.identity,
-                headers: {'Content-Type': undefined}
-            })
-                .success(function(){
-                    $timeout(function() {
-                        $location.path('/ace').replace();
-                    });
-                })
-                .error(function(){
-                });
-        }
+zero_seconde.controller('ACEStatCtrl', ['$scope', '$http', '$location', '$timeout',
+    function ($scope, $http, $location, $timeout) {
+        var url_statODalheure = '/od/statODalheure';
+        var url_statODalheureHier = '/od/statODalheureHier';
+        var url_statODalheureSemaine = '/od/statODalheureSemaine';
+
+        var url_statODenRetard = '/od/statODenRetard';
+        var url_statODenRetardHier = '/od/statODenRetardHier';
+        var url_statODenRetardSemaine = '/od/statODenRetardSemaine';
+
+        var url_statODtotalTrain = '/od/statODtotalTrain';
+        var url_statODtotalTrainHier = '/od/statODtotalTrainHier';
+
+        var url_statTERBGalheure = '/ace/statTERBGalheure';
+        var url_statTERBGretard = '/ace/statTERBGretard';
+
+        var url_statTERFCalheure = '/ace/statTERFcalheure';
+        var url_statTERFCretard = '/ace/statTERFCretard';
+
+        var url_statVoyagealheure = '/ace/statVoyagealheure';
+        var url_statVoyageretard = '/ace/statVoyageretard';
+
+        $scope.date = new Date();
+
+        $scope.alheure = [];
+        $scope.alheureHier = [];
+        $scope.alheureSemaine = [];
+
+        $scope.enretard = [];
+        $scope.enretardHier = [];
+        $scope.enretardSemaine = [];
+
+        $scope.TERBGalheure = [];
+        $scope.TERBGretard = [];
+        $scope.TERFCalheure = [];
+        $scope.TERFCretard = [];
+        $scope.VOYAGEalheure = [];
+        $scope.VOYAGEretard = [];
+
+        $scope.nbTotalTrain = [];
+        $scope.alheureHier = [];
+        $scope.nbTotalTrainHier = [];
+        $scope.statHier = [];
+        $scope.statAjd = [];
+        $scope.stat = [];
+
+
+        $http.get(url_statODalheure)
+            .success(function(resultat){
+                $scope.alheure = resultat;
+            });
+
+        $http.get(url_statTERBGalheure)
+            .success(function(resultat){
+                $scope.TERBGalheure = resultat;
+            });
+
+        $http.get(url_statTERFCalheure)
+            .success(function(resultat){
+                $scope.TERFCalheure = resultat;
+            });
+
+        $http.get(url_statVoyagealheure)
+            .success(function(resultat){
+                $scope.VOYAGEalheure = resultat;
+            });
+
+        $http.get(url_statODenRetard)
+            .success(function(resultat){
+                $scope.enretard = resultat;
+            });
+
+        $http.get(url_statTERBGretard)
+            .success(function(resultat){
+                $scope.TERBGretard = resultat;
+            });
+
+        $http.get(url_statTERFCretard)
+            .success(function(resultat){
+                $scope.TERFCretard = resultat;
+            });
+
+        $http.get(url_statVoyageretard)
+            .success(function(resultat){
+                $scope.VOYAGEretard = resultat;
+            });
+
+        $http.get(url_statODtotalTrain)
+            .success(function(resultat){
+                $scope.nbTotalTrain = resultat;
+            });
+
+        $http.get(url_statODalheureSemaine)
+            .success(function(resultat){
+                $scope.alheureSemaine = resultat;
+            });
+
+        $http.get(url_statODenRetardSemaine)
+            .success(function(resultat){
+                $scope.enretardSemaine = resultat;
+            });
+
+        $http.get(url_statODalheureHier)
+            .success(function(resultat){
+                $scope.alheureHier = resultat;
+            });
+
+
+        $http.get(url_statODenRetardHier)
+            .success(function(resultat){
+                $scope.enretardHier = resultat;
+            });
+
+
+        $http.get(url_statODtotalTrainHier)
+            .success(function(resultat){
+                $scope.nbTotalTrainHier = resultat;
+            });
+
+        $timeout(function() {
+            if($scope.alheure.length > 0){
+                $scope.ponctuDV = (($scope.alheure[0].NbalHeure / $scope.nbTotalTrain[0].NbTotalTrain)*100);
+            }else{
+                Materialize.toast("Un problème est survenu lors du chargement des statistiques.", 4000);
+            }
+        },1000);
+
     }
 ]);
 
@@ -477,7 +586,7 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
                             $defer.resolve($scope.retards);
                         }
                     });
-                });
+                }, 1000);
                 $scope.loadUnites();
                 console.log($scope.retards[0]);
             });
@@ -615,6 +724,12 @@ zero_seconde.controller('menu_aceCtrl', ['$scope', '$http', '$location', '$timeo
         $scope.ajout_horaire = function() {
             $timeout(function () {
                 $location.path('/ace/ajoutHoraires').replace();
+            });
+        };
+
+        $scope.consultStat = function() {
+            $timeout(function () {
+                $location.path('/ace/statistiques').replace();
             });
         };
 
