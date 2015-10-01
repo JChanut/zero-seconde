@@ -276,42 +276,30 @@ zero_seconde.controller('ODStatCtrl', ['$scope', '$http', '$location', '$timeout
     function ($scope, $http, $location, $timeout) {
         var url_statODalheure = '/od/statODalheure';
         var url_statODalheureAgent = '/od/statODalheureAgent';
-        var url_statODalheureHier = '/od/statODalheureHier';
-        var url_statODalheureHierAgent = '/od/statODalheureHierAgent';
-        var url_statODalheureSemaine = '/od/statODalheureSemaine';
 
         var url_statODenRetard = '/od/statODenRetard';
         var url_statODenRetardAgent = '/od/statODenRetardAgent';
-        var url_statODenRetardHier = '/od/statODenRetardHier';
-        var url_statODenRetardHierAgent = '/od/statODenRetardHierAgent';
-        var url_statODenRetardSemaine = '/od/statODenRetardSemaine';
 
-        var url_statODannuleAgent = '/od/statODannuleAgent';
+        var url_statTERBGalheure = '/od/statTERBGalheure';
+        var url_statTERFCalheure = '/od/statTERFCalheure';
+        var url_statVoyagealheure = '/od/statVoyagealheure';
+
+        var url_statTERBGTotal = '/od/statTERBGTotal';
+        var url_statTERFCTotal = '/od/statTERFCTotal';
+        var url_statVOYAGETotal = '/od/statVOYAGETotal';
 
         var url_statODtotalTrain = '/od/statODtotalTrain';
-        var url_statODtotalTrainHier = '/od/statODtotalTrainHier';
 
 
         $scope.date = new Date();
 
         $scope.alheure = [];
         $scope.alheureAgent = [];
-        $scope.alheureHier = [];
-        $scope.alheureHierAgent = [];
-        $scope.alheureSemaine = [];
 
         $scope.enretard = [];
         $scope.enretardAgent = [];
-        $scope.enretardHier = [];
-        $scope.enretardHierAgent = [];
-        $scope.enretardSemaine = [];
-
-        $scope.annuleAgent = [];
 
         $scope.nbTotalTrain = [];
-        $scope.alheureHier = [];
-        $scope.nbTotalTrainHier = [];
-        $scope.statHier = [];
         $scope.statAjd = [];
         $scope.stat = [];
 
@@ -341,117 +329,126 @@ zero_seconde.controller('ODStatCtrl', ['$scope', '$http', '$location', '$timeout
                 $scope.nbTotalTrain = resultat;
             });
 
-        $http.get(url_statODalheureSemaine)
+        $http.get(url_statTERBGalheure)
             .success(function(resultat){
-               $scope.alheureSemaine = resultat;
+                $scope.TERBGalheure = resultat;
             });
 
-        $http.get(url_statODenRetardSemaine)
+        $http.get(url_statTERBGTotal)
             .success(function(resultat){
-               $scope.enretardSemaine = resultat;
+                $scope.TERBGTotal = resultat;
             });
 
-        $http.get(url_statODalheureHier)
+        $http.get(url_statTERFCalheure)
             .success(function(resultat){
-                $scope.alheureHier = resultat;
+                $scope.TERFCalheure = resultat;
             });
 
-        $http.get(url_statODalheureHierAgent)
+        $http.get(url_statTERFCTotal)
             .success(function(resultat){
-                $scope.alheureHierAgent = resultat;
+                $scope.TERFCTotal = resultat;
             });
 
-        $http.get(url_statODenRetardHier)
+        $http.get(url_statVoyagealheure)
             .success(function(resultat){
-                $scope.enretardHier = resultat;
+                $scope.VOYAGEalheure = resultat;
             });
 
-        $http.get(url_statODenRetardHierAgent)
+        $http.get(url_statVOYAGETotal)
             .success(function(resultat){
-                $scope.enretardHierAgent = resultat;
+                $scope.VOYAGETotal = resultat;
             });
 
-        $http.get(url_statODannuleAgent)
+        $http.get(url_statODenRetard)
             .success(function(resultat){
-                $scope.annuleAgent = resultat;
+                $scope.enretard = resultat;
             });
+        $timeout(function() {
+            if($scope.alheure.length > 0){
+                $scope.ponctuDV = (($scope.alheure[0].NbalHeure / $scope.nbTotalTrain[0].NbTotalTrain)*100);
+            }else{
+                Materialize.toast("Un problème est survenu lors du chargement des statistiques.", 4000);
+            }
+        },1000);
 
-            $http.get(url_statODtotalTrainHier)
-                .success(function(resultat){
-                    $scope.nbTotalTrainHier = resultat;
-                });
+        $timeout(function() {
+            if($scope.TERBGalheure.length > 0){
+                $scope.ponctuTERBG = (($scope.TERBGalheure[0].NBTERBG / $scope.TERBGTotal[0].NbTotalTERBG)*100);
+            }else{
+                console.log("ERREUR CHARGEMENT STATISTIQUES TER BG");
+            }
+        },1000);
 
-            $timeout(function() {
-                if($scope.alheure.length > 0){
-                    $scope.statHier = ($scope.alheureHier[0].NbalHeureHier / $scope.nbTotalTrainHier[0].NbTotalTrain);
-                    $scope.statAjd = ($scope.alheure[0].NbalHeure / $scope.nbTotalTrain[0].NbTotalTrain);
-                    if($scope.statHier > $scope.statAjd){
-                        console.log($scope.statHier);
-                        console.log($scope.statAjd);
-                        $scope.stat = ($scope.statHier - $scope.statAjd);
-                        if($scope.stat > 0.09){
-                            $scope.stat = $scope.stat*10;
-                        }
-                        console.log($scope.stat);
-                    }else if($scope.statHier == $scope.statAjd){
-                        $scope.stat = "idem";
-                    }else {
-                        $scope.stat = ($scope.statAjd - $scope.statHier);
-                        if($scope.stat > 0.09){
-                            $scope.stat = $scope.stat*10;
-                        }
-                        console.log($scope.stat);
+        $timeout(function(){
+            if($scope.TERFCalheure.length > 0){
+                $scope.ponctuTERFC = (($scope.TERFCalheure[0].NBTERFC / $scope.TERFCTotal[0].NbTotalTERFC)*100);
+            }else {
+                console.log("ERREUR CHARGEMENT STATISTIQUES TER FC");
+            }
+        },1000);
+
+        $timeout(function(){
+            if($scope.VOYAGEalheure.length > 0){
+                $scope.ponctuVOYAGE = (($scope.VOYAGEalheure[0].NBVOYAGE / $scope.VOYAGETotal[0].NbTotalVOYAGE)*100);
+            } else {
+                console.log("ERREUR CHARGEMENT STATISTIQUES VOYAGES");
+            }
+        },1000);
+        /*$timeout(function() {
+            if($scope.alheure.length > 0){
+                $scope.statHier = ($scope.alheureHier[0].NbalHeureHier / $scope.nbTotalTrainHier[0].NbTotalTrain);
+                $scope.statAjd = ($scope.alheure[0].NbalHeure / $scope.nbTotalTrain[0].NbTotalTrain);
+                if($scope.statHier > $scope.statAjd){
+                    console.log($scope.statHier);
+                    console.log($scope.statAjd);
+                    $scope.stat = ($scope.statHier - $scope.statAjd);
+                    if($scope.stat > 0.09){
+                        $scope.stat = $scope.stat*10;
                     }
-                }else{
-                    Materialize.toast("Un problème est survenu lors du chargement des statistiques.", 4000);
+                    console.log($scope.stat);
+                }else if($scope.statHier == $scope.statAjd){
+                    $scope.stat = "idem";
+                }else {
+                    $scope.stat = ($scope.statAjd - $scope.statHier);
+                    if($scope.stat > 0.09){
+                        $scope.stat = $scope.stat*10;
+                    }
+                    console.log($scope.stat);
                 }
-            },1000);
+            }else{
+                Materialize.toast("Un problème est survenu lors du chargement des statistiques.", 4000);
+            }
+        },1000);*/
     }
 ]);
 
 zero_seconde.controller('ACEStatCtrl', ['$scope', '$http', '$location', '$timeout',
     function ($scope, $http, $location, $timeout) {
+        //First row
         var url_statODalheure = '/od/statODalheure';
-        var url_statODalheureHier = '/od/statODalheureHier';
-        var url_statODalheureSemaine = '/od/statODalheureSemaine';
-
         var url_statODenRetard = '/od/statODenRetard';
-        var url_statODenRetardHier = '/od/statODenRetardHier';
-        var url_statODenRetardSemaine = '/od/statODenRetardSemaine';
+
+        //Second row
+        var url_statTERBGalheure = '/od/statTERBGalheure';
+        var url_statTERFCalheure = '/od/statTERFcalheure';
+        var url_statVoyagealheure = '/od/statVoyagealheure';
+
+        var url_statTERBGTotal = '/od/statTERBGTotal';
+        var url_statTERFCTotal = '/od/statTERFCTotal';
+        var url_statVOYAGETotal = '/od/statVOYAGETotal';
 
         var url_statODtotalTrain = '/od/statODtotalTrain';
-        var url_statODtotalTrainHier = '/od/statODtotalTrainHier';
-
-        var url_statTERBGalheure = '/ace/statTERBGalheure';
-        var url_statTERBGretard = '/ace/statTERBGretard';
-
-        var url_statTERFCalheure = '/ace/statTERFcalheure';
-        var url_statTERFCretard = '/ace/statTERFCretard';
-
-        var url_statVoyagealheure = '/ace/statVoyagealheure';
-        var url_statVoyageretard = '/ace/statVoyageretard';
 
         $scope.date = new Date();
 
         $scope.alheure = [];
-        $scope.alheureHier = [];
-        $scope.alheureSemaine = [];
-
         $scope.enretard = [];
-        $scope.enretardHier = [];
-        $scope.enretardSemaine = [];
 
         $scope.TERBGalheure = [];
-        $scope.TERBGretard = [];
         $scope.TERFCalheure = [];
-        $scope.TERFCretard = [];
         $scope.VOYAGEalheure = [];
-        $scope.VOYAGEretard = [];
 
         $scope.nbTotalTrain = [];
-        $scope.alheureHier = [];
-        $scope.nbTotalTrainHier = [];
-        $scope.statHier = [];
         $scope.statAjd = [];
         $scope.stat = [];
 
@@ -466,9 +463,19 @@ zero_seconde.controller('ACEStatCtrl', ['$scope', '$http', '$location', '$timeou
                 $scope.TERBGalheure = resultat;
             });
 
+        $http.get(url_statTERBGTotal)
+            .success(function(resultat){
+                $scope.TERBGTotal = resultat;
+            });
+
         $http.get(url_statTERFCalheure)
             .success(function(resultat){
                 $scope.TERFCalheure = resultat;
+            });
+
+        $http.get(url_statTERFCTotal)
+            .success(function(resultat){
+                $scope.TERFCTotal = resultat;
             });
 
         $http.get(url_statVoyagealheure)
@@ -476,24 +483,14 @@ zero_seconde.controller('ACEStatCtrl', ['$scope', '$http', '$location', '$timeou
                 $scope.VOYAGEalheure = resultat;
             });
 
+        $http.get(url_statVOYAGETotal)
+            .success(function(resultat){
+                $scope.VOYAGETotal = resultat;
+            });
+
         $http.get(url_statODenRetard)
             .success(function(resultat){
                 $scope.enretard = resultat;
-            });
-
-        $http.get(url_statTERBGretard)
-            .success(function(resultat){
-                $scope.TERBGretard = resultat;
-            });
-
-        $http.get(url_statTERFCretard)
-            .success(function(resultat){
-                $scope.TERFCretard = resultat;
-            });
-
-        $http.get(url_statVoyageretard)
-            .success(function(resultat){
-                $scope.VOYAGEretard = resultat;
             });
 
         $http.get(url_statODtotalTrain)
@@ -501,32 +498,6 @@ zero_seconde.controller('ACEStatCtrl', ['$scope', '$http', '$location', '$timeou
                 $scope.nbTotalTrain = resultat;
             });
 
-        $http.get(url_statODalheureSemaine)
-            .success(function(resultat){
-                $scope.alheureSemaine = resultat;
-            });
-
-        $http.get(url_statODenRetardSemaine)
-            .success(function(resultat){
-                $scope.enretardSemaine = resultat;
-            });
-
-        $http.get(url_statODalheureHier)
-            .success(function(resultat){
-                $scope.alheureHier = resultat;
-            });
-
-
-        $http.get(url_statODenRetardHier)
-            .success(function(resultat){
-                $scope.enretardHier = resultat;
-            });
-
-
-        $http.get(url_statODtotalTrainHier)
-            .success(function(resultat){
-                $scope.nbTotalTrainHier = resultat;
-            });
 
         $timeout(function() {
             if($scope.alheure.length > 0){
@@ -536,7 +507,31 @@ zero_seconde.controller('ACEStatCtrl', ['$scope', '$http', '$location', '$timeou
             }
         },1000);
 
+        $timeout(function() {
+            if($scope.TERBGalheure.length > 0){
+                $scope.ponctuTERBG = (($scope.TERBGalheure[0].NBTERBG / $scope.TERBGTotal[0].NbTotalTERBG)*100);
+            }else{
+                console.log("ERREUR CHARGEMENT STATISTIQUES TER BG");
+            }
+        },1000);
+
+        $timeout(function(){
+           if($scope.TERFCalheure.length > 0){
+               $scope.ponctuTERFC = (($scope.TERFCalheure[0].NBTERFC / $scope.TERFCTotal[0].NbTotalTERFC)*100);
+           }else {
+               console.log("ERREUR CHARGEMENT STATISTIQUES TER FC");
+           }
+        },1000);
+
+        $timeout(function(){
+           if($scope.VOYAGEalheure.length > 0){
+               $scope.ponctuVOYAGE = (($scope.VOYAGEalheure[0].NBVOYAGE / $scope.VOYAGETotal[0].NbTotalVOYAGE)*100);
+           } else {
+               console.log("ERREUR CHARGEMENT STATISTIQUES VOYAGES");
+           }
+        },1000);
     }
+
 ]);
 
 zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$timeout', '$filter', 'ngTableParams',
@@ -565,10 +560,10 @@ zero_seconde.controller('historiqueCtrl', ['$scope', '$http', '$location', '$tim
 
         $scope.etat_retard = [{
             valeur:0,
-            text:'oui'
+            text:'Non'
         },{
             valeur:1,
-            text:'non'
+            text:'Oui'
         }];
 
         $http.get(url_histo)

@@ -9,9 +9,9 @@
 
 
             <div class="input-field col s12" >
-                <label class="label-list" for="list">Sélectionnez l'unité :</label>
+                <label class="label-list" for="list">Sélectionnez l'entité :</label>
                 <select class="browser-default" id="list" ng-model="selected.unite" ng-change="update_unite()" ng-options="u.libelle_unite for u in data">
-                    <option value="">-- UNITES --</option>
+                    <option value="">-- ENTITES --</option>
                 </select>
             </div>
 
@@ -27,7 +27,7 @@
             <div class="row">
                 <div class="input-field col s12">
                     <i class="mdi-editor-mode-edit prefix"></i>
-                    <textarea id="icon_prefix2" class="materialize-textarea" ng-model="selected.commentaire" ng-change="update_commentaire()"></textarea>
+                    <textarea id="icon_prefix2" class="materialize-textarea" ng-model="selected.commentaire" ng-change="update_commentaire()" placeholder="facultatif"></textarea>
                     <label for="icon_prefix2" class="">Commentaire :</label>
                 </div>
             </div>

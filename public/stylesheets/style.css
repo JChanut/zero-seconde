@@ -1487,19 +1487,25 @@ footer.page-footer {
   background-color: #E05206;
 }
 
-.statGlobal {
+.statRetard {
   background-color: #CD0037;
 }
 
-.statGlobalDark {
-  background-color: #A1006B;
+.statRetardDark {
+  background-color: #CD0020;
+}
+.statAlheure {
+  background-color: #7ABB00;
 }
 
+.statAlheureDark {
+  background-color: #4EB300;
+}
 .statMax {
-  background-color: #A1006B;
+  background-color: #82786F;
 }
 .statMaxDark {
-  background-color: #6E1E78;
+  background-color: #675C53;
 }
 
 .statTERBG {

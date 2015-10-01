@@ -322,52 +322,6 @@ router.get('/statODalheureAgent', isLoggedOD, function(req, res){
     });
 });
 
-router.get('/statODalheureHierAgent', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeureHierAgent FROM zs_historique WHERE retard = 0 AND etat="ok" AND id_OD =' + req.session.id_user + ' AND date="' + DDH + '"';
-        console.log(getQuery);
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            res.json(rows);
-        })
-    });
-});
-
-router.get('/statODalheureHier', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeureHier FROM zs_historique WHERE retard = 0 AND etat="ok" AND date="' + DDH + '"';
-        console.log(getQuery);
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            res.json(rows);
-        })
-    });
-});
-
-router.get('/statODalheureSemaine', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = 'SELECT COUNT(id_historique) AS NbalHeureSemaine FROM zs_historique WHERE retard = 0  AND etat="ok" AND WEEK(date) = WEEK("' + DDJ + '")';
-
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            res.json(rows);
-
-        })
-    });
-});
-
 router.get('/statODenRetard', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
         if (err) return console.log('Connection fail: ' + err);
@@ -396,62 +350,6 @@ router.get('/statODenRetardAgent', isLoggedOD, function(req, res){
     });
 });
 
-router.get('/statODenRetardHierAgent', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetardHierAgent FROM zs_historique WHERE retard = 1 AND id_OD =' + req.session.id_user + ' AND date="' + DDH + '"';
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            res.json(rows);
-        })
-    });
-});
-
-router.get('/statODenRetardHier', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = 'SELECT COUNT(id_historique) AS NbenRetardHier FROM zs_historique WHERE retard = 1 AND date="' + DDH + '"';
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            res.json(rows);
-        })
-    });
-});
-
-router.get('/statODenRetardSemaine', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = "SELECT COUNT(id_historique) AS NbenRetardSemaine FROM zs_historique WHERE retard = 1 AND WEEK(date) = WEEK('" + DDJ + "')";
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            res.json(rows);
-        })
-    });
-});
-
-router.get('/statODannuleAgent', isLoggedOD, function(req, res){
-    req.getConnection(function(err, conn) {
-        if (err) return console.log('Connection fail: ' + err);
-
-        var getQuery = 'SELECT COUNT(id_historique) AS NbannuleAgent FROM zs_historique WHERE etat="ko" AND id_OD =' + req.session.id_user + ' AND date="' + DDJ + '"';
-        var query = conn.query(getQuery, function (err, rows) {
-            if (err) {
-                res.status(500).send(err);
-            }
-            res.json(rows);
-        })
-    });
-});
-
 router.get('/statODtotalTrain', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
         if (err) return console.log('Connection fail: ' + err);
@@ -471,14 +369,136 @@ router.get('/statODtotalTrain', isLoggedOD, function(req, res){
     });
 });
 
-router.get('/statODtotalTrainHier', isLoggedOD, function(req, res){
+//STAT ACTIVITE
+
+router.get('/statTERBGalheure', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBTERBG ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "TER Bourgogne" ' +
+            'AND retard = 0 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statTERBGTotal', isLoggedOD, function(req, res){
     req.getConnection(function(err, conn) {
         if (err) return console.log('Connection fail: ' + err);
 
         var rightNow = new Date();
         var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
 
-        var getQuery = 'SELECT COUNT(id_historique) AS NbTotalTrain FROM zs_historique WHERE date ="' + DDH + '"';
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NbTotalTERBG ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision ZSP ON ZSH.id_prevision = ZSP.id_prevision ' +
+            'LEFT JOIN zs_prevision_train ZSPT ON ZSP.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE date ="' + DDJ + '" ' +
+            'AND etat="ok" ' +
+            'AND ZSP.id_gare = 1 ' +
+            'AND ZST.famille = "TER Bourgogne"';
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+        console.log(getQuery);
+    });
+});
+
+router.get('/statTERFCalheure', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBTERFC ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "TER Franche Comte" ' +
+            'AND retard = 0 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statTERFCTotal', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var rightNow = new Date();
+        var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NbTotalTERFC ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision ZSP ON ZSH.id_prevision = ZSP.id_prevision ' +
+            'LEFT JOIN zs_prevision_train ZSPT ON ZSP.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE date ="' + DDJ + '" ' +
+            'AND etat="ok" ' +
+            'AND ZSP.id_gare = 1 ' +
+            'AND ZST.famille = "TER Franche Comte"';
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+        console.log(getQuery);
+    });
+});
+
+router.get('/statVoyagealheure', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NBVOYAGE ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision_train ZSPT ON ZSH.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE ZST.famille = "Voyages" ' +
+            'AND retard = 0 ' +
+            'AND etat="ok" ' +
+            'AND date="' + DDJ + '"';
+        console.log(getQuery);
+        var query = conn.query(getQuery, function (err, rows) {
+            if (err) {
+                res.status(500).send(err);
+            }
+            res.json(rows);
+        })
+    });
+});
+
+router.get('/statVOYAGETotal', isLoggedOD, function(req, res){
+    req.getConnection(function(err, conn) {
+        if (err) return console.log('Connection fail: ' + err);
+
+        var rightNow = new Date();
+        var DDJ = rightNow.toISOString().slice(0,10).replace(/-/g,"-");
+
+        var getQuery = 'SELECT COUNT(ZSH.id_historique) AS NbTotalVOYAGE ' +
+            'FROM zs_historique ZSH LEFT JOIN zs_prevision ZSP ON ZSH.id_prevision = ZSP.id_prevision ' +
+            'LEFT JOIN zs_prevision_train ZSPT ON ZSP.id_prevision = ZSPT.id_prevision ' +
+            'LEFT JOIN zs_train ZST ON ZSPT.id_train = ZST.id_train ' +
+            'WHERE date ="' + DDJ + '" ' +
+            'AND etat="ok" ' +
+            'AND ZSP.id_gare = 1 ' +
+            'AND ZST.famille = "Voyages"';
         var query = conn.query(getQuery, function (err, rows) {
             if (err) {
                 res.status(500).send(err);

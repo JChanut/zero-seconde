@@ -8,12 +8,11 @@
                 <th data-field="date">Date</th>
                 <th data-field="id">N° train</th>
                 <th data-field="retard">OD</th>
-                <th data-field="etat">Etat</th>
-                <th data-field="temps">En retard ?</th>
-                <th >Unité du retard</th>
+                <th data-field="temps">Retard</th>
+                <th >Entité du retard</th>
                 <th >Cause du retard</th>
                 <th >Commentaire</th>
-                <th >Durée du retard</th>
+                <th >Valeur retard</th>
                 <th><i class="fa fa-search"></i><input type="text" ng-model="searchText" placeholder="Chercher par n° de train" name="filtre"></th>
             </tr>
             </thead>
@@ -27,11 +26,11 @@
                     {{ret.num_train}}
                 </td>
                 <td>{{ret.identite}}</td>
-                <td>
+                <!--<td>
                     <span editable-select="ret.etat" e-name="etat" e-form="rowform" e-ng-options="e.valeur as e.text for e in etats" e-required>
                         {{showEtat(ret.etat)}}
                     </span>
-                </td>
+                </td>-->
                 <td>
                     <span editable-select="ret.retard" e-name="retard" e-form="rowform"  e-ng-options="e.valeur as e.text for e in etat_retard" e-required>
                         {{showEtat_retard(ret.retard)}}
@@ -54,7 +53,7 @@
                 </td>
                 <td>
                     <span editable-text="ret.duree_retard" e-name="duree_retard" e-form="rowform">
-                        {{ret.duree_retard || "<1min"}}
+                        {{ret.duree_retard || "<1"}} min.
                     </span>
                 </td>
                 <td style="white-space: nowrap">

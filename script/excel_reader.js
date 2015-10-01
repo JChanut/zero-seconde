@@ -70,7 +70,7 @@ module.exports = function(req,res,path_file) {
                 var champArdenne = /^(15|2197|2198|1194|8398)/;
 
                 if(fc.exec(train)){
-                    famille = "TER Franche Comté";
+                    famille = "TER Franche Comte";
                 }else if(bourgogne.exec(train)){
                     famille = "TER Bourgogne";
                 }else if(rhalpes.exec(train)){

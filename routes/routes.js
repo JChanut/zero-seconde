@@ -17,13 +17,12 @@ module.exports = function(app, express) {
 
 
     //==============================================================================
-    //               Page de connection
+    //               Page de connexion
     //==============================================================================
     app.all('/', function (req, res) {
         req.session.user = "guest";
         res.sendFile(path.resolve(__dirname + '/../views/index.html'));
     });
-
 
 
     //==============================================================================
