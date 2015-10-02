@@ -1,4 +1,5 @@
 #!/bin/bash
+
 wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.27.1/install.sh | bash
 
 echo "source /home/vagrant/.nvm/nvm.sh" >> /home/vagrant/.profile
