@@ -6,6 +6,15 @@
     "Jerry Chanut <jerry.chanut@soprasteria.com>"
   ],
   "license": "MIT",
+  "dependencies": {
+    "jquery": "2.1.4",
+    "angular": "1.2.20",
+    "angular-route": "1.2.20",
+    "materialize": "0.97.0",
+    "prism": "*",
+    "perfect-scrollbar": "0.6.3",
+    "angular-cookies": "1.2.20"
+  },
   "ignore": [
     "**/.*",
     "node_modules",
