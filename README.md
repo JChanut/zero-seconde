@@ -52,7 +52,7 @@ npm install
 The last step is to start the working environment with Vagrant, 
 from the root source code folder simply type the following command in the root directory in order to start the virtual machine.
 
-The following command with create and provisionning the VM (installing nodejs and mysql)
+The following command will create and provisionning the VM (installing nodejs and mysql)
 
 ```
 vagrant up
