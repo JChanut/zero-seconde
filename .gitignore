@@ -51,3 +51,9 @@ node_modules
 
 # Vagrant directory
 .vagrant
+
+### Bower ###
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
